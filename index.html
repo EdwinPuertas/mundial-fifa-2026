@@ -575,6 +575,16 @@ function runAnalysis() {
 function discreteGoals(lambda) {
   return Math.min(5, Math.max(0, Math.round(lambda)));
 }
+function consistentGoals(lA, lB, prob) {
+  let gA = Math.min(5, Math.max(0, Math.round(lA)));
+  let gB = Math.min(5, Math.max(0, Math.round(lB)));
+  if (prob.p_victoria > prob.p_derrota && prob.p_victoria > prob.p_empate) {
+    if (gA <= gB) { gA = gB + 1; if (gA > 5) { gA = 5; gB = 4; } }
+  } else if (prob.p_derrota > prob.p_victoria && prob.p_derrota > prob.p_empate) {
+    if (gB <= gA) { gB = gA + 1; if (gB > 5) { gB = 5; gA = 4; } }
+  }
+  return [gA, gB];
+}
 
 // ═══════════════════════════════
 // LINEUP CHIPS
@@ -709,8 +719,9 @@ function renderEngineA(p,tA,tB,lA,lB) {
   document.getElementById('pbarAl').style.width=pct(p.p_derrota);
   document.getElementById('lblAw').textContent=tA+' '+pct(p.p_victoria);
   document.getElementById('lblAl').textContent=tB+' '+pct(p.p_derrota);
-  document.getElementById('aGoalA').textContent=discreteGoals(lA);
-  document.getElementById('aGoalB').textContent=discreteGoals(lB);
+  const [gA_a, gB_a]=consistentGoals(lA,lB,p);
+  document.getElementById('aGoalA').textContent=gA_a;
+  document.getElementById('aGoalB').textContent=gB_a;
   document.getElementById('aNameA').textContent=tA;
   document.getElementById('aNameB').textContent=tB;
 }
@@ -726,8 +737,9 @@ function renderEngineB(p,tA,tB,lA,lB) {
   document.getElementById('pbarBl').style.width=pct(p.p_derrota);
   document.getElementById('lblBw').textContent=tA+' '+pct(p.p_victoria);
   document.getElementById('lblBl').textContent=tB+' '+pct(p.p_derrota);
-  document.getElementById('bGoalA').textContent=discreteGoals(lA);
-  document.getElementById('bGoalB').textContent=discreteGoals(lB);
+  const [gA_b, gB_b]=consistentGoals(lA,lB,p);
+  document.getElementById('bGoalA').textContent=gA_b;
+  document.getElementById('bGoalB').textContent=gB_b;
   document.getElementById('bNameA').textContent=tA;
   document.getElementById('bNameB').textContent=tB;
 }
@@ -763,7 +775,8 @@ function renderVerdict(pA,pB,tA,tB,lA,lB) {
   const avgV=(pA.p_victoria+pB.p_victoria)/2;
   const avgE=(pA.p_empate+pB.p_empate)/2;
   const avgD=(pA.p_derrota+pB.p_derrota)/2;
-  const gA=discreteGoals(lA), gB=discreteGoals(lB);
+  const avgProb={p_victoria:avgV,p_empate:avgE,p_derrota:avgD};
+  const [gA,gB]=consistentGoals(lA,lB,avgProb);
   let cls,text;
   if (avgV>avgD&&avgV>avgE) {
     cls='verd-win';
@@ -843,6 +856,7 @@ function showGroupMatches(grp) {
     const avgV=(m.engine_A.p_victoria+m.engine_B.p_victoria)/2;
     const avgE=(m.engine_A.p_empate+m.engine_B.p_empate)/2;
     const avgD=(m.engine_A.p_derrota+m.engine_B.p_derrota)/2;
+    const [gA,gB]=consistentGoals(m.lambda_A,m.lambda_B,{p_victoria:avgV,p_empate:avgE,p_derrota:avgD});
     return `<div style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid var(--border);cursor:pointer"
       onclick="document.getElementById('teamA').value='${a}';document.getElementById('teamB').value='${b}';onTeamChange()">
       <div style="flex:1;font-size:.82rem;font-weight:600;color:var(--text)">${a}</div>
@@ -854,7 +868,7 @@ function showGroupMatches(grp) {
           <span style="color:var(--text3)">|</span>
           <span style="color:var(--red);font-weight:600">${pct(avgD)}</span>
         </div>
-        <div style="font-size:.64rem;color:var(--text3);margin-top:2px">${discreteGoals(m.lambda_A)}-${discreteGoals(m.lambda_B)} goles</div>
+        <div style="font-size:.64rem;color:var(--text3);margin-top:2px">${gA}-${gB} goles</div>
       </div>
       <div style="flex:1;text-align:right;font-size:.82rem;font-weight:600;color:var(--text)">${b}</div>
     </div>`;
