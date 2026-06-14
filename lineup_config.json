@@ -1,0 +1,267 @@
+{
+  "LINEUP": {
+    "Francia": {
+      "formation": "4-2-3-1",
+      "style": "balanced"
+    },
+    "España": {
+      "formation": "4-3-3",
+      "style": "attacking"
+    },
+    "Argentina": {
+      "formation": "4-4-2",
+      "style": "balanced"
+    },
+    "Inglaterra": {
+      "formation": "4-3-3",
+      "style": "balanced"
+    },
+    "Portugal": {
+      "formation": "4-2-3-1",
+      "style": "attacking"
+    },
+    "Brasil": {
+      "formation": "4-3-3",
+      "style": "attacking"
+    },
+    "Países Bajos": {
+      "formation": "4-3-3",
+      "style": "attacking"
+    },
+    "Marruecos": {
+      "formation": "4-5-1",
+      "style": "defensive"
+    },
+    "Bélgica": {
+      "formation": "3-4-3",
+      "style": "balanced"
+    },
+    "Alemania": {
+      "formation": "4-2-3-1",
+      "style": "attacking"
+    },
+    "Croacia": {
+      "formation": "4-3-3",
+      "style": "balanced"
+    },
+    "Colombia": {
+      "formation": "4-2-3-1",
+      "style": "attacking"
+    },
+    "Senegal": {
+      "formation": "4-3-3",
+      "style": "balanced"
+    },
+    "México": {
+      "formation": "4-3-3",
+      "style": "balanced"
+    },
+    "Estados Unidos": {
+      "formation": "4-3-3",
+      "style": "balanced"
+    },
+    "Uruguay": {
+      "formation": "4-4-2",
+      "style": "defensive"
+    },
+    "Japón": {
+      "formation": "4-2-3-1",
+      "style": "balanced"
+    },
+    "Suiza": {
+      "formation": "3-4-3",
+      "style": "defensive"
+    },
+    "Irán": {
+      "formation": "4-5-1",
+      "style": "defensive"
+    },
+    "Turquía": {
+      "formation": "4-2-3-1",
+      "style": "attacking"
+    },
+    "Ecuador": {
+      "formation": "4-3-3",
+      "style": "balanced"
+    },
+    "Austria": {
+      "formation": "4-2-3-1",
+      "style": "balanced"
+    },
+    "Corea del Sur": {
+      "formation": "4-2-3-1",
+      "style": "balanced"
+    },
+    "Australia": {
+      "formation": "4-4-2",
+      "style": "defensive"
+    },
+    "Argelia": {
+      "formation": "4-3-3",
+      "style": "defensive"
+    },
+    "Egipto": {
+      "formation": "4-2-3-1",
+      "style": "defensive"
+    },
+    "Canadá": {
+      "formation": "4-3-3",
+      "style": "attacking"
+    },
+    "Noruega": {
+      "formation": "4-2-3-1",
+      "style": "attacking"
+    },
+    "Panamá": {
+      "formation": "4-5-1",
+      "style": "defensive"
+    },
+    "Costa de Marfil": {
+      "formation": "4-3-3",
+      "style": "attacking"
+    },
+    "Suecia": {
+      "formation": "4-4-2",
+      "style": "balanced"
+    },
+    "Paraguay": {
+      "formation": "5-3-2",
+      "style": "defensive"
+    },
+    "República Checa": {
+      "formation": "4-2-3-1",
+      "style": "balanced"
+    },
+    "Escocia": {
+      "formation": "3-5-2",
+      "style": "defensive"
+    },
+    "Túnez": {
+      "formation": "4-3-3",
+      "style": "defensive"
+    },
+    "RD Congo": {
+      "formation": "4-3-3",
+      "style": "balanced"
+    },
+    "Uzbekistán": {
+      "formation": "4-4-2",
+      "style": "defensive"
+    },
+    "Qatar": {
+      "formation": "5-3-2",
+      "style": "defensive"
+    },
+    "Irak": {
+      "formation": "4-4-2",
+      "style": "defensive"
+    },
+    "Sudáfrica": {
+      "formation": "4-3-3",
+      "style": "defensive"
+    },
+    "Arabia Saudita": {
+      "formation": "4-2-3-1",
+      "style": "defensive"
+    },
+    "Jordania": {
+      "formation": "5-4-1",
+      "style": "defensive"
+    },
+    "Bosnia y Herz.": {
+      "formation": "4-3-3",
+      "style": "balanced"
+    },
+    "Cabo Verde": {
+      "formation": "4-4-2",
+      "style": "balanced"
+    },
+    "Ghana": {
+      "formation": "4-2-3-1",
+      "style": "balanced"
+    },
+    "Curazao": {
+      "formation": "4-4-2",
+      "style": "defensive"
+    },
+    "Haití": {
+      "formation": "5-3-2",
+      "style": "defensive"
+    },
+    "Nueva Zelanda": {
+      "formation": "4-4-2",
+      "style": "balanced"
+    }
+  },
+  "FORMATION_FEATURES": {
+    "4-3-3": {
+      "attack": 0.88,
+      "defense": 0.62,
+      "width": 0.92,
+      "pressing": 0.85,
+      "set_piece": 0.65
+    },
+    "4-4-2": {
+      "attack": 0.72,
+      "defense": 0.76,
+      "width": 0.78,
+      "pressing": 0.7,
+      "set_piece": 0.78
+    },
+    "4-2-3-1": {
+      "attack": 0.78,
+      "defense": 0.72,
+      "width": 0.8,
+      "pressing": 0.76,
+      "set_piece": 0.75
+    },
+    "3-4-3": {
+      "attack": 0.85,
+      "defense": 0.68,
+      "width": 0.8,
+      "pressing": 0.82,
+      "set_piece": 0.68
+    },
+    "3-5-2": {
+      "attack": 0.75,
+      "defense": 0.78,
+      "width": 0.65,
+      "pressing": 0.72,
+      "set_piece": 0.82
+    },
+    "5-3-2": {
+      "attack": 0.58,
+      "defense": 0.92,
+      "width": 0.5,
+      "pressing": 0.55,
+      "set_piece": 0.78
+    },
+    "4-5-1": {
+      "attack": 0.55,
+      "defense": 0.9,
+      "width": 0.6,
+      "pressing": 0.65,
+      "set_piece": 0.75
+    },
+    "5-4-1": {
+      "attack": 0.48,
+      "defense": 0.95,
+      "width": 0.45,
+      "pressing": 0.5,
+      "set_piece": 0.72
+    },
+    "4-1-4-1": {
+      "attack": 0.68,
+      "defense": 0.82,
+      "width": 0.72,
+      "pressing": 0.78,
+      "set_piece": 0.72
+    }
+  },
+  "STYLE_SCORE": {
+    "attacking": 1.18,
+    "balanced": 1.0,
+    "defensive": 0.82,
+    "counterattack": 0.92
+  }
+}

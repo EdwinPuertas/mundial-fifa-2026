@@ -2,7 +2,9 @@
   "version": 2,
   "name": "mundial-fifa-2026",
   "builds": [
-    { "src": "index.html", "use": "@vercel/static" }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "metricas_v3.png", "use": "@vercel/static" },
+    { "src": "feature_importance_v3.csv", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/index.html" }
