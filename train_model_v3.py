@@ -46,14 +46,14 @@ OUT = "/home/user/mundial-fifa-2026/"
 # ═══════════════════════════════════════════════════════════════════════════════
 LINEUP = {
     "Francia":         {"formation": "4-2-3-1", "style": "balanced"},
-    "España":          {"formation": "4-3-3",   "style": "attacking"},
+    "España":          {"formation": "4-2-3-1", "style": "attacking"},
     "Argentina":       {"formation": "4-4-2",   "style": "balanced"},
     "Inglaterra":      {"formation": "4-3-3",   "style": "balanced"},
     "Portugal":        {"formation": "4-2-3-1", "style": "attacking"},
     "Brasil":          {"formation": "4-3-3",   "style": "attacking"},
     "Países Bajos":    {"formation": "4-3-3",   "style": "attacking"},
     "Marruecos":       {"formation": "4-5-1",   "style": "defensive"},
-    "Bélgica":         {"formation": "3-4-3",   "style": "balanced"},
+    "Bélgica":         {"formation": "4-2-3-1", "style": "balanced"},
     "Alemania":        {"formation": "4-2-3-1", "style": "attacking"},
     "Croacia":         {"formation": "4-3-3",   "style": "balanced"},
     "Colombia":        {"formation": "4-2-3-1", "style": "attacking"},
@@ -65,7 +65,7 @@ LINEUP = {
     "Suiza":           {"formation": "3-4-3",   "style": "defensive"},
     "Irán":            {"formation": "4-5-1",   "style": "defensive"},
     "Turquía":         {"formation": "4-2-3-1", "style": "attacking"},
-    "Ecuador":         {"formation": "4-3-3",   "style": "balanced"},
+    "Ecuador":         {"formation": "3-4-3",   "style": "balanced"},
     "Austria":         {"formation": "4-2-3-1", "style": "balanced"},
     "Corea del Sur":   {"formation": "4-2-3-1", "style": "balanced"},
     "Australia":       {"formation": "4-4-2",   "style": "defensive"},
@@ -74,12 +74,12 @@ LINEUP = {
     "Canadá":          {"formation": "4-3-3",   "style": "attacking"},
     "Noruega":         {"formation": "4-2-3-1", "style": "attacking"},
     "Panamá":          {"formation": "4-5-1",   "style": "defensive"},
-    "Costa de Marfil": {"formation": "4-3-3",   "style": "attacking"},
-    "Suecia":          {"formation": "4-4-2",   "style": "balanced"},
+    "Costa de Marfil": {"formation": "4-4-2",   "style": "attacking"},
+    "Suecia":          {"formation": "3-5-2",   "style": "balanced"},
     "Paraguay":        {"formation": "5-3-2",   "style": "defensive"},
     "República Checa": {"formation": "4-2-3-1", "style": "balanced"},
     "Escocia":         {"formation": "3-5-2",   "style": "defensive"},
-    "Túnez":           {"formation": "4-3-3",   "style": "defensive"},
+    "Túnez":           {"formation": "4-2-3-1", "style": "defensive"},
     "RD Congo":        {"formation": "4-3-3",   "style": "balanced"},
     "Uzbekistán":      {"formation": "4-4-2",   "style": "defensive"},
     "Qatar":           {"formation": "5-3-2",   "style": "defensive"},
@@ -88,9 +88,9 @@ LINEUP = {
     "Arabia Saudita":  {"formation": "4-2-3-1", "style": "defensive"},
     "Jordania":        {"formation": "5-4-1",   "style": "defensive"},
     "Bosnia y Herz.":  {"formation": "4-3-3",   "style": "balanced"},
-    "Cabo Verde":      {"formation": "4-4-2",   "style": "balanced"},
+    "Cabo Verde":      {"formation": "4-5-1",   "style": "defensive"},
     "Ghana":           {"formation": "4-2-3-1", "style": "balanced"},
-    "Curazao":         {"formation": "4-4-2",   "style": "defensive"},
+    "Curazao":         {"formation": "3-5-2",   "style": "defensive"},
     "Haití":           {"formation": "5-3-2",   "style": "defensive"},
     "Nueva Zelanda":   {"formation": "4-4-2",   "style": "balanced"},
 }
@@ -137,15 +137,15 @@ def get_tact(name):
 TEAMS = {
     # [rank, conf, qual_gf, qual_ga, qual_w, qual_m, top_scorer, squad_rating, mv_M, avg_age, wc_pts, wc_gf, wc_ga, wc_pl]
     "Francia":         [1, "UEFA",    32, 8,  8, 10, 9,  88.2,1050,26.1, 0,0,0,0],
-    "España":          [2, "UEFA",    30,10,  7, 10, 7,  87.5, 980,24.8, 0,0,0,0],
+    "España":          [2, "UEFA",    30,10,  7, 10, 7,  87.5, 980,24.8, 1,0,0,1],
     "Argentina":       [3, "CONMEBOL",35,17, 12, 18, 8,  87.0, 760,28.2, 0,0,0,0],
     "Inglaterra":      [4, "UEFA",    30, 9,  8, 10, 7,  86.5,1100,26.5, 0,0,0,0],
     "Portugal":        [5, "UEFA",    28, 7,  9, 10, 7,  85.8, 920,27.8, 0,0,0,0],
     "Brasil":          [6, "CONMEBOL",29,22,  7, 18, 5,  86.0,1200,24.5, 0,0,0,0],
     "Países Bajos":    [7, "UEFA",    29,14,  7, 10, 8,  84.5, 870,25.8, 0,0,0,0],
     "Marruecos":       [8, "CAF",     15, 3,  5,  6, 4,  80.0, 320,25.2, 0,0,0,0],
-    "Bélgica":         [9, "UEFA",    27,12,  7, 10, 6,  83.5, 680,28.5, 0,0,0,0],
-    "Alemania":        [10,"UEFA",    33,11,  8, 10, 9,  84.0, 890,25.2, 0,0,0,0],
+    "Bélgica":         [9, "UEFA",    27,12,  7, 10, 6,  83.5, 680,28.5, 1,1,1,1],
+    "Alemania":        [10,"UEFA",    33,11,  8, 10, 9,  84.0, 890,25.2, 3,7,1,1],
     "Croacia":         [11,"UEFA",    22,11,  6, 10, 5,  82.5, 420,29.5, 0,0,0,0],
     "Colombia":        [13,"CONMEBOL",26,22,  8, 18, 7,  82.0, 480,25.8, 0,0,0,0],
     "Senegal":         [14,"CAF",     12, 5,  4,  6, 4,  79.5, 280,26.0, 0,0,0,0],
@@ -156,21 +156,21 @@ TEAMS = {
     "Suiza":           [19,"UEFA",    25, 8,  7, 10, 5,  80.5, 450,27.2, 0,0,0,0],
     "Irán":            [21,"AFC",     30,18, 11, 18, 7,  77.5, 180,26.5, 0,0,0,0],
     "Turquía":         [22,"UEFA",    24,14,  6, 10, 7,  79.5, 490,26.2, 0,0,0,0],
-    "Ecuador":         [23,"CONMEBOL",26,17,  8, 18, 5,  79.0, 310,24.8, 0,0,0,0],
+    "Ecuador":         [23,"CONMEBOL",26,17,  8, 18, 5,  79.0, 310,24.8, 0,0,1,1],
     "Austria":         [24,"UEFA",    25,14,  7, 10, 6,  79.5, 410,26.5, 0,0,0,0],
     "Corea del Sur":   [25,"AFC",     32,20, 10, 18, 6,  79.0, 380,26.0, 3,2,1,1],
     "Australia":       [27,"AFC",     26,24,  8, 18, 5,  77.5, 220,26.8, 0,0,0,0],
     "Argelia":         [28,"CAF",     12, 5,  4,  6, 4,  77.0, 160,26.5, 0,0,0,0],
-    "Egipto":          [29,"CAF",     12, 4,  4,  6, 4,  76.5, 140,26.2, 0,0,0,0],
+    "Egipto":          [29,"CAF",     12, 4,  4,  6, 4,  76.5, 140,26.2, 1,1,1,1],
     "Canadá":          [30,"CONCACAF",25,12,  8, 14, 6,  78.0, 340,25.0, 0,0,0,0],
     "Noruega":         [31,"UEFA",    35,12,  8, 10,16,  79.5, 560,25.5, 0,0,0,0],
     "Panamá":          [33,"CONCACAF",18,18,  5, 14, 4,  73.5,  95,26.5, 0,0,0,0],
-    "Costa de Marfil": [34,"CAF",     10, 6,  3,  6, 3,  74.5, 210,26.2, 0,0,0,0],
-    "Suecia":          [38,"UEFA",    22,14,  5, 10, 8,  76.0, 360,26.8, 0,0,0,0],
+    "Costa de Marfil": [34,"CAF",     10, 6,  3,  6, 3,  74.5, 210,26.2, 3,1,0,1],
+    "Suecia":          [38,"UEFA",    22,14,  5, 10, 8,  76.0, 360,26.8, 3,5,1,1],
     "Paraguay":        [40,"CONMEBOL",21,26,  5, 18, 4,  73.5, 150,26.5, 0,0,0,0],
     "República Checa": [41,"UEFA",    18,12,  4, 10, 5,  74.0, 220,27.0, 0,1,2,1],
     "Escocia":         [43,"UEFA",    20,16,  4, 10, 5,  72.5, 180,27.2, 0,0,0,0],
-    "Túnez":           [44,"CAF",      9, 7,  3,  6, 3,  71.5, 120,26.8, 0,0,0,0],
+    "Túnez":           [44,"CAF",      9, 7,  3,  6, 3,  71.5, 120,26.8, 0,1,5,1],
     "RD Congo":        [46,"CAF",      8, 5,  3,  6, 3,  70.5,  95,26.0, 0,0,0,0],
     "Uzbekistán":      [50,"AFC",     18,12,  6, 12, 4,  70.0,  85,25.5, 0,0,0,0],
     "Qatar":           [55,"AFC",     20,35,  5, 18, 3,  68.5,  75,26.2, 0,0,0,0],
@@ -179,9 +179,9 @@ TEAMS = {
     "Arabia Saudita":  [61,"AFC",     26,32,  7, 18, 5,  68.0, 110,26.5, 0,0,0,0],
     "Jordania":        [63,"AFC",     21,30,  6, 18, 4,  66.5,  55,26.2, 0,0,0,0],
     "Bosnia y Herz.":  [65,"UEFA",    14,18,  3, 10, 3,  69.0,  95,27.5, 0,0,0,0],
-    "Cabo Verde":      [69,"CAF",      8, 7,  3,  6, 2,  66.0,  55,26.5, 0,0,0,0],
+    "Cabo Verde":      [69,"CAF",      8, 7,  3,  6, 2,  66.0,  55,26.5, 1,0,0,1],
     "Ghana":           [74,"CAF",      8, 9,  2,  6, 2,  65.0,  70,26.0, 0,0,0,0],
-    "Curazao":         [82,"CONCACAF", 6,10,  2,  8, 2,  61.5,  30,25.8, 0,0,0,0],
+    "Curazao":         [82,"CONCACAF", 6,10,  2,  8, 2,  61.5,  30,25.8, 0,1,7,1],
     "Haití":           [83,"CONCACAF", 5,12,  1,  8, 1,  60.5,  25,25.5, 0,0,0,0],
     "Nueva Zelanda":   [85,"OFC",     28,15,  7,  8, 9,  60.0,  40,26.5, 0,0,0,0],
 }
@@ -460,6 +460,12 @@ historical_raw = [
     [6, 61, 1,4,  1.61,1.22,1.44,1.78, 86.0,68.0, 5,5, 1200,110,24.5,26.5,14.0, 7.0,0.39,0.39, 2,0],  # Brasil beats Arabia
     [10,61, 0,4,  3.30,1.10,1.44,1.78, 84.0,68.0, 9,5,  890,110,25.2,26.5,22.0, 7.0,0.80,0.39, 2,0],  # Germany beats Arabia
     [7, 63, 0,4,  2.90,1.40,1.17,1.67, 84.5,66.5, 8,4,  870, 55,25.8,26.2,15.0, 6.0,0.70,0.33, 3,0],  # Netherlands beats Jordan
+    # Partidos reales — Mundial FIFA 2026 (Jornada 1, 14-15 junio 2026)
+    [10,82, 0,2, 3.30,1.10, 0.75,1.25, 84.0,61.5, 9,2,  890, 30, 25.2,25.8, 21.0, 3.0, 0.80,0.25, 7,1],  # Alemania 7-1 Curazao
+    [38,44, 0,3, 2.20,1.40, 1.50,1.17, 76.0,71.5, 8,3,  360,120, 26.8,26.8, 15.0, 5.0, 0.50,0.50, 5,1],  # Suecia 5-1 Túnez
+    [34,23, 3,1, 1.67,1.00, 1.44,0.94, 74.5,79.0, 3,5,  210,310, 26.2,24.8,  6.0,10.0, 0.50,0.44, 1,0],  # Costa de Marfil 1-0 Ecuador (upset)
+    [ 9,29, 0,3, 2.70,1.20, 2.00,0.67, 83.5,76.5, 6,4,  680,140, 28.5,26.2, 13.0, 8.0, 0.70,0.67, 1,1],  # Bélgica 1-1 Egipto
+    [ 2,69, 0,3, 3.00,1.00, 1.33,1.17, 87.5,66.0, 7,2,  980, 55, 24.8,26.5, 14.0, 4.0, 0.70,0.50, 0,0],  # España 0-0 Cabo Verde (upset draw)
 ]
 
 # Construir el dataset combinando raw data con features tácticas históricas aproximadas

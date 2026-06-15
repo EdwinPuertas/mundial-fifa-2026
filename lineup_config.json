@@ -5,7 +5,7 @@
       "style": "balanced"
     },
     "España": {
-      "formation": "4-3-3",
+      "formation": "4-2-3-1",
       "style": "attacking"
     },
     "Argentina": {
@@ -33,7 +33,7 @@
       "style": "defensive"
     },
     "Bélgica": {
-      "formation": "3-4-3",
+      "formation": "4-2-3-1",
       "style": "balanced"
     },
     "Alemania": {
@@ -81,7 +81,7 @@
       "style": "attacking"
     },
     "Ecuador": {
-      "formation": "4-3-3",
+      "formation": "3-4-3",
       "style": "balanced"
     },
     "Austria": {
@@ -117,11 +117,11 @@
       "style": "defensive"
     },
     "Costa de Marfil": {
-      "formation": "4-3-3",
+      "formation": "4-4-2",
       "style": "attacking"
     },
     "Suecia": {
-      "formation": "4-4-2",
+      "formation": "3-5-2",
       "style": "balanced"
     },
     "Paraguay": {
@@ -137,7 +137,7 @@
       "style": "defensive"
     },
     "Túnez": {
-      "formation": "4-3-3",
+      "formation": "4-2-3-1",
       "style": "defensive"
     },
     "RD Congo": {
@@ -173,15 +173,15 @@
       "style": "balanced"
     },
     "Cabo Verde": {
-      "formation": "4-4-2",
-      "style": "balanced"
+      "formation": "4-5-1",
+      "style": "defensive"
     },
     "Ghana": {
       "formation": "4-2-3-1",
       "style": "balanced"
     },
     "Curazao": {
-      "formation": "4-4-2",
+      "formation": "3-5-2",
       "style": "defensive"
     },
     "Haití": {
