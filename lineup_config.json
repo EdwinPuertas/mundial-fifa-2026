@@ -9,8 +9,8 @@
       "style": "attacking"
     },
     "Argentina": {
-      "formation": "4-4-2",
-      "style": "balanced"
+      "formation": "4-3-3",
+      "style": "attacking"
     },
     "Inglaterra": {
       "formation": "4-3-3",
@@ -97,7 +97,7 @@
       "style": "defensive"
     },
     "Argelia": {
-      "formation": "4-3-3",
+      "formation": "4-2-3-1",
       "style": "defensive"
     },
     "Egipto": {
@@ -141,8 +141,8 @@
       "style": "defensive"
     },
     "RD Congo": {
-      "formation": "4-3-3",
-      "style": "balanced"
+      "formation": "5-3-2",
+      "style": "defensive"
     },
     "Uzbekistán": {
       "formation": "4-4-2",
