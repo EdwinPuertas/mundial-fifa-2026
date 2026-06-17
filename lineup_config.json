@@ -263,5 +263,121 @@
     "balanced": 1.0,
     "defensive": 0.82,
     "counterattack": 0.92
+  },
+  "VENUES": {
+    "Arlington": {
+      "altitude": 185,
+      "temp": 36,
+      "wind": 15,
+      "hydration": 0.8
+    },
+    "EastRutherford": {
+      "altitude": 5,
+      "temp": 28,
+      "wind": 18,
+      "hydration": 0.2
+    },
+    "SantaClara": {
+      "altitude": 15,
+      "temp": 19,
+      "wind": 14,
+      "hydration": 0.0
+    },
+    "Pasadena": {
+      "altitude": 234,
+      "temp": 29,
+      "wind": 8,
+      "hydration": 0.3
+    },
+    "Inglewood": {
+      "altitude": 30,
+      "temp": 24,
+      "wind": 10,
+      "hydration": 0.1
+    },
+    "Philadelphia": {
+      "altitude": 12,
+      "temp": 30,
+      "wind": 14,
+      "hydration": 0.4
+    },
+    "Charlotte": {
+      "altitude": 229,
+      "temp": 31,
+      "wind": 10,
+      "hydration": 0.5
+    },
+    "KansasCity": {
+      "altitude": 282,
+      "temp": 32,
+      "wind": 18,
+      "hydration": 0.6
+    },
+    "Denver": {
+      "altitude": 1609,
+      "temp": 26,
+      "wind": 14,
+      "hydration": 0.2
+    },
+    "Chicago": {
+      "altitude": 179,
+      "temp": 28,
+      "wind": 22,
+      "hydration": 0.2
+    },
+    "Miami": {
+      "altitude": 3,
+      "temp": 32,
+      "wind": 15,
+      "hydration": 0.9
+    },
+    "Boston": {
+      "altitude": 8,
+      "temp": 23,
+      "wind": 17,
+      "hydration": 0.1
+    },
+    "Toronto": {
+      "altitude": 76,
+      "temp": 24,
+      "wind": 14,
+      "hydration": 0.1
+    },
+    "Vancouver": {
+      "altitude": 4,
+      "temp": 19,
+      "wind": 11,
+      "hydration": 0.0
+    },
+    "Montreal": {
+      "altitude": 29,
+      "temp": 25,
+      "wind": 14,
+      "hydration": 0.1
+    },
+    "MexicoCity": {
+      "altitude": 2240,
+      "temp": 18,
+      "wind": 9,
+      "hydration": 0.0
+    },
+    "Monterrey": {
+      "altitude": 538,
+      "temp": 36,
+      "wind": 12,
+      "hydration": 0.9
+    },
+    "Guadalajara": {
+      "altitude": 1566,
+      "temp": 22,
+      "wind": 10,
+      "hydration": 0.1
+    },
+    "neutral": {
+      "altitude": 300,
+      "temp": 22,
+      "wind": 11,
+      "hydration": 0.0
+    }
   }
 }

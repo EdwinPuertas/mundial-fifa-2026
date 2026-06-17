@@ -118,6 +118,40 @@ STYLE_SCORE = {"attacking": 1.18, "balanced": 1.00, "defensive": 0.82, "countera
 CONF_MAP = {"UEFA": 0, "CONMEBOL": 1, "CONCACAF": 2, "CAF": 3, "AFC": 4, "OFC": 5}
 CONF_WC_EXP = {"UEFA": 0.82, "CONMEBOL": 0.78, "CONCACAF": 0.45, "CAF": 0.42, "AFC": 0.40, "OFC": 0.25}
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# VENUES — Estadios 2026 con datos ambientales
+#   altitude  : metros sobre el nivel del mar
+#   temp      : temperatura media en °C (junio-julio)
+#   wind      : velocidad media del viento (km/h)
+#   hydration : severidad de pause de hidratación obligatoria (0=ninguna, 1=máxima)
+#               → penaliza equipos de alto pressing y estilo atacante
+# ═══════════════════════════════════════════════════════════════════════════════
+VENUES = {
+    # ── USA ──────────────────────────────────────────────────────────────────
+    "Arlington":     {"altitude":185,  "temp":36, "wind":15, "hydration":0.8},
+    "EastRutherford":{"altitude":5,    "temp":28, "wind":18, "hydration":0.2},
+    "SantaClara":    {"altitude":15,   "temp":19, "wind":14, "hydration":0.0},
+    "Pasadena":      {"altitude":234,  "temp":29, "wind":8,  "hydration":0.3},
+    "Inglewood":     {"altitude":30,   "temp":24, "wind":10, "hydration":0.1},
+    "Philadelphia":  {"altitude":12,   "temp":30, "wind":14, "hydration":0.4},
+    "Charlotte":     {"altitude":229,  "temp":31, "wind":10, "hydration":0.5},
+    "KansasCity":    {"altitude":282,  "temp":32, "wind":18, "hydration":0.6},
+    "Denver":        {"altitude":1609, "temp":26, "wind":14, "hydration":0.2},
+    "Chicago":       {"altitude":179,  "temp":28, "wind":22, "hydration":0.2},
+    "Miami":         {"altitude":3,    "temp":32, "wind":15, "hydration":0.9},
+    "Boston":        {"altitude":8,    "temp":23, "wind":17, "hydration":0.1},
+    # ── Canada ───────────────────────────────────────────────────────────────
+    "Toronto":       {"altitude":76,   "temp":24, "wind":14, "hydration":0.1},
+    "Vancouver":     {"altitude":4,    "temp":19, "wind":11, "hydration":0.0},
+    "Montreal":      {"altitude":29,   "temp":25, "wind":14, "hydration":0.1},
+    # ── México ───────────────────────────────────────────────────────────────
+    "MexicoCity":    {"altitude":2240, "temp":18, "wind":9,  "hydration":0.0},
+    "Monterrey":     {"altitude":538,  "temp":36, "wind":12, "hydration":0.9},
+    "Guadalajara":   {"altitude":1566, "temp":22, "wind":10, "hydration":0.1},
+    # ── Neutral (default para predicciones sin sede especificada) ─────────────
+    "neutral":       {"altitude":300,  "temp":22, "wind":11, "hydration":0.0},
+}
+
 def get_tact(name):
     lu = LINEUP.get(name, {"formation": "4-3-3", "style": "balanced"})
     ff = FORMATION_FEATURES.get(lu["formation"], FORMATION_FEATURES["4-3-3"])
@@ -286,9 +320,20 @@ print(f"Features/equipo: {len(next(iter(team_feats_v3.values())))}")
 # ═══════════════════════════════════════════════════════════════════════════════
 # 3. FUNCIÓN PARA CONSTRUIR VECTOR DE PARTIDO
 # ═══════════════════════════════════════════════════════════════════════════════
-def make_match_feat(fA, fB):
+def make_match_feat(fA, fB, altitude=300, temp=22, wind=11, hydration=0.0):
     ta = fA["form_attack"] * fB["form_defense"]   # ataque A vs defensa B
     tb = fB["form_attack"] * fA["form_defense"]   # ataque B vs defensa A
+    # Environmental features
+    alt_norm   = altitude / 2500.0
+    temp_norm  = temp / 45.0
+    wind_norm  = wind / 40.0
+    alt_stress = max(0.0, (altitude - 1000) / 1500.0)
+    heat_stress = max(0.0, (temp - 28) / 15.0)
+    alt_pen_A  = fA["pressing"] * alt_stress
+    alt_pen_B  = fB["pressing"] * alt_stress
+    # Negative: pressing teams suffer in heat + hydration breaks
+    heat_hydra_pen_A = -(fA["pressing"] * heat_stress + hydration * fA["pressing"] * 0.5)
+    heat_hydra_pen_B = -(fB["pressing"] * heat_stress + hydration * fB["pressing"] * 0.5)
     return [
         fA["rank"], fB["rank"],
         fB["rank"] - fA["rank"],
@@ -324,6 +369,10 @@ def make_match_feat(fA, fB):
         fA["style_score"] * fA["form_attack"],   # ofensiva real A
         fB["style_score"] * fB["form_attack"],   # ofensiva real B
         (fA["att_combo"] * fA["form_attack"]) - (fB["att_combo"] * fB["form_attack"]),  # poder ofensivo neto
+        # Environmental features (8 nuevas)
+        alt_norm, temp_norm, wind_norm, hydration,
+        alt_pen_A, alt_pen_B,
+        heat_hydra_pen_A, heat_hydra_pen_B,
     ]
 
 N_FEAT = len(make_match_feat(next(iter(team_feats_v3.values())), next(iter(team_feats_v3.values()))))
@@ -355,6 +404,10 @@ FEAT_COLS = [
     "style_A","style_B","diff_style",
     "tact_adv","cross_ta","cross_tb",
     "off_pow_A","off_pow_B","net_off_pow",
+    # Environmental features
+    "env_alt","env_temp","env_wind","env_hydration",
+    "alt_pen_A","alt_pen_B",
+    "heat_hydra_pen_A","heat_hydra_pen_B",
 ]
 assert len(FEAT_COLS) == N_FEAT, f"Mismatch: cols={len(FEAT_COLS)} feat={N_FEAT}"
 
@@ -485,10 +538,63 @@ historical_raw = [
     [ 5,46, 0,3, 2.80,0.70, 1.33,0.83, 85.8,70.5, 7,3,  920, 95, 27.8,26.0, 18.0, 8.0, 0.90,0.50, 1,1],  # Portugal 1-1 RD Congo (sorpresa)
 ]
 
+# Datos ambientales por partido (paralelo a historical_raw)
+historical_env = [
+    # Qatar 2022 — 16 partidos (estadios AC, temperatura controlada)
+    *[{"altitude":10,  "temp":22, "wind":8,  "hydration":0.0}] * 16,
+    # Rusia 2018 — 8 partidos (temperatura fresca, viento variable)
+    *[{"altitude":140, "temp":18, "wind":14, "hydration":0.0}] * 8,
+    # Upsets históricos — 5 partidos
+    *[{"altitude":300, "temp":24, "wind":12, "hydration":0.1}] * 5,
+    # Brasil 2014 — 5 partidos (calor intenso, algo de altitud)
+    *[{"altitude":600, "temp":29, "wind":9,  "hydration":0.6}] * 5,
+    # Empates técnicos — 8 partidos
+    *[{"altitude":300, "temp":22, "wind":10, "hydration":0.0}] * 8,
+    # Finales / partidos defensivos — 6 partidos
+    *[{"altitude":200, "temp":20, "wind":8,  "hydration":0.0}] * 6,
+    # Cross UEFA vs AFC — 4 partidos
+    *[{"altitude":300, "temp":22, "wind":10, "hydration":0.0}] * 4,
+    # Cross UEFA vs CAF — 4 partidos
+    *[{"altitude":300, "temp":25, "wind":12, "hydration":0.1}] * 4,
+    # Cross UEFA vs CONCACAF — 3 partidos
+    *[{"altitude":300, "temp":22, "wind":10, "hydration":0.0}] * 3,
+    # Cross CONMEBOL vs AFC — 3 partidos
+    *[{"altitude":300, "temp":23, "wind":10, "hydration":0.0}] * 3,
+    # CONMEBOL vs CAF — 2 partidos
+    *[{"altitude":400, "temp":26, "wind":10, "hydration":0.2}] * 2,
+    # Equipos débiles favorecidos — 6 partidos
+    *[{"altitude":300, "temp":24, "wind":10, "hydration":0.0}] * 6,
+    # 2026 Jornada 1 (14-15 jun) — 5 partidos con sede real
+    {"altitude":5,   "temp":27, "wind":18, "hydration":0.2},  # Alemania 7-1 Curazao → MetLife
+    {"altitude":5,   "temp":28, "wind":18, "hydration":0.2},  # Suecia 5-1 Túnez → MetLife
+    {"altitude":3,   "temp":31, "wind":15, "hydration":0.8},  # Costa de Marfil 1-0 Ecuador → Miami
+    {"altitude":229, "temp":30, "wind":10, "hydration":0.5},  # Bélgica 1-1 Egipto → Charlotte
+    {"altitude":30,  "temp":24, "wind":10, "hydration":0.1},  # España 0-0 Cabo Verde → SoFi
+    # 2026 Jornada 1 continuación (11-17 jun) — 16 partidos con sede real
+    {"altitude":282, "temp":32, "wind":18, "hydration":0.6},  # México 2-0 Sudáfrica → Kansas City
+    {"altitude":5,   "temp":27, "wind":18, "hydration":0.2},  # Corea del Sur 2-1 Rep. Checa → MetLife
+    {"altitude":76,  "temp":24, "wind":14, "hydration":0.1},  # Canadá 1-1 Bosnia → Toronto
+    {"altitude":2240,"temp":18, "wind":9,  "hydration":0.0},  # Qatar 1-1 Suiza → México DF
+    {"altitude":3,   "temp":32, "wind":15, "hydration":0.9},  # Brasil 1-1 Marruecos → Miami
+    {"altitude":8,   "temp":24, "wind":17, "hydration":0.1},  # Escocia 1-0 Haití → Boston
+    {"altitude":185, "temp":35, "wind":15, "hydration":0.7},  # USA 4-1 Paraguay → Arlington
+    {"altitude":538, "temp":35, "wind":12, "hydration":0.8},  # Australia 2-0 Turquía → Monterrey
+    {"altitude":76,  "temp":24, "wind":14, "hydration":0.1},  # Países Bajos 2-2 Japón → Toronto
+    {"altitude":1566,"temp":22, "wind":10, "hydration":0.1},  # Irán 2-2 Nueva Zelanda → Guadalajara
+    {"altitude":229, "temp":30, "wind":10, "hydration":0.5},  # Uruguay 1-1 Arabia Saudita → Charlotte
+    {"altitude":179, "temp":28, "wind":22, "hydration":0.2},  # Francia 3-1 Senegal → Chicago
+    {"altitude":234, "temp":28, "wind":8,  "hydration":0.3},  # Noruega 4-1 Irak → Pasadena
+    {"altitude":30,  "temp":24, "wind":10, "hydration":0.1},  # Argentina 3-0 Argelia → SoFi
+    {"altitude":2240,"temp":18, "wind":9,  "hydration":0.0},  # Austria 3-1 Jordania → Azteca
+    {"altitude":5,   "temp":28, "wind":16, "hydration":0.2},  # Portugal 1-1 RD Congo → MetLife
+]
+assert len(historical_env) == len(historical_raw), f"Env list mismatch: {len(historical_env)} vs {len(historical_raw)}"
+
 # Construir el dataset combinando raw data con features tácticas históricas aproximadas
 rows = []
-for r in historical_raw:
+for i, r in enumerate(historical_raw):
     rA,rB,cA,cB,gfA,gaA,gfB,gaB,sqA,sqB,tsA,tsB,mvA,mvB,ageA,ageB,acA,acB,wcfA,wcfB,gA,gB = r
+    env = historical_env[i]
 
     def make_fake_team_feat(rnk, cf, gf_pg, ga_pg, sq, ts, mv, age, ac, wcf, is_A=True, ab=0.0):
         wc_wr = wcf
@@ -510,8 +616,8 @@ for r in historical_raw:
     fA_ = make_fake_team_feat(rA, cA, gfA, gaA, sqA, tsA, mvA, ageA, acA, wcfA, is_A=True)
     fB_ = make_fake_team_feat(rB, cB, gfB, gaB, sqB, tsB, mvB, ageB, acB, wcfB, is_A=False)
 
-    feat_fwd = make_match_feat(fA_, fB_)
-    feat_inv = make_match_feat(fB_, fA_)
+    feat_fwd = make_match_feat(fA_, fB_, **env)
+    feat_inv = make_match_feat(fB_, fA_, **env)
 
     res_fwd = 2 if gA > gB else (1 if gA == gB else 0)
     res_inv = 2 if gB > gA else (1 if gB == gA else 0)
@@ -752,10 +858,11 @@ print("\nModelos v3 guardados.")
 # ═══════════════════════════════════════════════════════════════════════════════
 print("\nGenerando predicciones duales...")
 
-def predict_match(nameA, nameB):
+def predict_match(nameA, nameB, venue="neutral"):
     fA = team_feats_v3[nameA]
     fB = team_feats_v3[nameB]
-    x  = np.array(make_match_feat(fA, fB)).reshape(1, -1)
+    env = VENUES.get(venue, VENUES["neutral"])
+    x  = np.array(make_match_feat(fA, fB, **env)).reshape(1, -1)
 
     # Engine A
     xA_pre  = scaler_pre.transform(x)
@@ -806,7 +913,7 @@ fi_xgb.to_csv(OUT + "feature_importance_v3.csv", index=False)
 print(f"predicciones_v3.json generado: {len(preds_v3)} equipos")
 
 # Guardar también config de alineaciones
-lineup_config = {"LINEUP": LINEUP, "FORMATION_FEATURES": FORMATION_FEATURES, "STYLE_SCORE": STYLE_SCORE}
+lineup_config = {"LINEUP": LINEUP, "FORMATION_FEATURES": FORMATION_FEATURES, "STYLE_SCORE": STYLE_SCORE, "VENUES": VENUES}
 with open(OUT + "lineup_config.json", "w", encoding="utf-8") as f:
     json.dump(lineup_config, f, ensure_ascii=False, indent=2)
 

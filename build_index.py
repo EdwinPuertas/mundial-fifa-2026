@@ -9,6 +9,7 @@ with open('lineup_config.json') as f:
 lineup_js = json.dumps(lineup_cfg["LINEUP"], ensure_ascii=False)
 formation_js = json.dumps(lineup_cfg["FORMATION_FEATURES"], ensure_ascii=False)
 style_js = json.dumps(lineup_cfg["STYLE_SCORE"], ensure_ascii=False)
+venues_js = json.dumps(lineup_cfg["VENUES"], ensure_ascii=False)
 
 GROUPS = {
     "A":["México","Corea del Sur","Sudáfrica","República Checa"],
@@ -245,6 +246,28 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .flex{{display:flex}} .gap8{{gap:8px}} .items-center{{align-items:center}} .flex-wrap{{flex-wrap:wrap}}
 .text-center{{text-align:center}}
 
+/* ── Venue selector ── */
+.venue-label{{font-size:.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;text-align:center;margin-top:4px;font-weight:700}}
+#venueSelect{{width:120px;font-size:.72rem;padding:5px 8px;margin-top:2px;border-radius:6px}}
+
+/* ── Env strip ── */
+.env-strip{{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  background:linear-gradient(135deg,#f0f9ff,#f0fdf4);
+  border:1px solid #bae6fd;border-radius:8px;
+  padding:8px 12px;margin-bottom:10px;
+}}
+.env-item{{display:flex;align-items:center;gap:5px;font-size:.75rem;color:var(--text2)}}
+.env-icon{{font-size:1rem}}
+.env-val{{font-weight:700;color:var(--text)}}
+.env-lbl{{font-size:.62rem;color:var(--text3)}}
+.hydra-badge{{
+  font-size:.65rem;padding:2px 7px;border-radius:4px;font-weight:700;
+}}
+.hydra-none{{background:#f0fdf4;color:#059669;border:1px solid #bbf7d0}}
+.hydra-low{{background:#fef3c7;color:#d97706;border:1px solid #fcd34d}}
+.hydra-high{{background:#fee2e2;color:#dc2626;border:1px solid #fca5a5}}
+
 @media(max-width:860px){{
   .engines-row,.tact-row,.groups-grid{{grid-template-columns:1fr}}
   .groups-grid{{grid-template-columns:repeat(2,1fr)}}
@@ -262,7 +285,7 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
   <div class="topbar-badges">
     <span class="tbadge a">Engine A · MLP+Atención</span>
     <span class="tbadge b">Engine B · XGBoost</span>
-    <span class="tbadge g">74 features · T=0.55</span>
+    <span class="tbadge g">82 features · T=0.55</span>
   </div>
   <button class="btn-analyze" id="analyzeBtn" onclick="runAnalysis()">⚡ Analizar Partido</button>
 </div>
@@ -287,10 +310,31 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
       <div id="badgeA" class="mt8"></div>
     </div>
 
-    <!-- VS -->
+    <!-- VS + VENUE -->
     <div class="vs-divider">
       <div class="vs-text">VS</div>
-      <div class="vs-sub">Sede<br>Neutral</div>
+      <div class="venue-label">🏟️ SEDE</div>
+      <select id="venueSelect" onchange="updatePrediction()">
+        <option value="neutral">Neutral</option>
+        <option value="Arlington">Arlington TX</option>
+        <option value="EastRutherford">East Rutherford NJ</option>
+        <option value="SantaClara">Santa Clara CA</option>
+        <option value="Pasadena">Pasadena CA</option>
+        <option value="Inglewood">Inglewood CA</option>
+        <option value="Philadelphia">Philadelphia PA</option>
+        <option value="Charlotte">Charlotte NC</option>
+        <option value="KansasCity">Kansas City MO</option>
+        <option value="Denver">Denver CO 🏔️</option>
+        <option value="Chicago">Chicago IL</option>
+        <option value="Miami">Miami FL 🔥</option>
+        <option value="Boston">Boston MA</option>
+        <option value="Toronto">Toronto CAN</option>
+        <option value="Vancouver">Vancouver CAN</option>
+        <option value="Montreal">Montreal CAN</option>
+        <option value="MexicoCity">México DF 🏔️🔥</option>
+        <option value="Monterrey">Monterrey MEX 🔥</option>
+        <option value="Guadalajara">Guadalajara MEX 🏔️</option>
+      </select>
       <button class="swap-btn mt8" onclick="swapTeams()" title="Intercambiar equipos">⇄</button>
     </div>
 
@@ -312,6 +356,14 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 <!-- PREDICTION PANEL -->
 <div class="card" id="predCard">
   <div class="card-title">🎯 Predicción del Partido</div>
+
+  <!-- ENV STRIP -->
+  <div id="envStrip" class="env-strip" style="display:none">
+    <div class="env-item"><span class="env-icon">🏔️</span><span class="env-val" id="envAlt">—</span><span class="env-lbl">m alt.</span></div>
+    <div class="env-item"><span class="env-icon">🌡️</span><span class="env-val" id="envTemp">—</span><span class="env-lbl">°C</span></div>
+    <div class="env-item"><span class="env-icon">💨</span><span class="env-val" id="envWind">—</span><span class="env-lbl">km/h</span></div>
+    <div class="env-item"><span class="env-icon">💧</span><span class="env-lbl">Hidratación:&nbsp;</span><span id="envHydra" class="hydra-badge hydra-none">Sin pausa</span></div>
+  </div>
 
   <!-- CONSENSUS -->
   <div id="consensusBox" class="consensus-box agree">
@@ -408,7 +460,8 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
         <li><span style="color:var(--green)">✓</span> <strong>Alineaciones tácticas</strong>: formación (9 esquemas) + estilo de juego por equipo</li>
         <li><span style="color:var(--green)">✓</span> <strong>Engine A</strong>: Deep MLP (512→256→128→64→32) + Self-Attention 4 cabezas, implementado en sklearn/numpy</li>
         <li><span style="color:var(--green)">✓</span> <strong>Engine B</strong>: XGBoost agresivo calibrado con temperatura T=0.55 para predicciones más decisivas</li>
-        <li><span style="color:var(--green)">✓</span> <strong>74 features</strong> vs 35 en v2: tácticas, experiencia confederación WC, interacciones cruzadas ataque×defensa</li>
+        <li><span style="color:var(--green)">✓</span> <strong>82 features</strong> (74 tácticas + 8 ambientales): altitud, temperatura, viento, hidratación Break</li>
+        <li><span style="color:var(--green)">✓</span> <strong>Hidratación Break negativa</strong>: penaliza equipos de alto pressing en calor/humedad extrema</li>
         <li><span style="color:var(--green)">✓</span> <strong>Goles discretos</strong>: resultado redondeado al entero más cercano (0-5)</li>
         <li><span style="color:var(--green)">✓</span> <strong>Variables de experto eliminadas</strong>: injury_factor, is_host, xg_qual</li>
       </ul>
@@ -418,13 +471,13 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
           <div style="color:var(--blue);font-weight:700;margin-bottom:4px">Engine A — MLP + Self-Attention</div>
           <div>• Capas: 512→256→128→64→32</div>
           <div>• Self-Attention: 4 heads, T=0.45</div>
-          <div>• Acc=0.591 | F1=0.525 | AUC=0.642</div>
+          <div>• Acc=0.537 | F1=0.471 | AUC=0.615</div>
         </div>
         <div style="background:var(--yellow-light);border-radius:8px;padding:10px;border:1px solid var(--yellow-mid)">
           <div style="color:var(--yellow);font-weight:700;margin-bottom:4px">Engine B — XGBoost Agresivo</div>
           <div>• depth=5 | n_est=300 | lr=0.07</div>
           <div>• min_child_w=3 | gamma=0.20</div>
-          <div>• Acc=0.545 | F1=0.535 | AUC=0.711</div>
+          <div>• Acc=0.561 | F1=0.528 | AUC=0.619</div>
         </div>
       </div>
     </div>
@@ -441,6 +494,7 @@ const PREDS = {preds_raw};
 const LINEUP_DEFAULT = {lineup_js};
 const FORMATION_FEATURES = {formation_js};
 const STYLE_SCORE = {style_js};
+const VENUES = {venues_js};
 const GROUPS = {groups_js};
 
 const FORMATIONS = ["4-3-3","4-4-2","4-2-3-1","3-4-3","3-5-2","5-3-2","4-5-1","5-4-1","4-1-4-1"];
@@ -449,24 +503,21 @@ const STYLE_LABEL = {{attacking:"Ataque",balanced:"Balanceado",defensive:"Defens
 const STYLE_CLASS = {{attacking:"atk",balanced:"bal",defensive:"def",counterattack:"ctr"}};
 
 const FEATURE_IMPORTANCE = [
-  {{f:"diff_att (combo ofensivo)",v:0.0429,new_:true}},
-  {{f:"diff_sq_rat (rating plantilla)",v:0.0394,new_:false}},
-  {{f:"sq_rat_A",v:0.0361,new_:false}},
-  {{f:"cross_tb (interacción táctica)",v:0.0343,new_:true}},
-  {{f:"cwe_A (exp. confederación WC)",v:0.0342,new_:true}},
-  {{f:"diff_log_mv (valor mercado)",v:0.0316,new_:false}},
-  {{f:"rank_diff",v:0.0278,new_:false}},
-  {{f:"net_off_pow (poder ofensivo neto)",v:0.0277,new_:true}},
-  {{f:"rank_ratio",v:0.0274,new_:false}},
-  {{f:"log_mv_B",v:0.0268,new_:false}},
-  {{f:"conf_A",v:0.0258,new_:false}},
-  {{f:"rank_A",v:0.0243,new_:false}},
-  {{f:"diff_cwe (diff exp. WC)",v:0.0228,new_:true}},
-  {{f:"wr_A (win rate elim.)",v:0.0212,new_:true}},
-  {{f:"cwe_B",v:0.0200,new_:true}},
-  {{f:"fatk_A (formación ataque A)",v:0.0188,new_:true}},
-  {{f:"style_A",v:0.0175,new_:true}},
-  {{f:"tact_adv (ventaja táctica)",v:0.0166,new_:true}},
+  {{f:"diff_att (combo ofensivo)",v:0.1131,new_:true}},
+  {{f:"net_off_pow (poder ofensivo neto)",v:0.0375,new_:true}},
+  {{f:"diff_log_mv (valor mercado)",v:0.0353,new_:false}},
+  {{f:"diff_sq_rat (rating plantilla)",v:0.0306,new_:false}},
+  {{f:"rank_ratio",v:0.0245,new_:false}},
+  {{f:"log_sv_A (valor estrella A)",v:0.0244,new_:false}},
+  {{f:"log_mv_B",v:0.0221,new_:false}},
+  {{f:"diff_gf_pg (goles favor/pg)",v:0.0188,new_:false}},
+  {{f:"wr_A (win rate eliminatoria)",v:0.0177,new_:true}},
+  {{f:"heat_hydra_pen_B 🌡️💧",v:0.0178,new_:true}},
+  {{f:"env_alt (altitud sede) 🏔️",v:0.0172,new_:true}},
+  {{f:"alt_pen_A (pressing vs altitud) 🏔️",v:0.0165,new_:true}},
+  {{f:"env_temp (temperatura sede) 🌡️",v:0.0141,new_:true}},
+  {{f:"env_hydration (pausa hidrat.) 💧",v:0.0118,new_:true}},
+  {{f:"heat_hydra_pen_A 🌡️💧",v:0.0112,new_:true}},
 ];
 
 const TEAM_STATS = {{
@@ -599,6 +650,44 @@ function applyMod(baseP, tA, formA, styleA, tB, formB, styleB) {{
 }}
 
 // ═══════════════════════════════
+// VENUE / ENV MODIFIER
+// ═══════════════════════════════
+function applyVenueMod(p, formA, styleA, formB, styleB, venueKey) {{
+  const venue = VENUES[venueKey] || VENUES['neutral'];
+  const ffA = FORMATION_FEATURES[formA] || FORMATION_FEATURES['4-3-3'];
+  const ffB = FORMATION_FEATURES[formB] || FORMATION_FEATURES['4-3-3'];
+  const altStress  = Math.max(0, (venue.altitude - 1000) / 1500);
+  const heatStress = Math.max(0, (venue.temp - 28) / 15);
+  const pressPenA  = ffA.pressing * (altStress + heatStress * (1 + venue.hydration * 0.5));
+  const pressPenB  = ffB.pressing * (altStress + heatStress * (1 + venue.hydration * 0.5));
+  // Positive shift = team B pressing penalized more than A (benefits A), vice-versa
+  const shift = (pressPenA - pressPenB) * -0.13;
+  let v=Math.max(0.01,Math.min(0.97, p.p_victoria + shift));
+  let d=Math.max(0.01,Math.min(0.97, p.p_derrota  - shift));
+  let e=Math.max(0.01, p.p_empate);
+  const s=v+e+d;
+  return {{p_victoria:v/s,p_empate:e/s,p_derrota:d/s}};
+}}
+
+function updateEnvDisplay(venueKey) {{
+  const venue = VENUES[venueKey] || VENUES['neutral'];
+  const strip = document.getElementById('envStrip');
+  if (venueKey === 'neutral') {{ strip.style.display='none'; return; }}
+  strip.style.display='flex';
+  document.getElementById('envAlt').textContent  = venue.altitude.toLocaleString();
+  document.getElementById('envTemp').textContent  = venue.temp;
+  document.getElementById('envWind').textContent  = venue.wind;
+  const hEl = document.getElementById('envHydra');
+  if (venue.hydration <= 0) {{
+    hEl.className='hydra-badge hydra-none'; hEl.textContent='Sin pausa';
+  }} else if (venue.hydration < 0.6) {{
+    hEl.className='hydra-badge hydra-low';  hEl.textContent='Pausa posible';
+  }} else {{
+    hEl.className='hydra-badge hydra-high'; hEl.textContent='Pausa obligatoria';
+  }}
+}}
+
+// ═══════════════════════════════
 // TEAM CHANGE
 // ═══════════════════════════════
 function onTeamChange() {{
@@ -634,10 +723,14 @@ function updatePrediction() {{
   const formA=userFormA||dA.formation, styleA=userStyleA||dA.style;
   const formB=userFormB||dB.formation, styleB=userStyleB||dB.style;
 
-  const pA=applyMod(match.engine_A,tA,formA,styleA,tB,formB,styleB);
-  const pB=applyMod(match.engine_B,tA,formA,styleA,tB,formB,styleB);
+  const venue = document.getElementById('venueSelect').value;
+  const pA_tact=applyMod(match.engine_A,tA,formA,styleA,tB,formB,styleB);
+  const pB_tact=applyMod(match.engine_B,tA,formA,styleA,tB,formB,styleB);
+  const pA=applyVenueMod(pA_tact,formA,styleA,formB,styleB,venue);
+  const pB=applyVenueMod(pB_tact,formA,styleA,formB,styleB,venue);
   const lA=match.lambda_A, lB=match.lambda_B;
 
+  updateEnvDisplay(venue);
   renderEngineA(pA,tA,tB,lA,lB);
   renderEngineB(pB,tA,tB,lA,lB);
 
