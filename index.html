@@ -242,7 +242,7 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
   <div class="topbar-badges">
     <span class="tbadge a">Engine A · MLP+Atención</span>
     <span class="tbadge b">Engine B · XGBoost</span>
-    <span class="tbadge g">82 features · T=0.55</span>
+    <span class="tbadge g">85 features · T=0.55</span>
   </div>
   <button class="btn-analyze" id="analyzeBtn" onclick="runAnalysis()">⚡ Analizar Partido</button>
 </div>
@@ -416,6 +416,15 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
     <div class="env-item"><span class="env-icon">💧</span><span class="env-lbl">Hidratación:&nbsp;</span><span id="envHydra" class="hydra-badge hydra-none">Sin pausa</span></div>
   </div>
 
+  <!-- MARKET ODDS STRIP -->
+  <div id="bkStrip" style="display:none;flex-wrap:wrap;align-items:center;gap:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.74rem;color:var(--text2)">
+    <span style="font-weight:700;color:var(--text);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em">📊 Mercado estimado</span>
+    <span>Victoria A: <strong id="bkWinA" style="color:var(--green)">—</strong></span>
+    <span>Empate: <strong id="bkDraw" style="color:var(--yellow)">—</strong></span>
+    <span>Victoria B: <strong id="bkWinB" style="color:var(--red)">—</strong></span>
+    <span style="font-size:.62rem;color:var(--text3)">(Squawka · CBS · FoxSports · CleverScores)</span>
+  </div>
+
   <!-- CONSENSUS -->
   <div id="consensusBox" class="consensus-box agree">
     <div class="consensus-icon" id="consensusIcon">✅</div>
@@ -511,7 +520,8 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
         <li><span style="color:var(--green)">✓</span> <strong>Alineaciones tácticas</strong>: formación (9 esquemas) + estilo de juego por equipo</li>
         <li><span style="color:var(--green)">✓</span> <strong>Engine A</strong>: Deep MLP (512→256→128→64→32) + Self-Attention 4 cabezas, implementado en sklearn/numpy</li>
         <li><span style="color:var(--green)">✓</span> <strong>Engine B</strong>: XGBoost agresivo calibrado con temperatura T=0.55 para predicciones más decisivas</li>
-        <li><span style="color:var(--green)">✓</span> <strong>82 features</strong> (74 tácticas + 8 ambientales): altitud, temperatura, viento, hidratación Break</li>
+        <li><span style="color:var(--green)">✓</span> <strong>85 features</strong>: 74 tácticas + 8 ambientales (altitud/temp/viento/hidratación) + 3 de mercado</li>
+        <li><span style="color:var(--green)">✓</span> <strong>Odds de mercado</strong>: probabilidades de casas de apuestas (Squawka, CBS, FoxSports, CleverScores) como feature — <em>bk_win_A</em> es la 2ª feature más importante del modelo</li>
         <li><span style="color:var(--green)">✓</span> <strong>Hidratación Break negativa</strong>: penaliza equipos de alto pressing en calor/humedad extrema</li>
         <li><span style="color:var(--green)">✓</span> <strong>Goles discretos</strong>: resultado redondeado al entero más cercano (0-5)</li>
         <li><span style="color:var(--green)">✓</span> <strong>Variables de experto eliminadas</strong>: injury_factor, is_host, xg_qual</li>
@@ -522,13 +532,13 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
           <div style="color:var(--blue);font-weight:700;margin-bottom:4px">Engine A — MLP + Self-Attention</div>
           <div>• Capas: 512→256→128→64→32</div>
           <div>• Self-Attention: 4 heads, T=0.45</div>
-          <div>• Acc=0.537 | F1=0.471 | AUC=0.615</div>
+          <div>• Acc=0.537 | F1=0.471 | AUC=0.658</div>
         </div>
         <div style="background:var(--yellow-light);border-radius:8px;padding:10px;border:1px solid var(--yellow-mid)">
           <div style="color:var(--yellow);font-weight:700;margin-bottom:4px">Engine B — XGBoost Agresivo</div>
           <div>• depth=5 | n_est=300 | lr=0.07</div>
           <div>• min_child_w=3 | gamma=0.20</div>
-          <div>• Acc=0.561 | F1=0.528 | AUC=0.619</div>
+          <div>• Acc=0.561 | F1=0.499 | AUC=0.675</div>
         </div>
       </div>
     </div>
@@ -554,21 +564,21 @@ const STYLE_LABEL = {attacking:"Ataque",balanced:"Balanceado",defensive:"Defensa
 const STYLE_CLASS = {attacking:"atk",balanced:"bal",defensive:"def",counterattack:"ctr"};
 
 const FEATURE_IMPORTANCE = [
-  {f:"diff_att (combo ofensivo)",v:0.1131,new_:true},
-  {f:"net_off_pow (poder ofensivo neto)",v:0.0375,new_:true},
-  {f:"diff_log_mv (valor mercado)",v:0.0353,new_:false},
-  {f:"diff_sq_rat (rating plantilla)",v:0.0306,new_:false},
-  {f:"rank_ratio",v:0.0245,new_:false},
-  {f:"log_sv_A (valor estrella A)",v:0.0244,new_:false},
-  {f:"log_mv_B",v:0.0221,new_:false},
-  {f:"diff_gf_pg (goles favor/pg)",v:0.0188,new_:false},
-  {f:"wr_A (win rate eliminatoria)",v:0.0177,new_:true},
-  {f:"heat_hydra_pen_B 🌡️💧",v:0.0178,new_:true},
-  {f:"env_alt (altitud sede) 🏔️",v:0.0172,new_:true},
-  {f:"alt_pen_A (pressing vs altitud) 🏔️",v:0.0165,new_:true},
-  {f:"env_temp (temperatura sede) 🌡️",v:0.0141,new_:true},
-  {f:"env_hydration (pausa hidrat.) 💧",v:0.0118,new_:true},
-  {f:"heat_hydra_pen_A 🌡️💧",v:0.0112,new_:true},
+  {f:"diff_att (combo ofensivo)",v:0.1196,new_:true},
+  {f:"bk_win_A 📊 (odds mercado A)",v:0.0636,new_:true},
+  {f:"diff_log_mv (valor mercado)",v:0.0361,new_:false},
+  {f:"log_sv_A (valor estrella A)",v:0.0296,new_:false},
+  {f:"net_off_pow (poder ofensivo neto)",v:0.0283,new_:true},
+  {f:"log_sv_B",v:0.0216,new_:false},
+  {f:"bk_draw 📊 (odds empate mercado)",v:0.0214,new_:true},
+  {f:"env_alt (altitud sede) 🏔️",v:0.0199,new_:true},
+  {f:"gf_pg_A (goles favor/pg A)",v:0.0196,new_:false},
+  {f:"rank_ratio",v:0.0177,new_:false},
+  {f:"log_mv_A",v:0.0173,new_:false},
+  {f:"diff_gf_pg",v:0.0173,new_:false},
+  {f:"sq_rat_B (rating plantilla B)",v:0.0169,new_:false},
+  {f:"diff_sq_rat",v:0.0164,new_:false},
+  {f:"heat_hydra_pen_B 🌡️💧",v:0.0158,new_:true},
 ];
 
 const TEAM_STATS = {
@@ -782,6 +792,14 @@ function updatePrediction() {
   const lA=match.lambda_A, lB=match.lambda_B;
 
   updateEnvDisplay(venue);
+  // Market odds strip
+  if (match.bk_estimate) {
+    const bk=match.bk_estimate;
+    document.getElementById('bkStrip').style.display='flex';
+    document.getElementById('bkWinA').textContent=pct(bk[0]);
+    document.getElementById('bkDraw').textContent=pct(bk[1]);
+    document.getElementById('bkWinB').textContent=pct(bk[2]);
+  }
   renderEngineA(pA,tA,tB,lA,lB);
   renderEngineB(pB,tA,tB,lA,lB);
 

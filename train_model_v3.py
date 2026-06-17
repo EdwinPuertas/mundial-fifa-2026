@@ -165,6 +165,18 @@ def get_tact(name):
         "style_score":  STYLE_SCORE.get(lu["style"], 1.0),
     }
 
+def estimate_bk_prob(rankA, rankB, sqA, sqB, mvA, mvB):
+    """Estima probabilidades pre-partido tipo casa de apuestas (para datos históricos sin cuotas reales)."""
+    rank_adv = (rankB - rankA) / 25.0
+    sq_adv   = (sqA - sqB) / 20.0
+    mv_adv   = (np.log1p(mvA) - np.log1p(mvB)) / 2.0
+    logit    = 0.35 * rank_adv + 0.25 * sq_adv + 0.40 * mv_adv
+    p_base   = 1.0 / (1.0 + np.exp(-logit))
+    draw_p   = max(0.15, min(0.30, 0.25 - 0.003 * abs(rankB - rankA)))
+    bk_a     = p_base * (1 - draw_p)
+    bk_b     = (1 - p_base) * (1 - draw_p)
+    return [round(bk_a, 4), round(draw_p, 4), round(bk_b, 4)]
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # 1. DATOS DE EQUIPOS (sin injury_factor, sin xg_qual, sin is_host)
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -320,7 +332,7 @@ print(f"Features/equipo: {len(next(iter(team_feats_v3.values())))}")
 # ═══════════════════════════════════════════════════════════════════════════════
 # 3. FUNCIÓN PARA CONSTRUIR VECTOR DE PARTIDO
 # ═══════════════════════════════════════════════════════════════════════════════
-def make_match_feat(fA, fB, altitude=300, temp=22, wind=11, hydration=0.0):
+def make_match_feat(fA, fB, altitude=300, temp=22, wind=11, hydration=0.0, bk_win_A=0.333, bk_draw=0.333, bk_win_B=0.333):
     ta = fA["form_attack"] * fB["form_defense"]   # ataque A vs defensa B
     tb = fB["form_attack"] * fA["form_defense"]   # ataque B vs defensa A
     # Environmental features
@@ -373,6 +385,8 @@ def make_match_feat(fA, fB, altitude=300, temp=22, wind=11, hydration=0.0):
         alt_norm, temp_norm, wind_norm, hydration,
         alt_pen_A, alt_pen_B,
         heat_hydra_pen_A, heat_hydra_pen_B,
+        # Bookmaker odds — probabilidades de mercado pre-partido (3 nuevas)
+        bk_win_A, bk_draw, bk_win_B,
     ]
 
 N_FEAT = len(make_match_feat(next(iter(team_feats_v3.values())), next(iter(team_feats_v3.values()))))
@@ -408,6 +422,8 @@ FEAT_COLS = [
     "env_alt","env_temp","env_wind","env_hydration",
     "alt_pen_A","alt_pen_B",
     "heat_hydra_pen_A","heat_hydra_pen_B",
+    # Bookmaker odds features
+    "bk_win_A","bk_draw","bk_win_B",
 ]
 assert len(FEAT_COLS) == N_FEAT, f"Mismatch: cols={len(FEAT_COLS)} feat={N_FEAT}"
 
@@ -590,11 +606,48 @@ historical_env = [
 ]
 assert len(historical_env) == len(historical_raw), f"Env list mismatch: {len(historical_env)} vs {len(historical_raw)}"
 
+# Probabilidades pre-partido de casas de apuestas por partido
+# Fuentes: Squawka AI, CleverScores, FoxSports, CBS Sports, 1960Tips
+# None = estimado por fórmula a partir de ranking/calidad de plantilla
+historical_bk = [
+    *[None] * 70,  # Partidos históricos (2014, 2018, 2022) — estimación por fórmula
+    # ── 2026 Jornada 1 (14-15 jun) — cuotas reales de mercado ─────────────────
+    [0.87, 0.09, 0.04],  # Alemania 7-1 Curazao     (bk: Ale 85%)
+    [0.73, 0.18, 0.09],  # Suecia 5-1 Túnez          (bk: Sue 70%)
+    [0.38, 0.30, 0.32],  # Costa de Marfil 1-0 Ecu   (bk: igualado — sorpresa)
+    [0.65, 0.22, 0.13],  # Bélgica 1-1 Egipto        (bk: Bél 62%)
+    [0.90, 0.07, 0.03],  # España 0-0 Cabo Verde      (bk: Esp 90% — sorpresa extrema)
+    # ── 2026 Jornada 1 continuación (11-17 jun) — cuotas reales ───────────────
+    [0.62, 0.23, 0.15],  # México 2-0 Sudáfrica
+    [0.45, 0.28, 0.27],  # Corea del Sur 2-1 Rep.Checa
+    [0.48, 0.28, 0.24],  # Canadá 1-1 Bosnia
+    [0.11, 0.24, 0.65],  # Qatar 1-1 Suiza            (bk: Sui 65% — sorpresa Qatar)
+    [0.64, 0.22, 0.14],  # Brasil 1-1 Marruecos       (bk: Bra 62% — sorpresa)
+    [0.75, 0.17, 0.08],  # Escocia 1-0 Haití
+    [0.58, 0.24, 0.18],  # USA 4-1 Paraguay
+    [0.28, 0.27, 0.45],  # Australia 2-0 Turquía      (bk: Tur 45% — sorpresa Aus)
+    [0.68, 0.20, 0.12],  # Países Bajos 2-2 Japón     (bk: NED 65% — sorpresa)
+    [0.52, 0.25, 0.23],  # Irán 2-2 Nueva Zelanda
+    [0.60, 0.24, 0.16],  # Uruguay 1-1 Arabia Saudita
+    [0.79, 0.15, 0.06],  # Francia 3-1 Senegal
+    [0.83, 0.12, 0.05],  # Noruega 4-1 Irak
+    [0.89, 0.07, 0.04],  # Argentina 3-0 Argelia
+    [0.78, 0.15, 0.07],  # Austria 3-1 Jordania
+    [0.87, 0.09, 0.04],  # Portugal 1-1 RD Congo      (bk: Por 87% — sorpresa)
+]
+assert len(historical_bk) == len(historical_raw), f"BK list mismatch: {len(historical_bk)} vs {len(historical_raw)}"
+
 # Construir el dataset combinando raw data con features tácticas históricas aproximadas
 rows = []
 for i, r in enumerate(historical_raw):
     rA,rB,cA,cB,gfA,gaA,gfB,gaB,sqA,sqB,tsA,tsB,mvA,mvB,ageA,ageB,acA,acB,wcfA,wcfB,gA,gB = r
-    env = historical_env[i]
+    env    = historical_env[i]
+    bk_raw = historical_bk[i]
+    if bk_raw is None:
+        bk_fwd = estimate_bk_prob(rA, rB, sqA, sqB, mvA, mvB)
+    else:
+        bk_fwd = bk_raw
+    bk_inv = [bk_fwd[2], bk_fwd[1], bk_fwd[0]]
 
     def make_fake_team_feat(rnk, cf, gf_pg, ga_pg, sq, ts, mv, age, ac, wcf, is_A=True, ab=0.0):
         wc_wr = wcf
@@ -616,8 +669,8 @@ for i, r in enumerate(historical_raw):
     fA_ = make_fake_team_feat(rA, cA, gfA, gaA, sqA, tsA, mvA, ageA, acA, wcfA, is_A=True)
     fB_ = make_fake_team_feat(rB, cB, gfB, gaB, sqB, tsB, mvB, ageB, acB, wcfB, is_A=False)
 
-    feat_fwd = make_match_feat(fA_, fB_, **env)
-    feat_inv = make_match_feat(fB_, fA_, **env)
+    feat_fwd = make_match_feat(fA_, fB_, **env, bk_win_A=bk_fwd[0], bk_draw=bk_fwd[1], bk_win_B=bk_fwd[2])
+    feat_inv = make_match_feat(fB_, fA_, **env, bk_win_A=bk_inv[0], bk_draw=bk_inv[1], bk_win_B=bk_inv[2])
 
     res_fwd = 2 if gA > gB else (1 if gA == gB else 0)
     res_inv = 2 if gB > gA else (1 if gB == gA else 0)
@@ -858,11 +911,17 @@ print("\nModelos v3 guardados.")
 # ═══════════════════════════════════════════════════════════════════════════════
 print("\nGenerando predicciones duales...")
 
-def predict_match(nameA, nameB, venue="neutral"):
+def predict_match(nameA, nameB, venue="neutral", bk_probs=None):
     fA = team_feats_v3[nameA]
     fB = team_feats_v3[nameB]
     env = VENUES.get(venue, VENUES["neutral"])
-    x  = np.array(make_match_feat(fA, fB, **env)).reshape(1, -1)
+    if bk_probs is None:
+        tA = TEAMS[nameA]; tB = TEAMS[nameB]
+        bk = estimate_bk_prob(tA[0], tB[0], tA[7], tB[7], tA[8], tB[8])
+    else:
+        bk = bk_probs
+    x  = np.array(make_match_feat(fA, fB, **env,
+                                   bk_win_A=bk[0], bk_draw=bk[1], bk_win_B=bk[2])).reshape(1, -1)
 
     # Engine A
     xA_pre  = scaler_pre.transform(x)
@@ -895,6 +954,7 @@ def predict_match(nameA, nameB, venue="neutral"):
         "lambda_B": round(lB, 3),
         "lineup_A": LINEUP.get(nameA, {"formation": "4-3-3", "style": "balanced"}),
         "lineup_B": LINEUP.get(nameB, {"formation": "4-3-3", "style": "balanced"}),
+        "bk_estimate": [round(float(bk[0]),3), round(float(bk[1]),3), round(float(bk[2]),3)],
     }
 
 preds_v3 = {}
