@@ -1,0 +1,51 @@
+name: Daily WC2026 Update
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 2am UTC todos los días
+  workflow_dispatch:        # permite lanzar manualmente desde GitHub
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          pip install numpy pandas scikit-learn xgboost joblib matplotlib seaborn
+
+      - name: Obtener nuevos resultados
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+        run: python update_daily.py
+
+      - name: Reentrenar modelo y regenerar predicciones
+        run: python train_model_v3.py
+
+      - name: Reconstruir sitio estático
+        run: python build_index.py
+
+      - name: Confirmar y publicar cambios
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add wc2026_updates.json predicciones_v3.json index.html lineup_config.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update: resultados WC2026 $(date -u +'%Y-%m-%d')"
+            git push
+          else
+            echo "Sin cambios — no se genera commit."
+          fi

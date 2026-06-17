@@ -1,0 +1,5 @@
+{
+  "_comment": "Plantilla para cargar resultados manualmente si la API no está disponible. Agregar partidos completados al array 'matches'.",
+  "matches": [
+  ]
+}

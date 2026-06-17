@@ -13,6 +13,7 @@ Cambios vs v2:
   • Modelos de goles independientes por engine
 """
 
+import os
 import numpy as np
 import pandas as pd
 import json
@@ -677,6 +678,42 @@ for i, r in enumerate(historical_raw):
 
     rows.append(feat_fwd + [float(gA), float(gB), res_fwd])
     rows.append(feat_inv + [float(gB), float(gA), res_inv])
+
+# ──────────────────────────────────────────────────────────────────────────────
+# DYNAMIC UPDATES — carga resultados nuevos del Mundial 2026
+# Usa team_feats_v3 reales en lugar de aproximaciones históricas
+# ──────────────────────────────────────────────────────────────────────────────
+_updates_path = OUT + "wc2026_updates.json"
+if os.path.exists(_updates_path):
+    with open(_updates_path, "r", encoding="utf-8") as _f:
+        _wc_upd = json.load(_f)
+    _dyn_added = 0
+    for _m in _wc_upd.get("matches", []):
+        _tA, _tB = _m.get("teamA"), _m.get("teamB")
+        if _tA not in team_feats_v3 or _tB not in team_feats_v3:
+            print(f"  [UPDATE SKIP] {_tA} o {_tB} no está en team_feats_v3")
+            continue
+        _gA, _gB = int(_m["goalsA"]), int(_m["goalsB"])
+        _venue   = _m.get("venue", "neutral")
+        _env     = VENUES.get(_venue, VENUES["neutral"])
+        _bk      = _m.get("bk_probs") or estimate_bk_prob(
+                       TEAMS[_tA][0], TEAMS[_tB][0],
+                       TEAMS[_tA][7], TEAMS[_tB][7],
+                       TEAMS[_tA][8], TEAMS[_tB][8])
+        _bk_inv  = [_bk[2], _bk[1], _bk[0]]
+        _fA      = team_feats_v3[_tA]
+        _fB      = team_feats_v3[_tB]
+        _feat_fwd = make_match_feat(_fA, _fB, **_env,
+                                    bk_win_A=_bk[0],     bk_draw=_bk[1],     bk_win_B=_bk[2])
+        _feat_inv = make_match_feat(_fB, _fA, **_env,
+                                    bk_win_A=_bk_inv[0], bk_draw=_bk_inv[1], bk_win_B=_bk_inv[2])
+        _res_fwd  = 2 if _gA > _gB else (1 if _gA == _gB else 0)
+        _res_inv  = 2 if _gB > _gA else (1 if _gB == _gA else 0)
+        rows.append(_feat_fwd + [float(_gA), float(_gB), _res_fwd])
+        rows.append(_feat_inv + [float(_gB), float(_gA), _res_inv])
+        _dyn_added += 1
+    if _dyn_added > 0:
+        print(f"  [UPDATE] +{_dyn_added} partidos dinámicos de wc2026_updates.json")
 
 df = pd.DataFrame(rows, columns=FEAT_COLS + ["gA", "gB", "resultado"])
 print(f"\nDataset v3: {len(df)} partidos | Features: {len(FEAT_COLS)}")
