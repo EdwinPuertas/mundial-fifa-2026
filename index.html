@@ -203,6 +203,35 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
 .flex{display:flex} .gap8{gap:8px} .items-center{align-items:center} .flex-wrap{flex-wrap:wrap}
 .text-center{text-align:center}
 
+/* ── Mi Pronóstico (manual confidence) ── */
+.my-pred-section{border:1px dashed var(--border);border-radius:10px;padding:12px 14px;background:var(--surface2)}
+.my-pred-inputs{display:flex;align-items:center;gap:12px;margin:10px 0;flex-wrap:wrap}
+.goal-input{
+  width:56px;height:50px;text-align:center;font-size:1.8rem;font-weight:900;
+  border:2px solid var(--border);border-radius:8px;background:#fff;
+  color:var(--text);-moz-appearance:textfield;
+}
+.goal-input::-webkit-outer-spin-button,.goal-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.goal-input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,.15)}
+.btn-confidence{
+  background:var(--purple);color:#fff;border:none;
+  padding:9px 16px;border-radius:8px;font-size:.82rem;font-weight:700;
+  cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.btn-confidence:hover{background:#6d28d9;transform:translateY(-1px)}
+.conf-result{border-radius:8px;padding:12px 14px;margin-top:10px;background:#fff;border:1px solid var(--border)}
+.conf-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.conf-bar-label{font-size:.72rem;color:var(--text2);width:185px;flex-shrink:0}
+.conf-bar-track{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.conf-bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.conf-bar-pct{font-size:.72rem;font-weight:700;width:42px;text-align:right}
+.conf-verdict{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:.78rem;display:flex;align-items:center;gap:8px}
+.cv-agree{background:#f0fdf4;border:1px solid #bbf7d0;color:#065f46}
+.cv-caution{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}
+.cv-diverge{background:var(--red-light);border:1px solid var(--red-mid);color:#991b1b}
+.pred-team-name{font-size:.7rem;color:var(--text2);text-align:center;margin-bottom:3px;font-weight:600}
+.pred-separator{font-size:1.5rem;color:var(--text3);font-weight:300;align-self:center;margin-top:16px}
+
 /* ── Venue selector ── */
 .venue-label{font-size:.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;text-align:center;margin-top:4px;font-weight:700}
 #venueSelect{width:120px;font-size:.72rem;padding:5px 8px;margin-top:2px;border-radius:6px}
@@ -472,6 +501,29 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
 
   <!-- VERDICT (full width) -->
   <div id="verdict" class="verd-win">Selecciona dos equipos y pulsa ⚡ Analizar Partido.</div>
+</div>
+
+<!-- MI PRONÓSTICO -->
+<div class="card">
+  <div class="card-title">🎯 Mi Pronóstico — Calcular Confianza</div>
+  <div class="my-pred-section">
+    <div style="font-size:.78rem;color:var(--text2);margin-bottom:8px">
+      Ingresa tu marcador predicho y el modelo calcula qué tan alineado está con sus cálculos.
+    </div>
+    <div class="my-pred-inputs">
+      <div style="text-align:center">
+        <div class="pred-team-name" id="myTeamLabelA">Equipo A</div>
+        <input type="number" id="myGoalA" class="goal-input" min="0" max="15" value="1">
+      </div>
+      <div class="pred-separator">—</div>
+      <div style="text-align:center">
+        <div class="pred-team-name" id="myTeamLabelB">Equipo B</div>
+        <input type="number" id="myGoalB" class="goal-input" min="0" max="15" value="0">
+      </div>
+      <button class="btn-confidence" onclick="calcMyConfidence()">🎯 Calcular Confianza</button>
+    </div>
+    <div id="confResult" style="display:none" class="conf-result"></div>
+  </div>
 </div>
 
 <!-- ANÁLISIS TÁCTICO -->
@@ -758,6 +810,9 @@ function onTeamChange() {
   buildFormChips('formRowA',tA,'A'); buildFormChips('formRowB',tB,'B');
   buildStyleChips('styleRowA',tA,'A'); buildStyleChips('styleRowB',tB,'B');
   renderLineupBadge('A'); renderLineupBadge('B');
+  document.getElementById('myTeamLabelA').textContent=tA;
+  document.getElementById('myTeamLabelB').textContent=tB;
+  document.getElementById('confResult').style.display='none';
   updatePrediction();
   renderStats(tA,tB);
 }
@@ -1037,6 +1092,93 @@ function switchTab(id,el) {
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   if(el) el.classList.add('active');
   document.getElementById('tab-'+id).classList.add('active');
+}
+
+// ═══════════════════════════════
+// MI PRONÓSTICO — CONFIANZA
+// ═══════════════════════════════
+function poisson(k, lam) {
+  if (lam <= 0) return k === 0 ? 1 : 0;
+  let p = Math.exp(-lam);
+  for (let i = 1; i <= k; i++) p *= lam / i;
+  return Math.max(0, Math.min(1, p));
+}
+
+function calcMyConfidence() {
+  const tA = document.getElementById('teamA').value;
+  const tB = document.getElementById('teamB').value;
+  const myGA = Math.max(0, Math.min(15, parseInt(document.getElementById('myGoalA').value)||0));
+  const myGB = Math.max(0, Math.min(15, parseInt(document.getElementById('myGoalB').value)||0));
+  const match = PREDS[tA] && PREDS[tA][tB];
+  if (!match) return;
+
+  const venue = document.getElementById('venueSelect').value;
+  const dA = LINEUP_DEFAULT[tA]||{formation:'4-3-3',style:'balanced'};
+  const dB = LINEUP_DEFAULT[tB]||{formation:'4-3-3',style:'balanced'};
+  const formA=userFormA||dA.formation, styleA=userStyleA||dA.style;
+  const formB=userFormB||dB.formation, styleB=userStyleB||dB.style;
+
+  const pA_t=applyMod(match.engine_A,tA,formA,styleA,tB,formB,styleB);
+  const pB_t=applyMod(match.engine_B,tA,formA,styleA,tB,formB,styleB);
+  const pA=applyVenueMod(pA_t,formA,styleA,formB,styleB,venue);
+  const pB=applyVenueMod(pB_t,formA,styleA,formB,styleB,venue);
+  const avg={
+    p_victoria:(pA.p_victoria+pB.p_victoria)/2,
+    p_empate:  (pA.p_empate  +pB.p_empate  )/2,
+    p_derrota: (pA.p_derrota +pB.p_derrota )/2,
+  };
+
+  // Probabilidad de resultado según usuario
+  let resultProb, resultLabel;
+  if      (myGA>myGB) { resultProb=avg.p_victoria; resultLabel='Victoria '+tA; }
+  else if (myGA===myGB){ resultProb=avg.p_empate;   resultLabel='Empate'; }
+  else                 { resultProb=avg.p_derrota;  resultLabel='Victoria '+tB; }
+
+  // Marcador exacto via distribución Poisson (λ del modelo)
+  const lA=match.lambda_A, lB=match.lambda_B;
+  const pExact = poisson(myGA,lA) * poisson(myGB,lB);
+
+  // Confianza combinada: 70% resultado + 30% marcador exacto (escalado)
+  const exactScaled = Math.min(0.30, pExact * 6);
+  const combined = Math.min(0.97, resultProb*0.70 + exactScaled*0.30);
+
+  // Predicción del modelo para comparar
+  const [mGA,mGB]=consistentGoals(lA,lB,avg);
+  const modelLabel=mGA>mGB?`Victoria ${tA} (${mGA}-${mGB})`:
+                   mGA===mGB?`Empate (${mGA}-${mGB})`:`Victoria ${tB} (${mGA}-${mGB})`;
+
+  // Veredicto
+  let vClass,vIcon,vText;
+  if      (combined>=0.65){vClass='cv-agree';  vIcon='✅';vText='Pronóstico muy alineado — el modelo respalda tu predicción';}
+  else if (combined>=0.40){vClass='cv-caution';vIcon='🟡';vText='Pronóstico plausible — el modelo muestra apoyo moderado';}
+  else                    {vClass='cv-diverge';vIcon='⚠️';vText='Pronóstico diverge del modelo — el modelo ve otro resultado';}
+
+  const barCol=combined>=0.65?'var(--green)':combined>=0.40?'var(--yellow)':'var(--red)';
+
+  document.getElementById('confResult').style.display='block';
+  document.getElementById('confResult').innerHTML=`
+    <div style="font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:10px">
+      Confianza del modelo en: <strong style="color:var(--blue)">${tA} ${myGA} — ${myGB} ${tB}</strong>
+    </div>
+    <div class="conf-bar-row">
+      <div class="conf-bar-label">📊 Resultado (${resultLabel})</div>
+      <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${Math.round(resultProb*100)}%;background:var(--blue)"></div></div>
+      <div class="conf-bar-pct" style="color:var(--blue)">${pct(resultProb)}</div>
+    </div>
+    <div class="conf-bar-row">
+      <div class="conf-bar-label">⚽ Marcador exacto ${myGA}-${myGB} (Poisson)</div>
+      <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${Math.min(100,Math.round(pExact*400))}%;background:var(--purple)"></div></div>
+      <div class="conf-bar-pct" style="color:var(--purple)">${(pExact*100).toFixed(1)}%</div>
+    </div>
+    <div class="conf-bar-row">
+      <div class="conf-bar-label">🎯 Confianza combinada</div>
+      <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${Math.round(combined*100)}%;background:${barCol}"></div></div>
+      <div class="conf-bar-pct" style="color:${barCol};font-size:.78rem">${Math.round(combined*100)}%</div>
+    </div>
+    <div style="font-size:.72rem;color:var(--text3);margin:8px 0 4px">
+      🤖 El modelo predice: <strong style="color:var(--text)">${modelLabel}</strong>
+    </div>
+    <div class="conf-verdict ${vClass}">${vIcon} ${vText}</div>`;
 }
 
 // ═══════════════════════════════
