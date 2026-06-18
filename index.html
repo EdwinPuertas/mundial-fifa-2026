@@ -275,16 +275,21 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
 .gd-pct{font-size:.62rem;color:var(--text2);width:30px;text-align:right;flex-shrink:0}
 .gd-lambda{font-size:.62rem;color:var(--text3);margin-top:3px}
 
-/* ── 3 Scenarios per engine ── */
+/* ── 5 Scenarios per engine — independent Poisson ── */
 .scenarios-section{border-top:1px solid var(--border);margin-top:10px;padding-top:10px}
 .scenarios-title{font-size:.63rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:7px}
-.scenario-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:.72rem}
+.scenario-item{margin-bottom:7px}
+.scenario-row{display:flex;align-items:center;gap:6px;font-size:.72rem}
 .scen-rank{width:14px;font-size:.62rem;color:var(--text3);flex-shrink:0;font-weight:700}
 .scen-score{font-weight:800;color:var(--text);width:38px;flex-shrink:0;font-family:monospace}
 .scen-label{flex:1;color:var(--text2);font-size:.68rem}
 .scen-bar-track{width:60px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0}
 .scen-bar-fill{height:100%;border-radius:3px;transition:width .4s}
 .scen-pct{font-size:.67rem;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+.scen-goal-probs{display:flex;gap:6px;padding:2px 0 0 20px;font-size:.60rem;color:var(--text3)}
+.scen-gA{color:var(--blue);font-weight:600}
+.scen-gB{color:var(--text2);font-weight:600}
+.scen-sep{color:var(--border)}
 
 /* ── Mi Pronóstico revamp ── */
 .mi-pred-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
@@ -942,7 +947,7 @@ function renderEngineA(p,tA,tB,lA,lB) {
   document.getElementById('aNameA').textContent=tA;
   document.getElementById('aNameB').textContent=tB;
   renderGoalDist('goalDistA', lA, lB, tA, tB, 'A');
-  renderScenarios('scenariosA', lA, lB, p, tA, tB);
+  renderScenarios('scenariosA', lA, lB, tA, tB);
 }
 
 function renderEngineB(p,tA,tB,lA,lB) {
@@ -962,7 +967,7 @@ function renderEngineB(p,tA,tB,lA,lB) {
   document.getElementById('bNameA').textContent=tA;
   document.getElementById('bNameB').textContent=tB;
   renderGoalDist('goalDistB', lA, lB, tA, tB, 'B');
-  renderScenarios('scenariosB', lA, lB, p, tA, tB);
+  renderScenarios('scenariosB', lA, lB, tA, tB);
 }
 
 function renderGoalDist(containerId, lA, lB, tA, tB, engine) {
@@ -1006,42 +1011,43 @@ function renderGoalDist(containerId, lA, lB, tA, tB, engine) {
     </div>`;
 }
 
-function renderScenarios(containerId, lA, lB, p, tA, tB) {
+function renderScenarios(containerId, lA, lB, tA, tB) {
   const el = document.getElementById(containerId);
   if (!el) return;
-  // Best score per result category using Poisson
-  let bestWin=[null,0], bestDraw=[null,0], bestLoss=[null,0];
-  let sumWin=0, sumDraw=0, sumLoss=0;
-  for (let i=0; i<=5; i++) {
-    for (let j=0; j<=5; j++) {
-      const pp = poisson(i,lA)*poisson(j,lB);
-      if (i>j)  { sumWin+=pp;  if (pp>bestWin[1])  { bestWin=[i,j,pp];  bestWin[1]=pp; } }
-      else if (i===j) { sumDraw+=pp; if (pp>bestDraw[1]) { bestDraw=[i,j,pp]; bestDraw[1]=pp; } }
-      else        { sumLoss+=pp; if (pp>bestLoss[1]) { bestLoss=[i,j,pp]; bestLoss[1]=pp; } }
+  // Probabilidades completamente independientes: P(i-j) = Poisson(i,lA) × Poisson(j,lB)
+  const scores = [];
+  for (let i=0; i<=7; i++) {
+    for (let j=0; j<=7; j++) {
+      const pA_i = poisson(i, lA);
+      const pB_j = poisson(j, lB);
+      const prob  = pA_i * pB_j;
+      const cat   = i>j ? 'win' : i===j ? 'draw' : 'loss';
+      scores.push({i, j, pA_i, pB_j, prob, cat});
     }
   }
-  // P(scenario) = p_result * P(score|result)
-  const pWin  = sumWin>0  ? p.p_victoria * (bestWin[2]/sumWin)   : 0;
-  const pDraw = sumDraw>0 ? p.p_empate   * (bestDraw[2]/sumDraw) : 0;
-  const pLoss = sumLoss>0 ? p.p_derrota  * (bestLoss[2]/sumLoss) : 0;
-
-  const scenarios = [
-    { score:`${bestWin[0]}-${bestWin[1]}`,  label:`Victoria ${tA}`, prob:pWin,  cat:'win' },
-    { score:`${bestDraw[0]}-${bestDraw[1]}`, label:'Empate',          prob:pDraw, cat:'draw' },
-    { score:`${bestLoss[0]}-${bestLoss[1]}`, label:`Victoria ${tB}`, prob:pLoss, cat:'loss' },
-  ].sort((a,b)=>b.prob-a.prob);
+  scores.sort((a,b) => b.prob - a.prob);
+  const top5 = scores.slice(0, 5);
 
   const catColor = cat => cat==='win'?'var(--green)':cat==='draw'?'var(--yellow)':'var(--red)';
-  const maxProb = Math.max(...scenarios.map(s=>s.prob));
-  let html = '<div class="scenarios-section"><div class="scenarios-title">Escenarios más probables</div>';
-  scenarios.forEach((s,i) => {
+  const catLabel = cat => cat==='win'?`Victoria ${tA}`:cat==='draw'?'Empate':`Victoria ${tB}`;
+  const maxProb = top5[0].prob;
+  let html = '<div class="scenarios-section"><div class="scenarios-title">Marcadores más probables (Poisson independiente)</div>';
+  top5.forEach((s, idx) => {
     const barW = maxProb>0 ? Math.round(s.prob/maxProb*100) : 0;
-    html += `<div class="scenario-row">
-      <span class="scen-rank">${i+1}</span>
-      <span class="scen-score">${s.score}</span>
-      <span class="scen-label">${s.label}</span>
-      <div class="scen-bar-track"><div class="scen-bar-fill" style="width:${barW}%;background:${catColor(s.cat)}"></div></div>
-      <span class="scen-pct" style="color:${catColor(s.cat)}">${(s.prob*100).toFixed(1)}%</span>
+    const col  = catColor(s.cat);
+    html += `<div class="scenario-item">
+      <div class="scenario-row">
+        <span class="scen-rank">${idx+1}</span>
+        <span class="scen-score">${s.i}-${s.j}</span>
+        <span class="scen-label">${catLabel(s.cat)}</span>
+        <div class="scen-bar-track"><div class="scen-bar-fill" style="width:${barW}%;background:${col}"></div></div>
+        <span class="scen-pct" style="color:${col}">${(s.prob*100).toFixed(1)}%</span>
+      </div>
+      <div class="scen-goal-probs">
+        <span class="scen-gA">${tA} marca ${s.i}: ${(s.pA_i*100).toFixed(1)}%</span>
+        <span class="scen-sep">·</span>
+        <span class="scen-gB">${tB} marca ${s.j}: ${(s.pB_j*100).toFixed(1)}%</span>
+      </div>
     </div>`;
   });
   html += '</div>';
@@ -1307,7 +1313,7 @@ function calcMyConfidence() {
       html+=`<div class="mi-poisson-row${highlight}">
         <span class="mp-k">${label}</span>
         <div class="mp-track"><div class="mp-fill" style="width:${barW}%;background:${colorHex}"></div></div>
-        <span class="mp-pct-val" style="color:${k===myGoal?colorHex:'var(--text3)}">${(ps[k]*100).toFixed(1)}%</span>
+        <span class="mp-pct-val" style="color:${k===myGoal?colorHex:'var(--text3)'}">${(ps[k]*100).toFixed(1)}%</span>
       </div>`;
     }
     return html;
