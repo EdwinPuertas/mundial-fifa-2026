@@ -1010,25 +1010,25 @@ function renderScenarios(containerId, lA, lB, p, tA, tB) {
   const el = document.getElementById(containerId);
   if (!el) return;
   // Best score per result category using Poisson
-  let bestWin=[null,0], bestDraw=[null,0], bestLoss=[null,0];
+  let bestWin={i:0,j:0,pp:0}, bestDraw={i:0,j:0,pp:0}, bestLoss={i:0,j:0,pp:0};
   let sumWin=0, sumDraw=0, sumLoss=0;
   for (let i=0; i<=5; i++) {
     for (let j=0; j<=5; j++) {
       const pp = poisson(i,lA)*poisson(j,lB);
-      if (i>j)  { sumWin+=pp;  if (pp>bestWin[1])  { bestWin=[i,j,pp];  bestWin[1]=pp; } }
-      else if (i===j) { sumDraw+=pp; if (pp>bestDraw[1]) { bestDraw=[i,j,pp]; bestDraw[1]=pp; } }
-      else        { sumLoss+=pp; if (pp>bestLoss[1]) { bestLoss=[i,j,pp]; bestLoss[1]=pp; } }
+      if (i>j)        { sumWin+=pp;  if (pp>bestWin.pp)  bestWin  = {i,j,pp}; }
+      else if (i===j) { sumDraw+=pp; if (pp>bestDraw.pp) bestDraw = {i,j,pp}; }
+      else            { sumLoss+=pp; if (pp>bestLoss.pp) bestLoss = {i,j,pp}; }
     }
   }
   // P(scenario) = p_result * P(score|result)
-  const pWin  = sumWin>0  ? p.p_victoria * (bestWin[2]/sumWin)   : 0;
-  const pDraw = sumDraw>0 ? p.p_empate   * (bestDraw[2]/sumDraw) : 0;
-  const pLoss = sumLoss>0 ? p.p_derrota  * (bestLoss[2]/sumLoss) : 0;
+  const pWin  = sumWin>0  ? p.p_victoria * (bestWin.pp/sumWin)   : 0;
+  const pDraw = sumDraw>0 ? p.p_empate   * (bestDraw.pp/sumDraw) : 0;
+  const pLoss = sumLoss>0 ? p.p_derrota  * (bestLoss.pp/sumLoss) : 0;
 
   const scenarios = [
-    { score:`${bestWin[0]}-${bestWin[1]}`,  label:`Victoria ${tA}`, prob:pWin,  cat:'win' },
-    { score:`${bestDraw[0]}-${bestDraw[1]}`, label:'Empate',          prob:pDraw, cat:'draw' },
-    { score:`${bestLoss[0]}-${bestLoss[1]}`, label:`Victoria ${tB}`, prob:pLoss, cat:'loss' },
+    { score:`${bestWin.i}-${bestWin.j}`,   label:`Victoria ${tA}`, prob:pWin,  cat:'win' },
+    { score:`${bestDraw.i}-${bestDraw.j}`, label:'Empate',          prob:pDraw, cat:'draw' },
+    { score:`${bestLoss.i}-${bestLoss.j}`, label:`Victoria ${tB}`, prob:pLoss, cat:'loss' },
   ].sort((a,b)=>b.prob-a.prob);
 
   const catColor = cat => cat==='win'?'var(--green)':cat==='draw'?'var(--yellow)':'var(--red)';
@@ -1307,7 +1307,7 @@ function calcMyConfidence() {
       html+=`<div class="mi-poisson-row${highlight}">
         <span class="mp-k">${label}</span>
         <div class="mp-track"><div class="mp-fill" style="width:${barW}%;background:${colorHex}"></div></div>
-        <span class="mp-pct-val" style="color:${k===myGoal?colorHex:'var(--text3)}">${(ps[k]*100).toFixed(1)}%</span>
+        <span class="mp-pct-val" style="color:${k===myGoal?colorHex:'var(--text3)'}">${(ps[k]*100).toFixed(1)}%</span>
       </div>`;
     }
     return html;
