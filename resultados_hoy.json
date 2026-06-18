@@ -1,8 +1,12 @@
 {
   "_comment": "Plantilla para cargar resultados manualmente si la API no está disponible.",
   "matches": [
-    {"teamA": "Inglaterra", "teamB": "Croacia", "goalsA": 4, "goalsB": 2, "venue": "Arlington", "date": "2026-06-17", "bk_probs": [0.68, 0.19, 0.13]},
-    {"teamA": "Ghana", "teamB": "Panamá", "goalsA": 1, "goalsB": 0, "venue": "Toronto", "date": "2026-06-17", "bk_probs": [0.32, 0.29, 0.39]},
-    {"teamA": "Colombia", "teamB": "Uzbekistán", "goalsA": 2, "goalsB": 1, "venue": "MexicoCity", "date": "2026-06-17", "bk_probs": [0.72, 0.18, 0.10]}
+    {"teamA": "Inglaterra",      "teamB": "Croacia",      "goalsA": 4, "goalsB": 2, "venue": "Arlington",   "date": "2026-06-17", "bk_probs": [0.68, 0.19, 0.13]},
+    {"teamA": "Ghana",           "teamB": "Panamá",        "goalsA": 1, "goalsB": 0, "venue": "Toronto",     "date": "2026-06-17", "bk_probs": [0.32, 0.29, 0.39]},
+    {"teamA": "Colombia",        "teamB": "Uzbekistán",    "goalsA": 2, "goalsB": 1, "venue": "MexicoCity",  "date": "2026-06-17", "bk_probs": [0.72, 0.18, 0.10]},
+    {"teamA": "Argentina",       "teamB": "Argelia",       "goalsA": 3, "goalsB": 0, "venue": "KansasCity",  "date": "2026-06-17", "bk_probs": [0.82, 0.12, 0.06]},
+    {"teamA": "Austria",         "teamB": "Jordania",      "goalsA": 3, "goalsB": 1, "venue": "SantaClara",  "date": "2026-06-17", "bk_probs": [0.68, 0.20, 0.12]},
+    {"teamA": "Portugal",        "teamB": "RD Congo",      "goalsA": 1, "goalsB": 1, "venue": "Houston",     "date": "2026-06-17", "bk_probs": [0.75, 0.15, 0.10]},
+    {"teamA": "República Checa", "teamB": "Sudáfrica",     "goalsA": 1, "goalsB": 0, "venue": "Atlanta",     "date": "2026-06-18", "bk_probs": [0.52, 0.26, 0.22]}
   ]
 }

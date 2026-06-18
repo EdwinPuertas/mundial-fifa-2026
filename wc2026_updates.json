@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-18T04:02:28Z",
+  "last_updated": "2026-06-18T19:56:36Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -40,6 +40,62 @@
         0.72,
         0.18,
         0.1
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Argentina",
+      "teamB": "Argelia",
+      "goalsA": 3,
+      "goalsB": 0,
+      "venue": "KansasCity",
+      "bk_probs": [
+        0.82,
+        0.12,
+        0.06
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Austria",
+      "teamB": "Jordania",
+      "goalsA": 3,
+      "goalsB": 1,
+      "venue": "SantaClara",
+      "bk_probs": [
+        0.68,
+        0.2,
+        0.12
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Portugal",
+      "teamB": "RD Congo",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "Houston",
+      "bk_probs": [
+        0.75,
+        0.15,
+        0.1
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "República Checa",
+      "teamB": "Sudáfrica",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "Atlanta",
+      "bk_probs": [
+        0.52,
+        0.26,
+        0.22
       ],
       "source": "manual"
     }
