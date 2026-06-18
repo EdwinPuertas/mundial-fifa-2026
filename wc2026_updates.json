@@ -1,4 +1,47 @@
 {
-  "last_updated": "2026-06-17T00:00:00Z",
-  "matches": []
+  "last_updated": "2026-06-18T04:02:28Z",
+  "matches": [
+    {
+      "date": "2026-06-17",
+      "teamA": "Inglaterra",
+      "teamB": "Croacia",
+      "goalsA": 4,
+      "goalsB": 2,
+      "venue": "Arlington",
+      "bk_probs": [
+        0.68,
+        0.19,
+        0.13
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Ghana",
+      "teamB": "Panamá",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "Toronto",
+      "bk_probs": [
+        0.32,
+        0.29,
+        0.39
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Colombia",
+      "teamB": "Uzbekistán",
+      "goalsA": 2,
+      "goalsB": 1,
+      "venue": "MexicoCity",
+      "bk_probs": [
+        0.72,
+        0.18,
+        0.1
+      ],
+      "source": "manual"
+    }
+  ]
 }
