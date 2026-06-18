@@ -149,8 +149,98 @@ VENUES = {
     "MexicoCity":    {"altitude":2240, "temp":18, "wind":9,  "hydration":0.0},
     "Monterrey":     {"altitude":538,  "temp":36, "wind":12, "hydration":0.9},
     "Guadalajara":   {"altitude":1566, "temp":22, "wind":10, "hydration":0.1},
+    "Seattle":       {"altitude":5,   "temp":18, "wind":15, "hydration":0.1},
+    "Atlanta":       {"altitude":318, "temp":30, "wind":11, "hydration":0.5},
+    "Houston":       {"altitude":12,  "temp":35, "wind":14, "hydration":0.8},
     # ── Neutral (default para predicciones sin sede especificada) ─────────────
     "neutral":       {"altitude":300,  "temp":22, "wind":11, "hydration":0.0},
+}
+
+MATCH_SCHEDULE = {
+    # Group A: México, Sudáfrica, Corea del Sur, República Checa
+    "México_Sudáfrica": "MexicoCity",
+    "Corea del Sur_República Checa": "EastRutherford",
+    "México_Corea del Sur": "Guadalajara",
+    "Sudáfrica_República Checa": "Monterrey",
+    "República Checa_México": "MexicoCity",
+    "Sudáfrica_Corea del Sur": "Monterrey",
+    # Group B: Canadá, Suiza, Qatar, Bosnia y Herz.
+    "Canadá_Bosnia y Herz.": "Toronto",
+    "Qatar_Suiza": "MexicoCity",
+    "Canadá_Qatar": "Vancouver",
+    "Suiza_Bosnia y Herz.": "Boston",
+    "Suiza_Canadá": "Vancouver",
+    "Bosnia y Herz._Qatar": "Philadelphia",
+    # Group C: Brasil, Marruecos, Haití, Escocia
+    "Brasil_Marruecos": "EastRutherford",
+    "Haití_Escocia": "Boston",
+    "Escocia_Marruecos": "Boston",
+    "Brasil_Haití": "Philadelphia",
+    "Brasil_Escocia": "Miami",
+    "Marruecos_Haití": "Atlanta",
+    # Group D: Estados Unidos, Paraguay, Australia, Turquía
+    "Estados Unidos_Paraguay": "Arlington",
+    "Australia_Turquía": "Vancouver",
+    "Turquía_Estados Unidos": "Inglewood",
+    "Paraguay_Australia": "SantaClara",
+    "Estados Unidos_Australia": "Seattle",
+    "Turquía_Paraguay": "Denver",
+    # Group E: Alemania, Costa de Marfil, Ecuador, Curazao
+    "Alemania_Curazao": "EastRutherford",
+    "Costa de Marfil_Ecuador": "Miami",
+    "Alemania_Costa de Marfil": "Toronto",
+    "Ecuador_Curazao": "KansasCity",
+    "Alemania_Ecuador": "Charlotte",
+    "Costa de Marfil_Curazao": "Charlotte",
+    # Group F: Japón, Suecia, Túnez, Países Bajos
+    "Suecia_Túnez": "EastRutherford",
+    "Países Bajos_Japón": "Toronto",
+    "Japón_Suecia": "Arlington",
+    "Túnez_Países Bajos": "KansasCity",
+    "Países Bajos_Suecia": "Houston",
+    "Japón_Túnez": "Philadelphia",
+    # Group G: Bélgica, Irán, Egipto, Nueva Zelanda
+    "Bélgica_Egipto": "Charlotte",
+    "Irán_Nueva Zelanda": "Guadalajara",
+    "Bélgica_Irán": "Inglewood",
+    "Nueva Zelanda_Egipto": "Vancouver",
+    "Egipto_Irán": "Seattle",
+    "Nueva Zelanda_Bélgica": "Vancouver",
+    # Group H: España, Uruguay, Arabia Saudita, Cabo Verde
+    "España_Cabo Verde": "Inglewood",
+    "Uruguay_Arabia Saudita": "Charlotte",
+    "España_Uruguay": "Arlington",
+    "Arabia Saudita_Cabo Verde": "KansasCity",
+    "España_Arabia Saudita": "Miami",
+    "Uruguay_Cabo Verde": "Denver",
+    # Group I: Francia, Senegal, Noruega, Irak
+    "Francia_Senegal": "Chicago",
+    "Noruega_Irak": "Pasadena",
+    "Francia_Noruega": "Philadelphia",
+    "Senegal_Irak": "Atlanta",
+    "Francia_Irak": "Boston",
+    "Senegal_Noruega": "EastRutherford",
+    # Group J: Argentina, Argelia, Austria, Jordania
+    "Argentina_Argelia": "Inglewood",
+    "Austria_Jordania": "MexicoCity",
+    "Argentina_Austria": "Pasadena",
+    "Argelia_Jordania": "Guadalajara",
+    "Argentina_Jordania": "Arlington",
+    "Austria_Argelia": "Houston",
+    # Group K: Portugal, Colombia, Uzbekistán, RD Congo
+    "Portugal_RD Congo": "Houston",
+    "Uzbekistán_Colombia": "MexicoCity",
+    "Portugal_Uzbekistán": "Houston",
+    "Colombia_RD Congo": "Guadalajara",
+    "Colombia_Portugal": "Miami",
+    "RD Congo_Uzbekistán": "Atlanta",
+    # Group L: Inglaterra, Croacia, Ghana, Panamá
+    "Inglaterra_Croacia": "Arlington",
+    "Ghana_Panamá": "Toronto",
+    "Inglaterra_Ghana": "Boston",
+    "Panamá_Croacia": "Toronto",
+    "Panamá_Inglaterra": "EastRutherford",
+    "Croacia_Ghana": "Philadelphia",
 }
 
 def get_tact(name):
@@ -1010,7 +1100,7 @@ fi_xgb.to_csv(OUT + "feature_importance_v3.csv", index=False)
 print(f"predicciones_v3.json generado: {len(preds_v3)} equipos")
 
 # Guardar también config de alineaciones
-lineup_config = {"LINEUP": LINEUP, "FORMATION_FEATURES": FORMATION_FEATURES, "STYLE_SCORE": STYLE_SCORE, "VENUES": VENUES}
+lineup_config = {"LINEUP": LINEUP, "FORMATION_FEATURES": FORMATION_FEATURES, "STYLE_SCORE": STYLE_SCORE, "VENUES": VENUES, "MATCH_SCHEDULE": MATCH_SCHEDULE}
 with open(OUT + "lineup_config.json", "w", encoding="utf-8") as f:
     json.dump(lineup_config, f, ensure_ascii=False, indent=2)
 

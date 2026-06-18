@@ -10,6 +10,7 @@ lineup_js = json.dumps(lineup_cfg["LINEUP"], ensure_ascii=False)
 formation_js = json.dumps(lineup_cfg["FORMATION_FEATURES"], ensure_ascii=False)
 style_js = json.dumps(lineup_cfg["STYLE_SCORE"], ensure_ascii=False)
 venues_js = json.dumps(lineup_cfg["VENUES"], ensure_ascii=False)
+schedule_js = json.dumps(lineup_cfg.get("MATCH_SCHEDULE", {}), ensure_ascii=False)
 
 GROUPS = {
     "A":["México","Corea del Sur","Sudáfrica","República Checa"],
@@ -304,6 +305,42 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
   .topbar{{flex-direction:column;align-items:flex-start;gap:8px}}
   .topbar h1{{font-size:.95rem}}
 }}
+
+/* ── Goal Distribution (Poisson bars) ── */
+.goal-dist-section{{border-top:1px solid var(--border);margin-top:10px;padding-top:10px}}
+.goal-dist-title{{font-size:.63rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:7px}}
+.goal-dist-teams{{display:grid;grid-template-columns:1fr 1fr;gap:8px}}
+.goal-dist-col{{}}
+.goal-dist-team-name{{font-size:.68rem;font-weight:700;color:var(--text);margin-bottom:5px}}
+.goal-dist-row{{display:flex;align-items:center;gap:5px;margin-bottom:3px}}
+.gd-k{{font-size:.63rem;color:var(--text3);width:14px;text-align:right;flex-shrink:0}}
+.gd-bar-track{{flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden}}
+.gd-bar-fill{{height:100%;border-radius:3px;transition:width .4s}}
+.gd-pct{{font-size:.62rem;color:var(--text2);width:30px;text-align:right;flex-shrink:0}}
+.gd-lambda{{font-size:.62rem;color:var(--text3);margin-top:3px}}
+
+/* ── 3 Scenarios per engine ── */
+.scenarios-section{{border-top:1px solid var(--border);margin-top:10px;padding-top:10px}}
+.scenarios-title{{font-size:.63rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:7px}}
+.scenario-row{{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:.72rem}}
+.scen-rank{{width:14px;font-size:.62rem;color:var(--text3);flex-shrink:0;font-weight:700}}
+.scen-score{{font-weight:800;color:var(--text);width:38px;flex-shrink:0;font-family:monospace}}
+.scen-label{{flex:1;color:var(--text2);font-size:.68rem}}
+.scen-bar-track{{width:60px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0}}
+.scen-bar-fill{{height:100%;border-radius:3px;transition:width .4s}}
+.scen-pct{{font-size:.67rem;font-weight:700;width:36px;text-align:right;flex-shrink:0}}
+
+/* ── Mi Pronóstico revamp ── */
+.mi-pred-grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}}
+.mi-pred-poisson{{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px}}
+.mi-pred-poisson-title{{font-size:.63rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:6px}}
+.mi-poisson-row{{display:flex;align-items:center;gap:6px;margin-bottom:4px}}
+.mp-k{{font-size:.65rem;color:var(--text3);width:16px;text-align:right;flex-shrink:0}}
+.mp-track{{flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden}}
+.mp-fill{{height:100%;border-radius:3px;transition:width .5s}}
+.mp-pct-val{{font-size:.62rem;width:30px;text-align:right;flex-shrink:0}}
+.mp-highlight{{background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.2);border-radius:5px}}
+.mi-summary{{margin-top:10px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px}}
 </style>
 </head>
 <body>
@@ -429,6 +466,8 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
         <div class="score-colon">:</div>
         <div class="score-side"><div class="score-num" id="aGoalB">—</div><div class="score-name" id="aNameB">B</div><div class="score-lambda">goles (discreto)</div></div>
       </div>
+      <div id="goalDistA"></div>
+      <div id="scenariosA"></div>
     </div>
     <!-- Engine B -->
     <div class="engine-panel ep-b">
@@ -445,6 +484,8 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
         <div class="score-colon">:</div>
         <div class="score-side"><div class="score-num" id="bGoalB">—</div><div class="score-name" id="bNameB">B</div><div class="score-lambda">goles (discreto)</div></div>
       </div>
+      <div id="goalDistB"></div>
+      <div id="scenariosB"></div>
     </div>
   </div>
 
@@ -454,10 +495,10 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 
 <!-- MI PRONÓSTICO -->
 <div class="card">
-  <div class="card-title">🎯 Mi Pronóstico — Calcular Confianza</div>
+  <div class="card-title">🎯 Mi Pronóstico — Distribución Poisson</div>
   <div class="my-pred-section">
     <div style="font-size:.78rem;color:var(--text2);margin-bottom:8px">
-      Ingresa tu marcador predicho y el modelo calcula qué tan alineado está con sus cálculos.
+      Ingresa tu marcador. El modelo muestra la distribución Poisson de goles para cada equipo y calcula la confianza.
     </div>
     <div class="my-pred-inputs">
       <div style="text-align:center">
@@ -557,6 +598,7 @@ const LINEUP_DEFAULT = {lineup_js};
 const FORMATION_FEATURES = {formation_js};
 const STYLE_SCORE = {style_js};
 const VENUES = {venues_js};
+const SCHEDULE = {schedule_js};
 const GROUPS = {groups_js};
 
 const FORMATIONS = ["4-3-3","4-4-2","4-2-3-1","3-4-3","3-5-2","5-3-2","4-5-1","5-4-1","4-1-4-1"];
@@ -761,6 +803,7 @@ function onTeamChange() {{
   renderLineupBadge('A'); renderLineupBadge('B');
   document.getElementById('myTeamLabelA').textContent=tA;
   document.getElementById('myTeamLabelB').textContent=tB;
+  autoSetVenue(tA, tB);
   document.getElementById('confResult').style.display='none';
   updatePrediction();
   renderStats(tA,tB);
@@ -771,6 +814,16 @@ function swapTeams() {{
   [sA.value,sB.value]=[sB.value,sA.value];
   userFormA=null;userStyleA=null;userFormB=null;userStyleB=null;
   onTeamChange();
+}}
+
+function autoSetVenue(tA, tB) {{
+  const key1 = tA + '_' + tB;
+  const key2 = tB + '_' + tA;
+  const venue = SCHEDULE[key1] || SCHEDULE[key2];
+  if (venue) {{
+    const sel = document.getElementById('venueSelect');
+    if (sel) {{ sel.value = venue; updateEnvDisplay(venue); }}
+  }}
 }}
 
 // ═══════════════════════════════
@@ -838,6 +891,8 @@ function renderEngineA(p,tA,tB,lA,lB) {{
   document.getElementById('aGoalB').textContent=gB_a;
   document.getElementById('aNameA').textContent=tA;
   document.getElementById('aNameB').textContent=tB;
+  renderGoalDist('goalDistA', lA, lB, tA, tB, 'A');
+  renderScenarios('scenariosA', lA, lB, p, tA, tB);
 }}
 
 function renderEngineB(p,tA,tB,lA,lB) {{
@@ -856,6 +911,91 @@ function renderEngineB(p,tA,tB,lA,lB) {{
   document.getElementById('bGoalB').textContent=gB_b;
   document.getElementById('bNameA').textContent=tA;
   document.getElementById('bNameB').textContent=tB;
+  renderGoalDist('goalDistB', lA, lB, tA, tB, 'B');
+  renderScenarios('scenariosB', lA, lB, p, tA, tB);
+}}
+
+function renderGoalDist(containerId, lA, lB, tA, tB, engine) {{
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const colA = engine==='A' ? 'var(--blue)' : 'var(--yellow)';
+  const colB = '#94a3b8';
+  function goalBars(lam, color) {{
+    let bars = '';
+    let total = 0;
+    const ps = [];
+    for (let k=0; k<=5; k++) {{ const p=poisson(k,lam); ps.push(p); total+=p; }}
+    const maxP = Math.max(...ps);
+    for (let k=0; k<=5; k++) {{
+      const pct_v = maxP>0 ? Math.round(ps[k]/maxP*100) : 0;
+      const pct_show = total>0 ? (ps[k]/total*100).toFixed(0)+'%' : '—';
+      const label = k<5 ? k : '5+';
+      bars += `<div class="goal-dist-row">
+        <span class="gd-k">${{label}}</span>
+        <div class="gd-bar-track"><div class="gd-bar-fill" style="width:${{pct_v}}%;background:${{color}}"></div></div>
+        <span class="gd-pct">${{pct_show}}</span>
+      </div>`;
+    }}
+    return bars;
+  }}
+  el.innerHTML = `
+    <div class="goal-dist-section">
+      <div class="goal-dist-title">Distribución de Goles (Poisson)</div>
+      <div class="goal-dist-teams">
+        <div class="goal-dist-col">
+          <div class="goal-dist-team-name">${{tA}}</div>
+          ${{goalBars(lA, colA)}}
+          <div class="gd-lambda">λ=${{lA.toFixed(2)}}</div>
+        </div>
+        <div class="goal-dist-col">
+          <div class="goal-dist-team-name">${{tB}}</div>
+          ${{goalBars(lB, '#64748b')}}
+          <div class="gd-lambda">λ=${{lB.toFixed(2)}}</div>
+        </div>
+      </div>
+    </div>`;
+}}
+
+function renderScenarios(containerId, lA, lB, p, tA, tB) {{
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  // Best score per result category using Poisson
+  let bestWin=[null,0], bestDraw=[null,0], bestLoss=[null,0];
+  let sumWin=0, sumDraw=0, sumLoss=0;
+  for (let i=0; i<=5; i++) {{
+    for (let j=0; j<=5; j++) {{
+      const pp = poisson(i,lA)*poisson(j,lB);
+      if (i>j)  {{ sumWin+=pp;  if (pp>bestWin[1])  {{ bestWin=[i,j,pp];  bestWin[1]=pp; }} }}
+      else if (i===j) {{ sumDraw+=pp; if (pp>bestDraw[1]) {{ bestDraw=[i,j,pp]; bestDraw[1]=pp; }} }}
+      else        {{ sumLoss+=pp; if (pp>bestLoss[1]) {{ bestLoss=[i,j,pp]; bestLoss[1]=pp; }} }}
+    }}
+  }}
+  // P(scenario) = p_result * P(score|result)
+  const pWin  = sumWin>0  ? p.p_victoria * (bestWin[2]/sumWin)   : 0;
+  const pDraw = sumDraw>0 ? p.p_empate   * (bestDraw[2]/sumDraw) : 0;
+  const pLoss = sumLoss>0 ? p.p_derrota  * (bestLoss[2]/sumLoss) : 0;
+
+  const scenarios = [
+    {{ score:`${{bestWin[0]}}-${{bestWin[1]}}`,  label:`Victoria ${{tA}}`, prob:pWin,  cat:'win' }},
+    {{ score:`${{bestDraw[0]}}-${{bestDraw[1]}}`, label:'Empate',          prob:pDraw, cat:'draw' }},
+    {{ score:`${{bestLoss[0]}}-${{bestLoss[1]}}`, label:`Victoria ${{tB}}`, prob:pLoss, cat:'loss' }},
+  ].sort((a,b)=>b.prob-a.prob);
+
+  const catColor = cat => cat==='win'?'var(--green)':cat==='draw'?'var(--yellow)':'var(--red)';
+  const maxProb = Math.max(...scenarios.map(s=>s.prob));
+  let html = '<div class="scenarios-section"><div class="scenarios-title">Escenarios más probables</div>';
+  scenarios.forEach((s,i) => {{
+    const barW = maxProb>0 ? Math.round(s.prob/maxProb*100) : 0;
+    html += `<div class="scenario-row">
+      <span class="scen-rank">${{i+1}}</span>
+      <span class="scen-score">${{s.score}}</span>
+      <span class="scen-label">${{s.label}}</span>
+      <div class="scen-bar-track"><div class="scen-bar-fill" style="width:${{barW}}%;background:${{catColor(s.cat)}}"></div></div>
+      <span class="scen-pct" style="color:${{catColor(s.cat)}}">${{(s.prob*100).toFixed(1)}}%</span>
+    </div>`;
+  }});
+  html += '</div>';
+  el.innerHTML = html;
 }}
 
 // ═══════════════════════════════
@@ -1071,61 +1211,104 @@ function calcMyConfidence() {{
   const pB_t=applyMod(match.engine_B,tA,formA,styleA,tB,formB,styleB);
   const pA=applyVenueMod(pA_t,formA,styleA,formB,styleB,venue);
   const pB=applyVenueMod(pB_t,formA,styleA,formB,styleB,venue);
-  const avg={{
+
+  const lA=match.lambda_A, lB=match.lambda_B;
+
+  // Poisson probabilities for each team
+  const pGoalA = poisson(myGA, lA);
+  const pGoalB = poisson(myGB, lB);
+  const pExact = pGoalA * pGoalB;
+
+  // Result probability from model ensemble
+  const avgRes = {{
     p_victoria:(pA.p_victoria+pB.p_victoria)/2,
     p_empate:  (pA.p_empate  +pB.p_empate  )/2,
     p_derrota: (pA.p_derrota +pB.p_derrota )/2,
   }};
-
-  // Probabilidad de resultado según usuario
   let resultProb, resultLabel;
-  if      (myGA>myGB) {{ resultProb=avg.p_victoria; resultLabel='Victoria '+tA; }}
-  else if (myGA===myGB){{ resultProb=avg.p_empate;   resultLabel='Empate'; }}
-  else                 {{ resultProb=avg.p_derrota;  resultLabel='Victoria '+tB; }}
+  if      (myGA>myGB) {{ resultProb=avgRes.p_victoria; resultLabel='Victoria '+tA; }}
+  else if (myGA===myGB){{ resultProb=avgRes.p_empate;   resultLabel='Empate'; }}
+  else                 {{ resultProb=avgRes.p_derrota;  resultLabel='Victoria '+tB; }}
 
-  // Marcador exacto via distribución Poisson (λ del modelo)
-  const lA=match.lambda_A, lB=match.lambda_B;
-  const pExact = poisson(myGA,lA) * poisson(myGB,lB);
-
-  // Confianza combinada: 70% resultado + 30% marcador exacto (escalado)
+  // Combined confidence
   const exactScaled = Math.min(0.30, pExact * 6);
   const combined = Math.min(0.97, resultProb*0.70 + exactScaled*0.30);
 
-  // Predicción del modelo para comparar
-  const [mGA,mGB]=consistentGoals(lA,lB,avg);
-  const modelLabel=mGA>mGB?`Victoria ${{tA}} (${{mGA}}-${{mGB}})`:
-                   mGA===mGB?`Empate (${{mGA}}-${{mGB}})`:`Victoria ${{tB}} (${{mGA}}-${{mGB}})`;
-
-  // Veredicto
   let vClass,vIcon,vText;
   if      (combined>=0.65){{vClass='cv-agree';  vIcon='✅';vText='Pronóstico muy alineado — el modelo respalda tu predicción';}}
   else if (combined>=0.40){{vClass='cv-caution';vIcon='🟡';vText='Pronóstico plausible — el modelo muestra apoyo moderado';}}
   else                    {{vClass='cv-diverge';vIcon='⚠️';vText='Pronóstico diverge del modelo — el modelo ve otro resultado';}}
 
   const barCol=combined>=0.65?'var(--green)':combined>=0.40?'var(--yellow)':'var(--red)';
+  const [mGA,mGB]=consistentGoals(lA,lB,avgRes);
+  const modelLabel=mGA>mGB?`Victoria ${{tA}} (${{mGA}}-${{mGB}})`:
+                   mGA===mGB?`Empate (${{mGA}}-${{mGB}})`:`Victoria ${{tB}} (${{mGA}}-${{mGB}})`;
+
+  // Build Poisson distributions for display (k=0..5)
+  function poissonBars(team, lam, myGoal, colorHex) {{
+    let html='';
+    let maxP=0;
+    const ps=[];
+    for(let k=0;k<=5;k++){{ const p=poisson(k,lam); ps.push(p); if(p>maxP)maxP=p; }}
+    for(let k=0;k<=5;k++){{
+      const barW=maxP>0?Math.round(ps[k]/maxP*100):0;
+      const highlight=k===myGoal?' mp-highlight':'';
+      const label=k<5?k:'5+';
+      html+=`<div class="mi-poisson-row${{highlight}}">
+        <span class="mp-k">${{label}}</span>
+        <div class="mp-track"><div class="mp-fill" style="width:${{barW}}%;background:${{colorHex}}"></div></div>
+        <span class="mp-pct-val" style="color:${{k===myGoal?colorHex:'var(--text3)}}">${{(ps[k]*100).toFixed(1)}}%</span>
+      </div>`;
+    }}
+    return html;
+  }}
 
   document.getElementById('confResult').style.display='block';
   document.getElementById('confResult').innerHTML=`
-    <div style="font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:10px">
-      Confianza del modelo en: <strong style="color:var(--blue)">${{tA}} ${{myGA}} — ${{myGB}} ${{tB}}</strong>
+    <div style="font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:10px">
+      Análisis: <strong style="color:var(--blue)">${{tA}} ${{myGA}} — ${{myGB}} ${{tB}}</strong>
     </div>
-    <div class="conf-bar-row">
-      <div class="conf-bar-label">📊 Resultado (${{resultLabel}})</div>
-      <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.round(resultProb*100)}}%;background:var(--blue)"></div></div>
-      <div class="conf-bar-pct" style="color:var(--blue)">${{pct(resultProb)}}</div>
+    <div class="mi-pred-grid">
+      <div class="mi-pred-poisson">
+        <div class="mi-pred-poisson-title">${{tA}} — Goles marcados</div>
+        ${{poissonBars(tA, lA, myGA, '#2563eb')}}
+        <div style="font-size:.62rem;color:var(--text3);margin-top:4px">λ=${{lA.toFixed(2)}} · Tu gol: <strong style="color:var(--blue)">${{myGA}}</strong> → ${{(pGoalA*100).toFixed(1)}}%</div>
+      </div>
+      <div class="mi-pred-poisson">
+        <div class="mi-pred-poisson-title">${{tB}} — Goles marcados</div>
+        ${{poissonBars(tB, lB, myGB, '#d97706')}}
+        <div style="font-size:.62rem;color:var(--text3);margin-top:4px">λ=${{lB.toFixed(2)}} · Tu gol: <strong style="color:var(--yellow)">${{myGB}}</strong> → ${{(pGoalB*100).toFixed(1)}}%</div>
+      </div>
     </div>
-    <div class="conf-bar-row">
-      <div class="conf-bar-label">⚽ Marcador exacto ${{myGA}}-${{myGB}} (Poisson)</div>
-      <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.min(100,Math.round(pExact*400))}}%;background:var(--purple)"></div></div>
-      <div class="conf-bar-pct" style="color:var(--purple)">${{(pExact*100).toFixed(1)}}%</div>
-    </div>
-    <div class="conf-bar-row">
-      <div class="conf-bar-label">🎯 Confianza combinada</div>
-      <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.round(combined*100)}}%;background:${{barCol}}"></div></div>
-      <div class="conf-bar-pct" style="color:${{barCol}};font-size:.78rem">${{Math.round(combined*100)}}%</div>
+    <div class="mi-summary">
+      <div class="conf-bar-row">
+        <div class="conf-bar-label">⚽ P(${{tA}}=${{myGA}}) · Poisson</div>
+        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.min(100,Math.round(pGoalA*300))}}%;background:var(--blue)"></div></div>
+        <div class="conf-bar-pct" style="color:var(--blue)">${{(pGoalA*100).toFixed(1)}}%</div>
+      </div>
+      <div class="conf-bar-row">
+        <div class="conf-bar-label">⚽ P(${{tB}}=${{myGB}}) · Poisson</div>
+        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.min(100,Math.round(pGoalB*300))}}%;background:var(--yellow)"></div></div>
+        <div class="conf-bar-pct" style="color:var(--yellow)">${{(pGoalB*100).toFixed(1)}}%</div>
+      </div>
+      <div class="conf-bar-row" style="border-top:1px solid var(--border);padding-top:7px;margin-top:4px">
+        <div class="conf-bar-label">🎯 Marcador exacto ${{myGA}}-${{myGB}}</div>
+        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.min(100,Math.round(pExact*600))}}%;background:var(--purple)"></div></div>
+        <div class="conf-bar-pct" style="color:var(--purple)">${{(pExact*100).toFixed(1)}}%</div>
+      </div>
+      <div class="conf-bar-row">
+        <div class="conf-bar-label">📊 Resultado (${{resultLabel}})</div>
+        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.round(resultProb*100)}}%;background:var(--green)"></div></div>
+        <div class="conf-bar-pct" style="color:var(--green)">${{pct(resultProb)}}</div>
+      </div>
+      <div class="conf-bar-row" style="border-top:1px solid var(--border);padding-top:7px;margin-top:4px">
+        <div class="conf-bar-label" style="font-weight:700;color:var(--text)">🏆 Confianza combinada</div>
+        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.round(combined*100)}}%;background:${{barCol}}"></div></div>
+        <div class="conf-bar-pct" style="color:${{barCol}};font-size:.78rem;font-weight:800">${{Math.round(combined*100)}}%</div>
+      </div>
     </div>
     <div style="font-size:.72rem;color:var(--text3);margin:8px 0 4px">
-      🤖 El modelo predice: <strong style="color:var(--text)">${{modelLabel}}</strong>
+      🤖 Modelo predice: <strong style="color:var(--text)">${{modelLabel}}</strong>
     </div>
     <div class="conf-verdict ${{vClass}}">${{vIcon}} ${{vText}}</div>`;
 }}
