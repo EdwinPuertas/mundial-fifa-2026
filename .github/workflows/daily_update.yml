@@ -25,7 +25,7 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          pip install numpy pandas scikit-learn xgboost joblib matplotlib seaborn
+          pip install -r requirements.txt
 
       - name: Obtener nuevos resultados
         env:
@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add wc2026_updates.json predicciones_v3.json index.html lineup_config.json
+          git add wc2026_updates.json predicciones_v3.json predicciones_v3_compact.json index.html lineup_config.json engine_A_v3.pkl engine_B_v3.pkl
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update: resultados WC2026 $(date -u +'%Y-%m-%d')"
             git push
