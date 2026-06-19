@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-18T19:56:36Z",
+  "last_updated": "2026-06-19T01:06:19Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -90,12 +90,40 @@
       "teamA": "República Checa",
       "teamB": "Sudáfrica",
       "goalsA": 1,
-      "goalsB": 0,
+      "goalsB": 1,
       "venue": "Atlanta",
       "bk_probs": [
         0.52,
         0.26,
         0.22
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "Suiza",
+      "teamB": "Bosnia y Herz.",
+      "goalsA": 4,
+      "goalsB": 1,
+      "venue": "Inglewood",
+      "bk_probs": [
+        0.65,
+        0.2,
+        0.15
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "Canadá",
+      "teamB": "Qatar",
+      "goalsA": 6,
+      "goalsB": 0,
+      "venue": "Vancouver",
+      "bk_probs": [
+        0.75,
+        0.15,
+        0.1
       ],
       "source": "manual"
     }
