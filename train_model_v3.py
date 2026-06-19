@@ -37,7 +37,7 @@ import seaborn as sns
 warnings.filterwarnings('ignore')
 np.random.seed(42)
 
-OUT = "/home/user/mundial-fifa-2026/"
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 0. CONFIGURACIÓN DE ALINEACIONES — EDITABLE POR EL USUARIO
