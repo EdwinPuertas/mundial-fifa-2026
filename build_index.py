@@ -335,6 +335,24 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .scen-gB{{color:var(--text2);font-weight:600}}
 .scen-sep{{color:var(--border)}}
 
+/* ── Interpretation Layer ── */
+.interp-card{{background:linear-gradient(135deg,var(--surface) 0%,rgba(99,102,241,.04) 100%);border:1px solid var(--border);border-radius:8px;padding:10px;margin-top:10px}}
+.interp-title{{font-size:.59rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:5px}}
+.interp-verdict{{font-size:.73rem;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4}}
+.interp-tags{{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px}}
+.interp-tag{{font-size:.59rem;font-weight:700;padding:2px 7px;border-radius:12px;border:1px solid}}
+.itag-fav{{color:var(--green);border-color:var(--green);background:rgba(34,197,94,.08)}}
+.itag-bal{{color:var(--yellow);border-color:var(--yellow);background:rgba(234,179,8,.08)}}
+.itag-open{{color:var(--red);border-color:var(--red);background:rgba(239,68,68,.08)}}
+.itag-def{{color:#94a3b8;border-color:#94a3b8;background:rgba(148,163,184,.08)}}
+.itag-att{{color:var(--blue);border-color:var(--blue);background:rgba(99,102,241,.08)}}
+.itag-mkt{{color:#f59e0b;border-color:#f59e0b;background:rgba(245,158,11,.08)}}
+.interp-stats{{display:flex;gap:12px;margin-bottom:5px}}
+.interp-kv{{display:flex;flex-direction:column;gap:1px}}
+.interp-k{{font-size:.57rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}}
+.interp-v{{font-size:.70rem;font-weight:700;color:var(--text)}}
+.interp-note{{font-size:.60rem;color:var(--text3);font-style:italic;margin-top:5px;border-top:1px solid var(--border);padding-top:5px;line-height:1.4}}
+
 /* ── Mi Pronóstico revamp ── */
 .mi-pred-grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}}
 .mi-pred-poisson{{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px}}
@@ -473,6 +491,7 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
       </div>
       <div id="goalDistA"></div>
       <div id="scenariosA"></div>
+      <div id="interpA"></div>
     </div>
     <!-- Engine B -->
     <div class="engine-panel ep-b">
@@ -491,6 +510,7 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
       </div>
       <div id="goalDistB"></div>
       <div id="scenariosB"></div>
+      <div id="interpB"></div>
     </div>
   </div>
 
@@ -854,16 +874,15 @@ function updatePrediction() {{
   const lA=match.lambda_A, lB=match.lambda_B;
 
   updateEnvDisplay(venue);
-  // Market odds strip
-  if (match.bk_estimate) {{
-    const bk=match.bk_estimate;
+  const bk = match.bk_estimate || null;
+  if (bk) {{
     document.getElementById('bkStrip').style.display='flex';
     document.getElementById('bkWinA').textContent=pct(bk[0]);
     document.getElementById('bkDraw').textContent=pct(bk[1]);
     document.getElementById('bkWinB').textContent=pct(bk[2]);
   }}
-  renderEngineA(pA,tA,tB,lA,lB);
-  renderEngineB(pB,tA,tB,lA,lB);
+  renderEngineA(pA,tA,tB,lA,lB,bk);
+  renderEngineB(pB,tA,tB,lA,lB,bk);
 
   const wA=outcome(pA), wB=outcome(pB);
   renderConsensus(wA===wB,wA,wB,tA,tB,pA,pB);
@@ -880,7 +899,7 @@ function outcome(p) {{
 // ═══════════════════════════════
 // RENDER ENGINE PANELS
 // ═══════════════════════════════
-function renderEngineA(p,tA,tB,lA,lB) {{
+function renderEngineA(p,tA,tB,lA,lB,bk) {{
   document.getElementById('aVic').textContent=pct(p.p_victoria);
   document.getElementById('aEmp').textContent=pct(p.p_empate);
   document.getElementById('aDer').textContent=pct(p.p_derrota);
@@ -898,9 +917,10 @@ function renderEngineA(p,tA,tB,lA,lB) {{
   document.getElementById('aNameB').textContent=tB;
   renderGoalDist('goalDistA', lA, lB, tA, tB, 'A');
   renderScenarios('scenariosA', lA, lB, tA, tB);
+  renderInterpretation('interpA', 'A', p, lA, lB, tA, tB, bk);
 }}
 
-function renderEngineB(p,tA,tB,lA,lB) {{
+function renderEngineB(p,tA,tB,lA,lB,bk) {{
   document.getElementById('bVic').textContent=pct(p.p_victoria);
   document.getElementById('bEmp').textContent=pct(p.p_empate);
   document.getElementById('bDer').textContent=pct(p.p_derrota);
@@ -918,6 +938,7 @@ function renderEngineB(p,tA,tB,lA,lB) {{
   document.getElementById('bNameB').textContent=tB;
   renderGoalDist('goalDistB', lA, lB, tA, tB, 'B');
   renderScenarios('scenariosB', lA, lB, tA, tB);
+  renderInterpretation('interpB', 'B', p, lA, lB, tA, tB, bk);
 }}
 
 function renderGoalDist(containerId, lA, lB, tA, tB, engine) {{
@@ -1002,6 +1023,79 @@ function renderScenarios(containerId, lA, lB, tA, tB) {{
   }});
   html += '</div>';
   el.innerHTML = html;
+}}
+
+// ═══════════════════════════════
+// INTERPRETATION LAYER
+// ═══════════════════════════════
+function renderInterpretation(containerId, engine, p, lA, lB, tA, tB, bk) {{
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const pV=p.p_victoria, pE=p.p_empate, pD=p.p_derrota;
+  const lTotal=+(lA+lB).toFixed(2);
+  const dLambda=+(Math.abs(lA-lB)).toFixed(2);
+  const maxP=Math.max(pV,pD);
+  const favTeam=pV>=pD?tA:tB;
+  const favP=pV>=pD?pV:pD;
+
+  // ── Tags ──
+  const tags=[];
+  if (maxP>0.68)      tags.push(['itag-fav',`Favorito claro: ${{favTeam}}`]);
+  else if (maxP>0.48) tags.push(['itag-bal',`Ligero favorito: ${{favTeam}}`]);
+  else                tags.push(['itag-open','Partido muy abierto']);
+
+  if (lTotal<1.6)      tags.push(['itag-def','Batalla defensiva']);
+  else if (lTotal>2.6) tags.push(['itag-att','Partido de goles']);
+  else                 tags.push(['itag-def','Intensidad media']);
+
+  if (pE>0.22)         tags.push(['itag-bal',`Empate factible ${{(pE*100).toFixed(0)}}%`]);
+
+  if (bk) {{
+    const diff=pV-bk[0];
+    if (diff>0.08)       tags.push(['itag-mkt',`Modelo +optimista que mercado`]);
+    else if (diff<-0.08) tags.push(['itag-mkt',`Mercado más favorece a ${{tA}}`]);
+    else                 tags.push(['itag-mkt','Acuerda con mercado']);
+  }}
+
+  // ── Verdict text ──
+  let verdict='';
+  if (maxP>0.68) {{
+    verdict=`${{favTeam}} domina con <strong>${{(favP*100).toFixed(0)}}%</strong> de probabilidad de victoria. `;
+    verdict+=lTotal<1.6?`Se espera un partido controlado (${{lTotal}} goles totales λ).`:`Alta producción ofensiva prevista (λ total ${{lTotal}}).`;
+  }} else if (maxP>0.48) {{
+    verdict=`${{favTeam}} sale como ligero favorito (${{(favP*100).toFixed(0)}}%). `;
+    verdict+=`El empate tiene un ${{(pE*100).toFixed(0)}}% de opciones — partido sin un dominador claro.`;
+  }} else {{
+    verdict=`Equilibrio total: victoria A ${{(pV*100).toFixed(0)}}% · empate ${{(pE*100).toFixed(0)}}% · victoria B ${{(pD*100).toFixed(0)}}%. `;
+    verdict+=`Cualquier resultado es plausible según el modelo.`;
+  }}
+
+  // ── Engine-specific insight ──
+  const engineNote = engine==='A'
+    ? `Engine A (MLP+Atención): red neuronal profunda sensible a estilos tácticos y patrones contextuales. Tiende a distribuciones más suavizadas — útil para detectar partidos trampa.`
+    : `Engine B (XGBoost): pondera features cuantitativos (ranking, valor de mercado, forma). Más decisivo en diferencias claras de nivel — menos confiable en equipos con datos escasos.`;
+
+  // ── Market divergence detail ──
+  let mktLine='';
+  if (bk) {{
+    const impl=(bk[0]*100).toFixed(0);
+    const mod=(pV*100).toFixed(0);
+    mktLine=`<div style="font-size:.61rem;color:var(--text2);margin-top:3px">Mercado implícito ${{tA}}: <strong>${{impl}}%</strong> · Modelo: <strong>${{mod}}%</strong></div>`;
+  }}
+
+  el.innerHTML=`<div class="interp-card">
+    <div class="interp-title">🔍 Interpretación — Engine ${{engine}}</div>
+    <div class="interp-verdict">${{verdict}}</div>
+    <div class="interp-tags">${{tags.map(([cls,txt])=>`<span class="interp-tag ${{cls}}">${{txt}}</span>`).join('')}}</div>
+    <div class="interp-stats">
+      <div class="interp-kv"><span class="interp-k">λ Total</span><span class="interp-v">${{lTotal}}</span></div>
+      <div class="interp-kv"><span class="interp-k">Δ Lambda</span><span class="interp-v">${{dLambda}}</span></div>
+      <div class="interp-kv"><span class="interp-k">Confianza</span><span class="interp-v">${{(maxP*100).toFixed(0)}}%</span></div>
+      <div class="interp-kv"><span class="interp-k">Empate</span><span class="interp-v">${{(pE*100).toFixed(0)}}%</span></div>
+    </div>
+    ${{mktLine}}
+    <div class="interp-note">${{engineNote}}</div>
+  </div>`;
 }}
 
 // ═══════════════════════════════
