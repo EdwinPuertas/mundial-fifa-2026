@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-19T01:06:19Z",
+  "last_updated": "2026-06-19T16:02:47Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -126,6 +126,176 @@
         0.1
       ],
       "source": "manual"
+    },
+    {
+      "date": "2026-06-11",
+      "teamA": "México",
+      "teamB": "Sudáfrica",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-12",
+      "teamA": "Corea del Sur",
+      "teamB": "República Checa",
+      "goalsA": 2,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Estados Unidos",
+      "teamB": "Paraguay",
+      "goalsA": 4,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Qatar",
+      "teamB": "Suiza",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Brasil",
+      "teamB": "Marruecos",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Haití",
+      "teamB": "Escocia",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Australia",
+      "teamB": "Turquía",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Alemania",
+      "teamB": "Curazao",
+      "goalsA": 7,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Países Bajos",
+      "teamB": "Japón",
+      "goalsA": 2,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Costa de Marfil",
+      "teamB": "Ecuador",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Suecia",
+      "teamB": "Túnez",
+      "goalsA": 5,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Bélgica",
+      "teamB": "Egipto",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Arabia Saudita",
+      "teamB": "Uruguay",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Irán",
+      "teamB": "Nueva Zelanda",
+      "goalsA": 2,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Francia",
+      "teamB": "Senegal",
+      "goalsA": 3,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Irak",
+      "teamB": "Noruega",
+      "goalsA": 1,
+      "goalsB": 4,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "México",
+      "teamB": "Corea del Sur",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
     }
   ]
 }
