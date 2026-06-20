@@ -376,6 +376,12 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 
 <div class="container">
 
+<!-- PRONÓSTICOS DEL DÍA -->
+<div class="card">
+  <div class="card-title">🗓️ Pronósticos del Día &nbsp;<span id="fechaHoyLabel" style="font-weight:400;color:var(--text2);text-transform:none;letter-spacing:0"></span></div>
+  <div id="pronosticosHoy"></div>
+</div>
+
 <!-- CONFIGURADOR DE PARTIDO -->
 <div class="card">
   <div class="card-title">⚽ Configurar Partido &amp; Alineaciones</div>
@@ -536,12 +542,6 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
       </div>
     </div>
   </div>
-</div>
-
-<!-- PRONÓSTICOS DEL DÍA -->
-<div class="card">
-  <div class="card-title">🗓️ Pronósticos del Día &nbsp;<span id="fechaHoyLabel" style="font-weight:400;color:var(--text2);text-transform:none;letter-spacing:0"></span></div>
-  <div id="pronosticosHoy"></div>
 </div>
 
 <!-- HISTORIAL DE PREDICCIONES -->
