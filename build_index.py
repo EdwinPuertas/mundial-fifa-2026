@@ -352,6 +352,17 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .hist-real{{font-weight:700;color:var(--text)}}
 .hist-ok{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.75rem;font-weight:800}}
 .hist-ok.yes{{background:var(--green-light);color:var(--green)}} .hist-ok.no{{background:var(--red-light);color:var(--red)}}
+/* ── Historial Panel (vista completa) ── */
+.hist-fab{{position:fixed;bottom:22px;right:22px;z-index:150;background:var(--blue);color:#fff;border:none;border-radius:50px;padding:11px 20px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .15s,box-shadow .15s}}
+.hist-fab:hover{{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.3)}}
+.hpanel{{position:fixed;inset:0;z-index:200;background:var(--bg);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto}}
+.hpanel.open{{transform:translateX(0)}}
+.hpanel-bar{{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 18px}}
+.hpanel-back{{background:none;border:1px solid var(--border);border-radius:7px;padding:6px 14px;font-size:.8rem;cursor:pointer;color:var(--text);font-weight:600;transition:background .15s}}
+.hpanel-back:hover{{background:var(--surface2)}}
+.hpanel-title{{font-size:.9rem;font-weight:700;color:var(--text);flex:1}}
+.hpanel-gen{{font-size:.68rem;color:var(--text3)}}
+.hpanel-body{{padding:18px;max-width:1100px;margin:0 auto}}
 .hist-empty{{text-align:center;padding:24px;color:var(--text3);font-size:.82rem}}
 .hist-score{{font-weight:800;color:var(--text);white-space:nowrap}}
 .hist-date{{color:var(--text3);font-size:.68rem;white-space:nowrap}}
@@ -548,14 +559,24 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
   </div>
 </div>
 
-<!-- HISTORIAL DE PREDICCIONES -->
-<div class="card" id="historialCard">
-  <div class="card-title">📊 Predicciones vs Resultados Reales</div>
-  <div class="hist-acc-grid" id="histAccGrid"></div>
-  <div class="hc-grid" id="historialList"></div>
-</div>
 
 </div><!-- /container -->
+
+<!-- BOTÓN FLOTANTE HISTORIAL -->
+<button class="hist-fab" onclick="openHistorial()">📊 Historial</button>
+
+<!-- PANEL HISTORIAL (vista completa) -->
+<div id="historialPanel" class="hpanel">
+  <div class="hpanel-bar">
+    <button class="hpanel-back" onclick="closeHistorial()">&#8592; Volver</button>
+    <span class="hpanel-title">📊 Predicciones vs Resultados Reales</span>
+    <span class="hpanel-gen" id="hpanelGen"></span>
+  </div>
+  <div class="hpanel-body">
+    <div class="hist-acc-grid" id="histAccGrid"></div>
+    <div class="hc-grid" id="historialList"></div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════
@@ -633,8 +654,23 @@ document.addEventListener('DOMContentLoaded', () => {{
   renderFeatureImportance();
   onTeamChange();
   renderPronosticosHoy();
-  renderHistorial();
 }});
+
+// ═══════════════════════════════
+// HISTORIAL PANEL
+// ═══════════════════════════════
+let _histRendered = false;
+function openHistorial() {{
+  document.getElementById('historialPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (!_histRendered) {{ renderHistorial(); _histRendered = true; }}
+  const gen = HISTORIAL.generated || '';
+  if (gen) document.getElementById('hpanelGen').textContent = 'Actualizado ' + gen;
+}}
+function closeHistorial() {{
+  document.getElementById('historialPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}}
 
 // ═══════════════════════════════
 // ANALYZE BUTTON
