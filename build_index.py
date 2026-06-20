@@ -9,8 +9,18 @@ with open('lineup_config.json') as f:
 lineup_js = json.dumps(lineup_cfg["LINEUP"], ensure_ascii=False)
 formation_js = json.dumps(lineup_cfg["FORMATION_FEATURES"], ensure_ascii=False)
 style_js = json.dumps(lineup_cfg["STYLE_SCORE"], ensure_ascii=False)
-venues_js = json.dumps(lineup_cfg["VENUES"], ensure_ascii=False)
-schedule_js = json.dumps(lineup_cfg.get("MATCH_SCHEDULE", {}), ensure_ascii=False)
+
+try:
+    with open('predicciones_historial.json', encoding='utf-8') as f:
+        historial_raw = f.read()
+except FileNotFoundError:
+    historial_raw = '{"generated":"","accuracy":{"engine_A":{"correct":0,"total":0},"engine_B":{"correct":0,"total":0}},"entries":[]}'
+
+try:
+    with open('fixtures.json', encoding='utf-8') as f:
+        fixtures_raw = f.read()
+except FileNotFoundError:
+    fixtures_raw = '{"schedule":[]}'
 
 GROUPS = {
     "A":["México","Corea del Sur","Sudáfrica","República Checa"],
@@ -247,56 +257,100 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .flex{{display:flex}} .gap8{{gap:8px}} .items-center{{align-items:center}} .flex-wrap{{flex-wrap:wrap}}
 .text-center{{text-align:center}}
 
-/* ── Mi Pronóstico (manual confidence) ── */
-.my-pred-section{{border:1px dashed var(--border);border-radius:10px;padding:12px 14px;background:var(--surface2)}}
-.my-pred-inputs{{display:flex;align-items:center;gap:12px;margin:10px 0;flex-wrap:wrap}}
-.goal-input{{
-  width:56px;height:50px;text-align:center;font-size:1.8rem;font-weight:900;
-  border:2px solid var(--border);border-radius:8px;background:#fff;
-  color:var(--text);-moz-appearance:textfield;
-}}
-.goal-input::-webkit-outer-spin-button,.goal-input::-webkit-inner-spin-button{{-webkit-appearance:none}}
-.goal-input:focus{{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,.15)}}
-.btn-confidence{{
-  background:var(--purple);color:#fff;border:none;
-  padding:9px 16px;border-radius:8px;font-size:.82rem;font-weight:700;
-  cursor:pointer;transition:all .18s;white-space:nowrap;
-}}
-.btn-confidence:hover{{background:#6d28d9;transform:translateY(-1px)}}
-.conf-result{{border-radius:8px;padding:12px 14px;margin-top:10px;background:#fff;border:1px solid var(--border)}}
-.conf-bar-row{{display:flex;align-items:center;gap:8px;margin-bottom:7px}}
-.conf-bar-label{{font-size:.72rem;color:var(--text2);width:185px;flex-shrink:0}}
-.conf-bar-track{{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}}
-.conf-bar-fill{{height:100%;border-radius:4px;transition:width .5s}}
-.conf-bar-pct{{font-size:.72rem;font-weight:700;width:42px;text-align:right}}
-.conf-verdict{{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:.78rem;display:flex;align-items:center;gap:8px}}
-.cv-agree{{background:#f0fdf4;border:1px solid #bbf7d0;color:#065f46}}
-.cv-caution{{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}}
-.cv-diverge{{background:var(--red-light);border:1px solid var(--red-mid);color:#991b1b}}
-.pred-team-name{{font-size:.7rem;color:var(--text2);text-align:center;margin-bottom:3px;font-weight:600}}
-.pred-separator{{font-size:1.5rem;color:var(--text3);font-weight:300;align-self:center;margin-top:16px}}
+/* ── Group match rows with result ── */
+.gm-match{{border-bottom:1px solid var(--border);transition:background .15s}}
+.gm-match:last-child{{border-bottom:none}}
+.gm-match:hover{{background:var(--surface2)}}
+.gm-match.gm-played{{cursor:default}}
+.gm-header{{display:flex;align-items:center;gap:10px;padding:8px 6px;cursor:pointer}}
+.gm-vs{{font-size:.72rem;font-weight:700;color:var(--text3);min-width:90px;text-align:center;padding:2px 6px;background:var(--surface2);border-radius:5px}}
+.gm-result{{background:var(--surface2);border-top:1px solid var(--border);padding:10px 12px;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px}}
+.gm-scorebox{{text-align:center}}
+.gm-score{{font-size:1.5rem;font-weight:900;color:var(--text);line-height:1}}
+.gm-score-lbl{{font-size:.6rem;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}}
+.gm-preds{{display:flex;flex-direction:column;gap:5px}}
+.gm-pred-row{{display:flex;align-items:center;gap:6px}}
+.gm-eng{{font-size:.6rem;font-weight:800;padding:1px 5px;border-radius:4px;min-width:22px;text-align:center}}
+.gm-eng.la{{background:var(--blue-light);color:var(--blue)}} .gm-eng.lb{{background:var(--yellow-light);color:var(--yellow)}}
+.gm-pred-bar{{flex:1;height:6px;border-radius:3px;display:flex;overflow:hidden}}
+.gm-pb-w{{background:var(--green)}} .gm-pb-d{{background:var(--yellow)}} .gm-pb-l{{background:var(--red)}}
+.gm-pred-lbl{{font-size:.67rem;color:var(--text2);min-width:80px}}
 
-/* ── Venue selector ── */
-.venue-label{{font-size:.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;text-align:center;margin-top:4px;font-weight:700}}
-#venueSelect{{width:120px;font-size:.72rem;padding:5px 8px;margin-top:2px;border-radius:6px}}
+/* ── Historial cards ── */
+.hc-grid{{display:flex;flex-direction:column;gap:10px}}
+.hc{{background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden}}
+.hc-top{{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;gap:10px;border-bottom:1px solid var(--border);background:var(--surface)}}
+.hc-team-a{{font-size:.85rem;font-weight:700;color:var(--text)}}
+.hc-team-b{{font-size:.85rem;font-weight:700;color:var(--text);text-align:right}}
+.hc-center{{text-align:center}}
+.hc-score{{font-size:1.4rem;font-weight:900;color:var(--text);line-height:1}}
+.hc-date-grp{{font-size:.62rem;color:var(--text3);margin-top:1px}}
+.hc-result-badge{{display:inline-block;padding:2px 8px;border-radius:5px;font-size:.67rem;font-weight:700;border:1px solid;margin-top:3px}}
+.hc-result-badge.victoria_A{{background:var(--green-light);border-color:var(--green-mid);color:var(--green)}}
+.hc-result-badge.victoria_B{{background:var(--red-light);border-color:var(--red-mid);color:var(--red)}}
+.hc-result-badge.empate{{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}}
+.hc-body{{padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}}
+.hc-eng-block{{display:flex;flex-direction:column;gap:4px}}
+.hc-eng-title{{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}}
+.hc-eng-title.la{{color:var(--blue)}} .hc-eng-title.lb{{color:var(--yellow)}}
+.hc-pbar{{height:7px;border-radius:4px;display:flex;overflow:hidden;margin-bottom:2px}}
+.hc-pb-w{{background:var(--green)}} .hc-pb-d{{background:var(--yellow)}} .hc-pb-l{{background:var(--red)}}
+.hc-pbar-vals{{display:flex;justify-content:space-between;font-size:.6rem;color:var(--text3)}}
+.hc-verdict{{display:flex;align-items:center;gap:6px;margin-top:2px}}
+.hc-ok{{width:18px;height:18px;border-radius:50%;font-size:.67rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}}
+.hc-ok.yes{{background:var(--green-light);color:var(--green)}} .hc-ok.no{{background:var(--red-light);color:var(--red)}}
+.hc-pred-txt{{font-size:.7rem;color:var(--text2)}}
 
-/* ── Env strip ── */
-.env-strip{{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  background:linear-gradient(135deg,#f0f9ff,#f0fdf4);
-  border:1px solid #bae6fd;border-radius:8px;
-  padding:8px 12px;margin-bottom:10px;
-}}
-.env-item{{display:flex;align-items:center;gap:5px;font-size:.75rem;color:var(--text2)}}
-.env-icon{{font-size:1rem}}
-.env-val{{font-weight:700;color:var(--text)}}
-.env-lbl{{font-size:.62rem;color:var(--text3)}}
-.hydra-badge{{
-  font-size:.65rem;padding:2px 7px;border-radius:4px;font-weight:700;
-}}
-.hydra-none{{background:#f0fdf4;color:#059669;border:1px solid #bbf7d0}}
-.hydra-low{{background:#fef3c7;color:#d97706;border:1px solid #fcd34d}}
-.hydra-high{{background:#fee2e2;color:#dc2626;border:1px solid #fca5a5}}
+/* ── Pronósticos del día ── */
+.pron-date-header{{font-size:.78rem;font-weight:700;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:8px}}
+.pron-badge{{font-size:.6rem;padding:2px 7px;border-radius:10px;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-mid);font-weight:700}}
+.pron-grid{{display:flex;flex-direction:column;gap:8px}}
+.pron-card{{background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden}}
+.pron-card.pron-played{{border-color:var(--green-mid);background:#f0fdf4}}
+.pron-header{{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:9px 14px;gap:10px;background:var(--surface);border-bottom:1px solid var(--border)}}
+.pron-team-a{{font-size:.85rem;font-weight:700;color:var(--text)}}
+.pron-team-b{{font-size:.85rem;font-weight:700;color:var(--text);text-align:right}}
+.pron-center{{text-align:center}}
+.pron-grupo{{font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}}
+.pron-vs{{font-size:.72rem;font-weight:700;color:var(--text3)}}
+.pron-score{{font-size:1.3rem;font-weight:900;color:var(--text);line-height:1}}
+.pron-body{{padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}}
+.pron-eng-block{{display:flex;flex-direction:column;gap:3px}}
+.pron-eng-title{{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}}
+.pron-eng-title.la{{color:var(--blue)}} .pron-eng-title.lb{{color:var(--yellow)}}
+.pron-pbar{{height:7px;border-radius:4px;display:flex;overflow:hidden;margin-bottom:2px}}
+.pron-pb-w{{background:var(--green)}} .pron-pb-d{{background:var(--yellow)}} .pron-pb-l{{background:var(--red)}}
+.pron-pbar-vals{{display:flex;justify-content:space-between;font-size:.6rem;color:var(--text3)}}
+.pron-pred-chip{{display:inline-block;padding:2px 7px;border-radius:5px;font-size:.67rem;font-weight:700;border:1px solid;margin-top:2px}}
+.pron-pred-chip.victoria_A{{background:var(--green-light);border-color:var(--green-mid);color:var(--green)}}
+.pron-pred-chip.victoria_B{{background:var(--red-light);border-color:var(--red-mid);color:var(--red)}}
+.pron-pred-chip.empate{{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}}
+.pron-played-chip{{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;padding:1px 6px;border-radius:5px;background:var(--green-light);color:var(--green);border:1px solid var(--green-mid);font-weight:700}}
+
+/* ── Historial de Predicciones ── */
+.hist-acc-grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}}
+.hist-acc-box{{border-radius:8px;padding:10px 14px;border:1px solid}}
+.hist-acc-box.eng-a{{background:var(--blue-light);border-color:var(--blue-mid)}}
+.hist-acc-box.eng-b{{background:var(--yellow-light);border-color:var(--yellow-mid)}}
+.hist-acc-label{{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}}
+.hist-acc-label.la{{color:var(--blue)}} .hist-acc-label.lb{{color:var(--yellow)}}
+.hist-acc-num{{font-size:1.6rem;font-weight:900;color:var(--text);line-height:1}}
+.hist-acc-sub{{font-size:.68rem;color:var(--text2);margin-top:2px}}
+.hist-table{{width:100%;border-collapse:collapse;font-size:.75rem}}
+.hist-table th{{padding:6px 8px;text-align:left;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);border-bottom:2px solid var(--border);font-weight:700}}
+.hist-table td{{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:middle}}
+.hist-table tr:last-child td{{border-bottom:none}}
+.hist-table tr:hover td{{background:var(--surface2)}}
+.hist-pred{{display:inline-block;padding:2px 7px;border-radius:5px;font-size:.67rem;font-weight:700;border:1px solid}}
+.hist-pred.victoria_A{{background:var(--green-light);border-color:var(--green-mid);color:var(--green)}}
+.hist-pred.victoria_B{{background:var(--red-light);border-color:var(--red-mid);color:var(--red)}}
+.hist-pred.empate{{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}}
+.hist-real{{font-weight:700;color:var(--text)}}
+.hist-ok{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.75rem;font-weight:800}}
+.hist-ok.yes{{background:var(--green-light);color:var(--green)}} .hist-ok.no{{background:var(--red-light);color:var(--red)}}
+.hist-empty{{text-align:center;padding:24px;color:var(--text3);font-size:.82rem}}
+.hist-score{{font-weight:800;color:var(--text);white-space:nowrap}}
+.hist-date{{color:var(--text3);font-size:.68rem;white-space:nowrap}}
 
 @media(max-width:860px){{
   .engines-row,.tact-row,.groups-grid{{grid-template-columns:1fr}}
@@ -305,65 +359,6 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
   .topbar{{flex-direction:column;align-items:flex-start;gap:8px}}
   .topbar h1{{font-size:.95rem}}
 }}
-
-/* ── Goal Distribution (Poisson bars) ── */
-.goal-dist-section{{border-top:1px solid var(--border);margin-top:10px;padding-top:10px}}
-.goal-dist-title{{font-size:.63rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:7px}}
-.goal-dist-teams{{display:grid;grid-template-columns:1fr 1fr;gap:8px}}
-.goal-dist-col{{}}
-.goal-dist-team-name{{font-size:.68rem;font-weight:700;color:var(--text);margin-bottom:5px}}
-.goal-dist-row{{display:flex;align-items:center;gap:5px;margin-bottom:3px}}
-.gd-k{{font-size:.63rem;color:var(--text3);width:14px;text-align:right;flex-shrink:0}}
-.gd-bar-track{{flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden}}
-.gd-bar-fill{{height:100%;border-radius:3px;transition:width .4s}}
-.gd-pct{{font-size:.62rem;color:var(--text2);width:30px;text-align:right;flex-shrink:0}}
-.gd-lambda{{font-size:.62rem;color:var(--text3);margin-top:3px}}
-
-/* ── 5 Scenarios per engine — independent Poisson ── */
-.scenarios-section{{border-top:1px solid var(--border);margin-top:10px;padding-top:10px}}
-.scenarios-title{{font-size:.63rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:7px}}
-.scenario-item{{margin-bottom:7px}}
-.scenario-row{{display:flex;align-items:center;gap:6px;font-size:.72rem}}
-.scen-rank{{width:14px;font-size:.62rem;color:var(--text3);flex-shrink:0;font-weight:700}}
-.scen-score{{font-weight:800;color:var(--text);width:38px;flex-shrink:0;font-family:monospace}}
-.scen-label{{flex:1;color:var(--text2);font-size:.68rem}}
-.scen-bar-track{{width:60px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0}}
-.scen-bar-fill{{height:100%;border-radius:3px;transition:width .4s}}
-.scen-pct{{font-size:.67rem;font-weight:700;width:36px;text-align:right;flex-shrink:0}}
-.scen-goal-probs{{display:flex;gap:6px;padding:2px 0 0 20px;font-size:.60rem;color:var(--text3)}}
-.scen-gA{{color:var(--blue);font-weight:600}}
-.scen-gB{{color:var(--text2);font-weight:600}}
-.scen-sep{{color:var(--border)}}
-
-/* ── Interpretation Layer ── */
-.interp-card{{background:linear-gradient(135deg,var(--surface) 0%,rgba(99,102,241,.04) 100%);border:1px solid var(--border);border-radius:8px;padding:10px;margin-top:10px}}
-.interp-title{{font-size:.59rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:5px}}
-.interp-verdict{{font-size:.73rem;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4}}
-.interp-tags{{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px}}
-.interp-tag{{font-size:.59rem;font-weight:700;padding:2px 7px;border-radius:12px;border:1px solid}}
-.itag-fav{{color:var(--green);border-color:var(--green);background:rgba(34,197,94,.08)}}
-.itag-bal{{color:var(--yellow);border-color:var(--yellow);background:rgba(234,179,8,.08)}}
-.itag-open{{color:var(--red);border-color:var(--red);background:rgba(239,68,68,.08)}}
-.itag-def{{color:#94a3b8;border-color:#94a3b8;background:rgba(148,163,184,.08)}}
-.itag-att{{color:var(--blue);border-color:var(--blue);background:rgba(99,102,241,.08)}}
-.itag-mkt{{color:#f59e0b;border-color:#f59e0b;background:rgba(245,158,11,.08)}}
-.interp-stats{{display:flex;gap:12px;margin-bottom:5px}}
-.interp-kv{{display:flex;flex-direction:column;gap:1px}}
-.interp-k{{font-size:.57rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}}
-.interp-v{{font-size:.70rem;font-weight:700;color:var(--text)}}
-.interp-note{{font-size:.60rem;color:var(--text3);font-style:italic;margin-top:5px;border-top:1px solid var(--border);padding-top:5px;line-height:1.4}}
-
-/* ── Mi Pronóstico revamp ── */
-.mi-pred-grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}}
-.mi-pred-poisson{{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px}}
-.mi-pred-poisson-title{{font-size:.63rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:6px}}
-.mi-poisson-row{{display:flex;align-items:center;gap:6px;margin-bottom:4px}}
-.mp-k{{font-size:.65rem;color:var(--text3);width:16px;text-align:right;flex-shrink:0}}
-.mp-track{{flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden}}
-.mp-fill{{height:100%;border-radius:3px;transition:width .5s}}
-.mp-pct-val{{font-size:.62rem;width:30px;text-align:right;flex-shrink:0}}
-.mp-highlight{{background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.2);border-radius:5px}}
-.mi-summary{{margin-top:10px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px}}
 </style>
 </head>
 <body>
@@ -374,12 +369,18 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
   <div class="topbar-badges">
     <span class="tbadge a">Engine A · MLP+Atención</span>
     <span class="tbadge b">Engine B · XGBoost</span>
-    <span class="tbadge g">85 features · T=0.55</span>
+    <span class="tbadge g">74 features · T=0.55</span>
   </div>
   <button class="btn-analyze" id="analyzeBtn" onclick="runAnalysis()">⚡ Analizar Partido</button>
 </div>
 
 <div class="container">
+
+<!-- PRONÓSTICOS DEL DÍA -->
+<div class="card">
+  <div class="card-title">🗓️ Pronósticos del Día &nbsp;<span id="fechaHoyLabel" style="font-weight:400;color:var(--text2);text-transform:none;letter-spacing:0"></span></div>
+  <div id="pronosticosHoy"></div>
+</div>
 
 <!-- CONFIGURADOR DE PARTIDO -->
 <div class="card">
@@ -399,31 +400,10 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
       <div id="badgeA" class="mt8"></div>
     </div>
 
-    <!-- VS + VENUE -->
+    <!-- VS -->
     <div class="vs-divider">
       <div class="vs-text">VS</div>
-      <div class="venue-label">🏟️ SEDE</div>
-      <select id="venueSelect" onchange="updatePrediction()">
-        <option value="neutral">Neutral</option>
-        <option value="Arlington">Arlington TX</option>
-        <option value="EastRutherford">East Rutherford NJ</option>
-        <option value="SantaClara">Santa Clara CA</option>
-        <option value="Pasadena">Pasadena CA</option>
-        <option value="Inglewood">Inglewood CA</option>
-        <option value="Philadelphia">Philadelphia PA</option>
-        <option value="Charlotte">Charlotte NC</option>
-        <option value="KansasCity">Kansas City MO</option>
-        <option value="Denver">Denver CO 🏔️</option>
-        <option value="Chicago">Chicago IL</option>
-        <option value="Miami">Miami FL 🔥</option>
-        <option value="Boston">Boston MA</option>
-        <option value="Toronto">Toronto CAN</option>
-        <option value="Vancouver">Vancouver CAN</option>
-        <option value="Montreal">Montreal CAN</option>
-        <option value="MexicoCity">México DF 🏔️🔥</option>
-        <option value="Monterrey">Monterrey MEX 🔥</option>
-        <option value="Guadalajara">Guadalajara MEX 🏔️</option>
-      </select>
+      <div class="vs-sub">Sede<br>Neutral</div>
       <button class="swap-btn mt8" onclick="swapTeams()" title="Intercambiar equipos">⇄</button>
     </div>
 
@@ -445,23 +425,6 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 <!-- PREDICTION PANEL -->
 <div class="card" id="predCard">
   <div class="card-title">🎯 Predicción del Partido</div>
-
-  <!-- ENV STRIP -->
-  <div id="envStrip" class="env-strip" style="display:none">
-    <div class="env-item"><span class="env-icon">🏔️</span><span class="env-val" id="envAlt">—</span><span class="env-lbl">m alt.</span></div>
-    <div class="env-item"><span class="env-icon">🌡️</span><span class="env-val" id="envTemp">—</span><span class="env-lbl">°C</span></div>
-    <div class="env-item"><span class="env-icon">💨</span><span class="env-val" id="envWind">—</span><span class="env-lbl">km/h</span></div>
-    <div class="env-item"><span class="env-icon">💧</span><span class="env-lbl">Hidratación:&nbsp;</span><span id="envHydra" class="hydra-badge hydra-none">Sin pausa</span></div>
-  </div>
-
-  <!-- MARKET ODDS STRIP -->
-  <div id="bkStrip" style="display:none;flex-wrap:wrap;align-items:center;gap:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.74rem;color:var(--text2)">
-    <span style="font-weight:700;color:var(--text);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em">📊 Mercado estimado</span>
-    <span>Victoria A: <strong id="bkWinA" style="color:var(--green)">—</strong></span>
-    <span>Empate: <strong id="bkDraw" style="color:var(--yellow)">—</strong></span>
-    <span>Victoria B: <strong id="bkWinB" style="color:var(--red)">—</strong></span>
-    <span style="font-size:.62rem;color:var(--text3)">(Squawka · CBS · FoxSports · CleverScores)</span>
-  </div>
 
   <!-- CONSENSUS -->
   <div id="consensusBox" class="consensus-box agree">
@@ -489,9 +452,6 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
         <div class="score-colon">:</div>
         <div class="score-side"><div class="score-num" id="aGoalB">—</div><div class="score-name" id="aNameB">B</div><div class="score-lambda">goles (discreto)</div></div>
       </div>
-      <div id="goalDistA"></div>
-      <div id="scenariosA"></div>
-      <div id="interpA"></div>
     </div>
     <!-- Engine B -->
     <div class="engine-panel ep-b">
@@ -508,37 +468,11 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
         <div class="score-colon">:</div>
         <div class="score-side"><div class="score-num" id="bGoalB">—</div><div class="score-name" id="bNameB">B</div><div class="score-lambda">goles (discreto)</div></div>
       </div>
-      <div id="goalDistB"></div>
-      <div id="scenariosB"></div>
-      <div id="interpB"></div>
     </div>
   </div>
 
   <!-- VERDICT (full width) -->
   <div id="verdict" class="verd-win">Selecciona dos equipos y pulsa ⚡ Analizar Partido.</div>
-</div>
-
-<!-- MI PRONÓSTICO -->
-<div class="card">
-  <div class="card-title">🎯 Mi Pronóstico — Distribución Poisson</div>
-  <div class="my-pred-section">
-    <div style="font-size:.78rem;color:var(--text2);margin-bottom:8px">
-      Ingresa tu marcador. El modelo muestra la distribución Poisson de goles para cada equipo y calcula la confianza.
-    </div>
-    <div class="my-pred-inputs">
-      <div style="text-align:center">
-        <div class="pred-team-name" id="myTeamLabelA">Equipo A</div>
-        <input type="number" id="myGoalA" class="goal-input" min="0" max="15" value="1">
-      </div>
-      <div class="pred-separator">—</div>
-      <div style="text-align:center">
-        <div class="pred-team-name" id="myTeamLabelB">Equipo B</div>
-        <input type="number" id="myGoalB" class="goal-input" min="0" max="15" value="0">
-      </div>
-      <button class="btn-confidence" onclick="calcMyConfidence()">🎯 Calcular Confianza</button>
-    </div>
-    <div id="confResult" style="display:none" class="conf-result"></div>
-  </div>
 </div>
 
 <!-- ANÁLISIS TÁCTICO -->
@@ -587,9 +521,7 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
         <li><span style="color:var(--green)">✓</span> <strong>Alineaciones tácticas</strong>: formación (9 esquemas) + estilo de juego por equipo</li>
         <li><span style="color:var(--green)">✓</span> <strong>Engine A</strong>: Deep MLP (512→256→128→64→32) + Self-Attention 4 cabezas, implementado en sklearn/numpy</li>
         <li><span style="color:var(--green)">✓</span> <strong>Engine B</strong>: XGBoost agresivo calibrado con temperatura T=0.55 para predicciones más decisivas</li>
-        <li><span style="color:var(--green)">✓</span> <strong>85 features</strong>: 74 tácticas + 8 ambientales (altitud/temp/viento/hidratación) + 3 de mercado</li>
-        <li><span style="color:var(--green)">✓</span> <strong>Odds de mercado</strong>: probabilidades de casas de apuestas (Squawka, CBS, FoxSports, CleverScores) como feature — <em>bk_win_A</em> es la 2ª feature más importante del modelo</li>
-        <li><span style="color:var(--green)">✓</span> <strong>Hidratación Break negativa</strong>: penaliza equipos de alto pressing en calor/humedad extrema</li>
+        <li><span style="color:var(--green)">✓</span> <strong>74 features</strong> vs 35 en v2: tácticas, experiencia confederación WC, interacciones cruzadas ataque×defensa</li>
         <li><span style="color:var(--green)">✓</span> <strong>Goles discretos</strong>: resultado redondeado al entero más cercano (0-5)</li>
         <li><span style="color:var(--green)">✓</span> <strong>Variables de experto eliminadas</strong>: injury_factor, is_host, xg_qual</li>
       </ul>
@@ -599,17 +531,24 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
           <div style="color:var(--blue);font-weight:700;margin-bottom:4px">Engine A — MLP + Self-Attention</div>
           <div>• Capas: 512→256→128→64→32</div>
           <div>• Self-Attention: 4 heads, T=0.45</div>
-          <div>• Acc=0.537 | F1=0.471 | AUC=0.658</div>
+          <div>• Acc=0.591 | F1=0.525 | AUC=0.642</div>
         </div>
         <div style="background:var(--yellow-light);border-radius:8px;padding:10px;border:1px solid var(--yellow-mid)">
           <div style="color:var(--yellow);font-weight:700;margin-bottom:4px">Engine B — XGBoost Agresivo</div>
           <div>• depth=5 | n_est=300 | lr=0.07</div>
           <div>• min_child_w=3 | gamma=0.20</div>
-          <div>• Acc=0.561 | F1=0.499 | AUC=0.675</div>
+          <div>• Acc=0.545 | F1=0.535 | AUC=0.711</div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- HISTORIAL DE PREDICCIONES -->
+<div class="card" id="historialCard">
+  <div class="card-title">📊 Predicciones vs Resultados Reales</div>
+  <div class="hist-acc-grid" id="histAccGrid"></div>
+  <div class="hc-grid" id="historialList"></div>
 </div>
 
 </div><!-- /container -->
@@ -622,9 +561,15 @@ const PREDS = {preds_raw};
 const LINEUP_DEFAULT = {lineup_js};
 const FORMATION_FEATURES = {formation_js};
 const STYLE_SCORE = {style_js};
-const VENUES = {venues_js};
-const SCHEDULE = {schedule_js};
 const GROUPS = {groups_js};
+const HISTORIAL = {historial_raw};
+const FIXTURES = {fixtures_raw};
+
+// Build fast lookup for played matches
+const HIST_LOOKUP = {{}};
+for (const e of (HISTORIAL.entries||[])) {{
+  HIST_LOOKUP[e.teamA+'|'+e.teamB] = e;
+}}
 
 const FORMATIONS = ["4-3-3","4-4-2","4-2-3-1","3-4-3","3-5-2","5-3-2","4-5-1","5-4-1","4-1-4-1"];
 const STYLES = ["attacking","balanced","defensive","counterattack"];
@@ -632,21 +577,24 @@ const STYLE_LABEL = {{attacking:"Ataque",balanced:"Balanceado",defensive:"Defens
 const STYLE_CLASS = {{attacking:"atk",balanced:"bal",defensive:"def",counterattack:"ctr"}};
 
 const FEATURE_IMPORTANCE = [
-  {{f:"diff_att (combo ofensivo)",v:0.1196,new_:true}},
-  {{f:"bk_win_A 📊 (odds mercado A)",v:0.0636,new_:true}},
-  {{f:"diff_log_mv (valor mercado)",v:0.0361,new_:false}},
-  {{f:"log_sv_A (valor estrella A)",v:0.0296,new_:false}},
-  {{f:"net_off_pow (poder ofensivo neto)",v:0.0283,new_:true}},
-  {{f:"log_sv_B",v:0.0216,new_:false}},
-  {{f:"bk_draw 📊 (odds empate mercado)",v:0.0214,new_:true}},
-  {{f:"env_alt (altitud sede) 🏔️",v:0.0199,new_:true}},
-  {{f:"gf_pg_A (goles favor/pg A)",v:0.0196,new_:false}},
-  {{f:"rank_ratio",v:0.0177,new_:false}},
-  {{f:"log_mv_A",v:0.0173,new_:false}},
-  {{f:"diff_gf_pg",v:0.0173,new_:false}},
-  {{f:"sq_rat_B (rating plantilla B)",v:0.0169,new_:false}},
-  {{f:"diff_sq_rat",v:0.0164,new_:false}},
-  {{f:"heat_hydra_pen_B 🌡️💧",v:0.0158,new_:true}},
+  {{f:"diff_att (combo ofensivo)",v:0.0429,new_:true}},
+  {{f:"diff_sq_rat (rating plantilla)",v:0.0394,new_:false}},
+  {{f:"sq_rat_A",v:0.0361,new_:false}},
+  {{f:"cross_tb (interacción táctica)",v:0.0343,new_:true}},
+  {{f:"cwe_A (exp. confederación WC)",v:0.0342,new_:true}},
+  {{f:"diff_log_mv (valor mercado)",v:0.0316,new_:false}},
+  {{f:"rank_diff",v:0.0278,new_:false}},
+  {{f:"net_off_pow (poder ofensivo neto)",v:0.0277,new_:true}},
+  {{f:"rank_ratio",v:0.0274,new_:false}},
+  {{f:"log_mv_B",v:0.0268,new_:false}},
+  {{f:"conf_A",v:0.0258,new_:false}},
+  {{f:"rank_A",v:0.0243,new_:false}},
+  {{f:"diff_cwe (diff exp. WC)",v:0.0228,new_:true}},
+  {{f:"wr_A (win rate elim.)",v:0.0212,new_:true}},
+  {{f:"cwe_B",v:0.0200,new_:true}},
+  {{f:"fatk_A (formación ataque A)",v:0.0188,new_:true}},
+  {{f:"style_A",v:0.0175,new_:true}},
+  {{f:"tact_adv (ventaja táctica)",v:0.0166,new_:true}},
 ];
 
 const TEAM_STATS = {{
@@ -680,6 +628,8 @@ document.addEventListener('DOMContentLoaded', () => {{
   renderGroups();
   renderFeatureImportance();
   onTeamChange();
+  renderPronosticosHoy();
+  renderHistorial();
 }});
 
 // ═══════════════════════════════
@@ -702,16 +652,6 @@ function runAnalysis() {{
 // ═══════════════════════════════
 function discreteGoals(lambda) {{
   return Math.min(5, Math.max(0, Math.round(lambda)));
-}}
-function consistentGoals(lA, lB, prob) {{
-  let gA = Math.min(5, Math.max(0, Math.round(lA)));
-  let gB = Math.min(5, Math.max(0, Math.round(lB)));
-  if (prob.p_victoria > prob.p_derrota && prob.p_victoria > prob.p_empate) {{
-    if (gA <= gB) {{ gA = gB + 1; if (gA > 5) {{ gA = 5; gB = 4; }} }}
-  }} else if (prob.p_derrota > prob.p_victoria && prob.p_derrota > prob.p_empate) {{
-    if (gB <= gA) {{ gB = gA + 1; if (gB > 5) {{ gB = 5; gA = 4; }} }}
-  }}
-  return [gA, gB];
 }}
 
 // ═══════════════════════════════
@@ -779,44 +719,6 @@ function applyMod(baseP, tA, formA, styleA, tB, formB, styleB) {{
 }}
 
 // ═══════════════════════════════
-// VENUE / ENV MODIFIER
-// ═══════════════════════════════
-function applyVenueMod(p, formA, styleA, formB, styleB, venueKey) {{
-  const venue = VENUES[venueKey] || VENUES['neutral'];
-  const ffA = FORMATION_FEATURES[formA] || FORMATION_FEATURES['4-3-3'];
-  const ffB = FORMATION_FEATURES[formB] || FORMATION_FEATURES['4-3-3'];
-  const altStress  = Math.max(0, (venue.altitude - 1000) / 1500);
-  const heatStress = Math.max(0, (venue.temp - 28) / 15);
-  const pressPenA  = ffA.pressing * (altStress + heatStress * (1 + venue.hydration * 0.5));
-  const pressPenB  = ffB.pressing * (altStress + heatStress * (1 + venue.hydration * 0.5));
-  // Positive shift = team B pressing penalized more than A (benefits A), vice-versa
-  const shift = (pressPenA - pressPenB) * -0.13;
-  let v=Math.max(0.01,Math.min(0.97, p.p_victoria + shift));
-  let d=Math.max(0.01,Math.min(0.97, p.p_derrota  - shift));
-  let e=Math.max(0.01, p.p_empate);
-  const s=v+e+d;
-  return {{p_victoria:v/s,p_empate:e/s,p_derrota:d/s}};
-}}
-
-function updateEnvDisplay(venueKey) {{
-  const venue = VENUES[venueKey] || VENUES['neutral'];
-  const strip = document.getElementById('envStrip');
-  if (venueKey === 'neutral') {{ strip.style.display='none'; return; }}
-  strip.style.display='flex';
-  document.getElementById('envAlt').textContent  = venue.altitude.toLocaleString();
-  document.getElementById('envTemp').textContent  = venue.temp;
-  document.getElementById('envWind').textContent  = venue.wind;
-  const hEl = document.getElementById('envHydra');
-  if (venue.hydration <= 0) {{
-    hEl.className='hydra-badge hydra-none'; hEl.textContent='Sin pausa';
-  }} else if (venue.hydration < 0.6) {{
-    hEl.className='hydra-badge hydra-low';  hEl.textContent='Pausa posible';
-  }} else {{
-    hEl.className='hydra-badge hydra-high'; hEl.textContent='Pausa obligatoria';
-  }}
-}}
-
-// ═══════════════════════════════
 // TEAM CHANGE
 // ═══════════════════════════════
 function onTeamChange() {{
@@ -826,10 +728,6 @@ function onTeamChange() {{
   buildFormChips('formRowA',tA,'A'); buildFormChips('formRowB',tB,'B');
   buildStyleChips('styleRowA',tA,'A'); buildStyleChips('styleRowB',tB,'B');
   renderLineupBadge('A'); renderLineupBadge('B');
-  document.getElementById('myTeamLabelA').textContent=tA;
-  document.getElementById('myTeamLabelB').textContent=tB;
-  autoSetVenue(tA, tB);
-  document.getElementById('confResult').style.display='none';
   updatePrediction();
   renderStats(tA,tB);
 }}
@@ -839,16 +737,6 @@ function swapTeams() {{
   [sA.value,sB.value]=[sB.value,sA.value];
   userFormA=null;userStyleA=null;userFormB=null;userStyleB=null;
   onTeamChange();
-}}
-
-function autoSetVenue(tA, tB) {{
-  const key1 = tA + '_' + tB;
-  const key2 = tB + '_' + tA;
-  const venue = SCHEDULE[key1] || SCHEDULE[key2];
-  if (venue) {{
-    const sel = document.getElementById('venueSelect');
-    if (sel) {{ sel.value = venue; updateEnvDisplay(venue); }}
-  }}
 }}
 
 // ═══════════════════════════════
@@ -866,23 +754,12 @@ function updatePrediction() {{
   const formA=userFormA||dA.formation, styleA=userStyleA||dA.style;
   const formB=userFormB||dB.formation, styleB=userStyleB||dB.style;
 
-  const venue = document.getElementById('venueSelect').value;
-  const pA_tact=applyMod(match.engine_A,tA,formA,styleA,tB,formB,styleB);
-  const pB_tact=applyMod(match.engine_B,tA,formA,styleA,tB,formB,styleB);
-  const pA=applyVenueMod(pA_tact,formA,styleA,formB,styleB,venue);
-  const pB=applyVenueMod(pB_tact,formA,styleA,formB,styleB,venue);
+  const pA=applyMod(match.engine_A,tA,formA,styleA,tB,formB,styleB);
+  const pB=applyMod(match.engine_B,tA,formA,styleA,tB,formB,styleB);
   const lA=match.lambda_A, lB=match.lambda_B;
 
-  updateEnvDisplay(venue);
-  const bk = match.bk_estimate || null;
-  if (bk) {{
-    document.getElementById('bkStrip').style.display='flex';
-    document.getElementById('bkWinA').textContent=pct(bk[0]);
-    document.getElementById('bkDraw').textContent=pct(bk[1]);
-    document.getElementById('bkWinB').textContent=pct(bk[2]);
-  }}
-  renderEngineA(pA,tA,tB,lA,lB,bk);
-  renderEngineB(pB,tA,tB,lA,lB,bk);
+  renderEngineA(pA,tA,tB,lA,lB);
+  renderEngineB(pB,tA,tB,lA,lB);
 
   const wA=outcome(pA), wB=outcome(pB);
   renderConsensus(wA===wB,wA,wB,tA,tB,pA,pB);
@@ -899,7 +776,7 @@ function outcome(p) {{
 // ═══════════════════════════════
 // RENDER ENGINE PANELS
 // ═══════════════════════════════
-function renderEngineA(p,tA,tB,lA,lB,bk) {{
+function renderEngineA(p,tA,tB,lA,lB) {{
   document.getElementById('aVic').textContent=pct(p.p_victoria);
   document.getElementById('aEmp').textContent=pct(p.p_empate);
   document.getElementById('aDer').textContent=pct(p.p_derrota);
@@ -910,17 +787,13 @@ function renderEngineA(p,tA,tB,lA,lB,bk) {{
   document.getElementById('pbarAl').style.width=pct(p.p_derrota);
   document.getElementById('lblAw').textContent=tA+' '+pct(p.p_victoria);
   document.getElementById('lblAl').textContent=tB+' '+pct(p.p_derrota);
-  const [gA_a, gB_a]=consistentGoals(lA,lB,p);
-  document.getElementById('aGoalA').textContent=gA_a;
-  document.getElementById('aGoalB').textContent=gB_a;
+  document.getElementById('aGoalA').textContent=discreteGoals(lA);
+  document.getElementById('aGoalB').textContent=discreteGoals(lB);
   document.getElementById('aNameA').textContent=tA;
   document.getElementById('aNameB').textContent=tB;
-  renderGoalDist('goalDistA', lA, lB, tA, tB, 'A');
-  renderScenarios('scenariosA', lA, lB, tA, tB);
-  renderInterpretation('interpA', 'A', p, lA, lB, tA, tB, bk);
 }}
 
-function renderEngineB(p,tA,tB,lA,lB,bk) {{
+function renderEngineB(p,tA,tB,lA,lB) {{
   document.getElementById('bVic').textContent=pct(p.p_victoria);
   document.getElementById('bEmp').textContent=pct(p.p_empate);
   document.getElementById('bDer').textContent=pct(p.p_derrota);
@@ -931,171 +804,10 @@ function renderEngineB(p,tA,tB,lA,lB,bk) {{
   document.getElementById('pbarBl').style.width=pct(p.p_derrota);
   document.getElementById('lblBw').textContent=tA+' '+pct(p.p_victoria);
   document.getElementById('lblBl').textContent=tB+' '+pct(p.p_derrota);
-  const [gA_b, gB_b]=consistentGoals(lA,lB,p);
-  document.getElementById('bGoalA').textContent=gA_b;
-  document.getElementById('bGoalB').textContent=gB_b;
+  document.getElementById('bGoalA').textContent=discreteGoals(lA);
+  document.getElementById('bGoalB').textContent=discreteGoals(lB);
   document.getElementById('bNameA').textContent=tA;
   document.getElementById('bNameB').textContent=tB;
-  renderGoalDist('goalDistB', lA, lB, tA, tB, 'B');
-  renderScenarios('scenariosB', lA, lB, tA, tB);
-  renderInterpretation('interpB', 'B', p, lA, lB, tA, tB, bk);
-}}
-
-function renderGoalDist(containerId, lA, lB, tA, tB, engine) {{
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  const colA = engine==='A' ? 'var(--blue)' : 'var(--yellow)';
-  const colB = '#94a3b8';
-  function goalBars(lam, color) {{
-    let bars = '';
-    let total = 0;
-    const ps = [];
-    for (let k=0; k<=5; k++) {{ const p=poisson(k,lam); ps.push(p); total+=p; }}
-    const maxP = Math.max(...ps);
-    for (let k=0; k<=5; k++) {{
-      const pct_v = maxP>0 ? Math.round(ps[k]/maxP*100) : 0;
-      const pct_show = total>0 ? (ps[k]/total*100).toFixed(0)+'%' : '—';
-      const label = k<5 ? k : '5+';
-      bars += `<div class="goal-dist-row">
-        <span class="gd-k">${{label}}</span>
-        <div class="gd-bar-track"><div class="gd-bar-fill" style="width:${{pct_v}}%;background:${{color}}"></div></div>
-        <span class="gd-pct">${{pct_show}}</span>
-      </div>`;
-    }}
-    return bars;
-  }}
-  el.innerHTML = `
-    <div class="goal-dist-section">
-      <div class="goal-dist-title">Distribución de Goles (Poisson)</div>
-      <div class="goal-dist-teams">
-        <div class="goal-dist-col">
-          <div class="goal-dist-team-name">${{tA}}</div>
-          ${{goalBars(lA, colA)}}
-          <div class="gd-lambda">λ=${{lA.toFixed(2)}}</div>
-        </div>
-        <div class="goal-dist-col">
-          <div class="goal-dist-team-name">${{tB}}</div>
-          ${{goalBars(lB, '#64748b')}}
-          <div class="gd-lambda">λ=${{lB.toFixed(2)}}</div>
-        </div>
-      </div>
-    </div>`;
-}}
-
-function renderScenarios(containerId, lA, lB, tA, tB) {{
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  // Probabilidades completamente independientes: P(i-j) = Poisson(i,lA) × Poisson(j,lB)
-  const scores = [];
-  for (let i=0; i<=7; i++) {{
-    for (let j=0; j<=7; j++) {{
-      const pA_i = poisson(i, lA);
-      const pB_j = poisson(j, lB);
-      const prob  = pA_i * pB_j;
-      const cat   = i>j ? 'win' : i===j ? 'draw' : 'loss';
-      scores.push({{i, j, pA_i, pB_j, prob, cat}});
-    }}
-  }}
-  scores.sort((a,b) => b.prob - a.prob);
-  const top5 = scores.slice(0, 5);
-
-  const catColor = cat => cat==='win'?'var(--green)':cat==='draw'?'var(--yellow)':'var(--red)';
-  const catLabel = cat => cat==='win'?`Victoria ${{tA}}`:cat==='draw'?'Empate':`Victoria ${{tB}}`;
-  const maxProb = top5[0].prob;
-  let html = '<div class="scenarios-section"><div class="scenarios-title">Marcadores más probables (Poisson independiente)</div>';
-  top5.forEach((s, idx) => {{
-    const barW = maxProb>0 ? Math.round(s.prob/maxProb*100) : 0;
-    const col  = catColor(s.cat);
-    html += `<div class="scenario-item">
-      <div class="scenario-row">
-        <span class="scen-rank">${{idx+1}}</span>
-        <span class="scen-score">${{s.i}}-${{s.j}}</span>
-        <span class="scen-label">${{catLabel(s.cat)}}</span>
-        <div class="scen-bar-track"><div class="scen-bar-fill" style="width:${{barW}}%;background:${{col}}"></div></div>
-        <span class="scen-pct" style="color:${{col}}">${{(s.prob*100).toFixed(1)}}%</span>
-      </div>
-      <div class="scen-goal-probs">
-        <span class="scen-gA">${{tA}} marca ${{s.i}}: ${{(s.pA_i*100).toFixed(1)}}%</span>
-        <span class="scen-sep">·</span>
-        <span class="scen-gB">${{tB}} marca ${{s.j}}: ${{(s.pB_j*100).toFixed(1)}}%</span>
-      </div>
-    </div>`;
-  }});
-  html += '</div>';
-  el.innerHTML = html;
-}}
-
-// ═══════════════════════════════
-// INTERPRETATION LAYER
-// ═══════════════════════════════
-function renderInterpretation(containerId, engine, p, lA, lB, tA, tB, bk) {{
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  const pV=p.p_victoria, pE=p.p_empate, pD=p.p_derrota;
-  const lTotal=+(lA+lB).toFixed(2);
-  const dLambda=+(Math.abs(lA-lB)).toFixed(2);
-  const maxP=Math.max(pV,pD);
-  const favTeam=pV>=pD?tA:tB;
-  const favP=pV>=pD?pV:pD;
-
-  // ── Tags ──
-  const tags=[];
-  if (maxP>0.68)      tags.push(['itag-fav',`Favorito claro: ${{favTeam}}`]);
-  else if (maxP>0.48) tags.push(['itag-bal',`Ligero favorito: ${{favTeam}}`]);
-  else                tags.push(['itag-open','Partido muy abierto']);
-
-  if (lTotal<1.6)      tags.push(['itag-def','Batalla defensiva']);
-  else if (lTotal>2.6) tags.push(['itag-att','Partido de goles']);
-  else                 tags.push(['itag-def','Intensidad media']);
-
-  if (pE>0.22)         tags.push(['itag-bal',`Empate factible ${{(pE*100).toFixed(0)}}%`]);
-
-  if (bk) {{
-    const diff=pV-bk[0];
-    if (diff>0.08)       tags.push(['itag-mkt',`Modelo +optimista que mercado`]);
-    else if (diff<-0.08) tags.push(['itag-mkt',`Mercado más favorece a ${{tA}}`]);
-    else                 tags.push(['itag-mkt','Acuerda con mercado']);
-  }}
-
-  // ── Verdict text ──
-  let verdict='';
-  if (maxP>0.68) {{
-    verdict=`${{favTeam}} domina con <strong>${{(favP*100).toFixed(0)}}%</strong> de probabilidad de victoria. `;
-    verdict+=lTotal<1.6?`Se espera un partido controlado (${{lTotal}} goles totales λ).`:`Alta producción ofensiva prevista (λ total ${{lTotal}}).`;
-  }} else if (maxP>0.48) {{
-    verdict=`${{favTeam}} sale como ligero favorito (${{(favP*100).toFixed(0)}}%). `;
-    verdict+=`El empate tiene un ${{(pE*100).toFixed(0)}}% de opciones — partido sin un dominador claro.`;
-  }} else {{
-    verdict=`Equilibrio total: victoria A ${{(pV*100).toFixed(0)}}% · empate ${{(pE*100).toFixed(0)}}% · victoria B ${{(pD*100).toFixed(0)}}%. `;
-    verdict+=`Cualquier resultado es plausible según el modelo.`;
-  }}
-
-  // ── Engine-specific insight ──
-  const engineNote = engine==='A'
-    ? `Engine A (MLP+Atención): red neuronal profunda sensible a estilos tácticos y patrones contextuales. Tiende a distribuciones más suavizadas — útil para detectar partidos trampa.`
-    : `Engine B (XGBoost): pondera features cuantitativos (ranking, valor de mercado, forma). Más decisivo en diferencias claras de nivel — menos confiable en equipos con datos escasos.`;
-
-  // ── Market divergence detail ──
-  let mktLine='';
-  if (bk) {{
-    const impl=(bk[0]*100).toFixed(0);
-    const mod=(pV*100).toFixed(0);
-    mktLine=`<div style="font-size:.61rem;color:var(--text2);margin-top:3px">Mercado implícito ${{tA}}: <strong>${{impl}}%</strong> · Modelo: <strong>${{mod}}%</strong></div>`;
-  }}
-
-  el.innerHTML=`<div class="interp-card">
-    <div class="interp-title">🔍 Interpretación — Engine ${{engine}}</div>
-    <div class="interp-verdict">${{verdict}}</div>
-    <div class="interp-tags">${{tags.map(([cls,txt])=>`<span class="interp-tag ${{cls}}">${{txt}}</span>`).join('')}}</div>
-    <div class="interp-stats">
-      <div class="interp-kv"><span class="interp-k">λ Total</span><span class="interp-v">${{lTotal}}</span></div>
-      <div class="interp-kv"><span class="interp-k">Δ Lambda</span><span class="interp-v">${{dLambda}}</span></div>
-      <div class="interp-kv"><span class="interp-k">Confianza</span><span class="interp-v">${{(maxP*100).toFixed(0)}}%</span></div>
-      <div class="interp-kv"><span class="interp-k">Empate</span><span class="interp-v">${{(pE*100).toFixed(0)}}%</span></div>
-    </div>
-    ${{mktLine}}
-    <div class="interp-note">${{engineNote}}</div>
-  </div>`;
 }}
 
 // ═══════════════════════════════
@@ -1129,8 +841,7 @@ function renderVerdict(pA,pB,tA,tB,lA,lB) {{
   const avgV=(pA.p_victoria+pB.p_victoria)/2;
   const avgE=(pA.p_empate+pB.p_empate)/2;
   const avgD=(pA.p_derrota+pB.p_derrota)/2;
-  const avgProb={{p_victoria:avgV,p_empate:avgE,p_derrota:avgD}};
-  const [gA,gB]=consistentGoals(lA,lB,avgProb);
+  const gA=discreteGoals(lA), gB=discreteGoals(lB);
   let cls,text;
   if (avgV>avgD&&avgV>avgE) {{
     cls='verd-win';
@@ -1199,32 +910,111 @@ function setTeamA(team) {{
   onTeamChange();
 }}
 
+// Helper: get historial entry normalized to (a vs b) perspective
+function getHistEntry(a, b) {{
+  const flip = r => r==='victoria_A'?'victoria_B':r==='victoria_B'?'victoria_A':r;
+  const he = HIST_LOOKUP[a+'|'+b];
+  if (he) return {{gA:he.goles_A,gB:he.goles_B,real:he.resultado_real,
+    predA:he.engine_A.prediccion,okA:he.acierto_A,pA:he.engine_A,
+    predB:he.engine_B.prediccion,okB:he.acierto_B,pB:he.engine_B}};
+  const he2 = HIST_LOOKUP[b+'|'+a];
+  if (he2) return {{gA:he2.goles_B,gB:he2.goles_A,real:flip(he2.resultado_real),
+    predA:flip(he2.engine_A.prediccion),okA:he2.acierto_A,
+    pA:{{p_victoria:he2.engine_A.p_derrota,p_empate:he2.engine_A.p_empate,p_derrota:he2.engine_A.p_victoria}},
+    predB:flip(he2.engine_B.prediccion),okB:he2.acierto_B,
+    pB:{{p_victoria:he2.engine_B.p_derrota,p_empate:he2.engine_B.p_empate,p_derrota:he2.engine_B.p_victoria}}}};
+  return null;
+}}
+
+// Helper: get predictions for (a vs b) from PREDS
+function getPredsFor(a, b) {{
+  if (PREDS[a]&&PREDS[a][b]) return PREDS[a][b];
+  if (PREDS[b]&&PREDS[b][a]) {{
+    const m=PREDS[b][a];
+    return {{
+      engine_A:{{p_victoria:m.engine_A.p_derrota,p_empate:m.engine_A.p_empate,p_derrota:m.engine_A.p_victoria}},
+      engine_B:{{p_victoria:m.engine_B.p_derrota,p_empate:m.engine_B.p_empate,p_derrota:m.engine_B.p_victoria}},
+      lambda_A:m.lambda_B,lambda_B:m.lambda_A,
+      lineup_A:m.lineup_B,lineup_B:m.lineup_A
+    }};
+  }}
+  return null;
+}}
+
+function predLabel(pred, a, b) {{
+  return pred==='victoria_A'?a:pred==='victoria_B'?b:'Empate';
+}}
+
+function outcomeOf(pv, pe, pd) {{
+  if (pv>=pe&&pv>=pd) return 'victoria_A';
+  if (pd>=pe) return 'victoria_B';
+  return 'empate';
+}}
+
 function showGroupMatches(grp) {{
   const teams=GROUPS[grp];
   const matches=[];
   for(let i=0;i<teams.length;i++) for(let j=i+1;j<teams.length;j++) matches.push([teams[i],teams[j]]);
   document.getElementById('groupMatchesTitle').textContent=`Partidos Grupo ${{grp}}`;
   document.getElementById('groupMatchesList').innerHTML=matches.map(([a,b])=>{{
-    const m=PREDS[a]&&PREDS[a][b];
+    const m=getPredsFor(a,b);
     if(!m) return '';
-    const avgV=(m.engine_A.p_victoria+m.engine_B.p_victoria)/2;
-    const avgE=(m.engine_A.p_empate+m.engine_B.p_empate)/2;
-    const avgD=(m.engine_A.p_derrota+m.engine_B.p_derrota)/2;
-    const [gA,gB]=consistentGoals(m.lambda_A,m.lambda_B,{{p_victoria:avgV,p_empate:avgE,p_derrota:avgD}});
-    return `<div style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid var(--border);cursor:pointer"
-      onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()">
-      <div style="flex:1;font-size:.82rem;font-weight:600;color:var(--text)">${{a}}</div>
-      <div style="text-align:center;min-width:90px">
-        <div style="display:flex;gap:3px;justify-content:center;font-size:.75rem">
-          <span style="color:var(--green);font-weight:600">${{pct(avgV)}}</span>
-          <span style="color:var(--text3)">|</span>
-          <span style="color:var(--yellow);font-weight:600">${{pct(avgE)}}</span>
-          <span style="color:var(--text3)">|</span>
-          <span style="color:var(--red);font-weight:600">${{pct(avgD)}}</span>
+    const pA=m.engine_A, pB=m.engine_B;
+    const avgV=(pA.p_victoria+pB.p_victoria)/2;
+    const avgE=(pA.p_empate+pB.p_empate)/2;
+    const avgD=(pA.p_derrota+pB.p_derrota)/2;
+    const he=getHistEntry(a,b);
+
+    const predOutA=outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
+    const predOutB=outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
+
+    const resultBox = he ? `
+      <div class="gm-result">
+        <div class="gm-scorebox">
+          <div class="gm-score">${{he.gA}} — ${{he.gB}}</div>
+          <div class="gm-score-lbl">Resultado</div>
         </div>
-        <div style="font-size:.64rem;color:var(--text3);margin-top:2px">${{gA}}-${{gB}} goles</div>
+        <div class="gm-preds">
+          <div class="gm-pred-row">
+            <span class="gm-eng la">A</span>
+            <div class="gm-pred-bar">
+              <div class="gm-pb-w" style="width:${{Math.round(he.pA.p_victoria*100)}}%"></div>
+              <div class="gm-pb-d" style="width:${{Math.round(he.pA.p_empate*100)}}%"></div>
+              <div class="gm-pb-l" style="width:${{Math.round(he.pA.p_derrota*100)}}%"></div>
+            </div>
+            <span class="gm-pred-lbl">${{predLabel(he.predA,a,b)}}</span>
+            <span class="hist-ok ${{he.okA?'yes':'no'}}">${{he.okA?'✓':'✗'}}</span>
+          </div>
+          <div class="gm-pred-row">
+            <span class="gm-eng lb">B</span>
+            <div class="gm-pred-bar">
+              <div class="gm-pb-w" style="width:${{Math.round(he.pB.p_victoria*100)}}%"></div>
+              <div class="gm-pb-d" style="width:${{Math.round(he.pB.p_empate*100)}}%"></div>
+              <div class="gm-pb-l" style="width:${{Math.round(he.pB.p_derrota*100)}}%"></div>
+            </div>
+            <span class="gm-pred-lbl">${{predLabel(he.predB,a,b)}}</span>
+            <span class="hist-ok ${{he.okB?'yes':'no'}}">${{he.okB?'✓':'✗'}}</span>
+          </div>
+        </div>
+      </div>` : '';
+
+    return `<div class="gm-match${{he?' gm-played':''}}">
+      <div class="gm-header" onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()">
+        <div style="flex:1;font-size:.82rem;font-weight:600;color:var(--text)">${{a}}</div>
+        <div style="text-align:center;min-width:90px">
+          ${{!he ? `<div style="display:flex;gap:3px;justify-content:center;font-size:.75rem">
+            <span style="color:var(--green);font-weight:600">${{pct(avgV)}}</span>
+            <span style="color:var(--text3)">|</span>
+            <span style="color:var(--yellow);font-weight:600">${{pct(avgE)}}</span>
+            <span style="color:var(--text3)">|</span>
+            <span style="color:var(--red);font-weight:600">${{pct(avgD)}}</span>
+          </div>
+          <div style="font-size:.64rem;color:var(--text3);margin-top:2px">${{discreteGoals(m.lambda_A)}}-${{discreteGoals(m.lambda_B)}} goles</div>`
+          : `<span class="pron-played-chip">✓ Jugado</span>`}}
+        </div>
+        <div style="flex:1;text-align:right;font-size:.82rem;font-weight:600;color:var(--text)">${{b}}</div>
       </div>
-      <div style="flex:1;text-align:right;font-size:.82rem;font-weight:600;color:var(--text)">${{b}}</div>
+      ${{resultBox}}
     </div>`;
   }}).join('');
   document.getElementById('groupMatchesPanel').style.display='block';
@@ -1284,133 +1074,172 @@ function switchTab(id,el) {{
 }}
 
 // ═══════════════════════════════
-// MI PRONÓSTICO — CONFIANZA
+// PRONÓSTICOS DEL DÍA
 // ═══════════════════════════════
-function poisson(k, lam) {{
-  if (lam <= 0) return k === 0 ? 1 : 0;
-  let p = Math.exp(-lam);
-  for (let i = 1; i <= k; i++) p *= lam / i;
-  return Math.max(0, Math.min(1, p));
-}}
+function renderPronosticosHoy() {{
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('fechaHoyLabel').textContent = today;
 
-function calcMyConfidence() {{
-  const tA = document.getElementById('teamA').value;
-  const tB = document.getElementById('teamB').value;
-  const myGA = Math.max(0, Math.min(15, parseInt(document.getElementById('myGoalA').value)||0));
-  const myGB = Math.max(0, Math.min(15, parseInt(document.getElementById('myGoalB').value)||0));
-  const match = PREDS[tA] && PREDS[tA][tB];
-  if (!match) return;
+  const fixtures = (FIXTURES.schedule||[]).filter(f => f.fecha === today);
+  const el = document.getElementById('pronosticosHoy');
 
-  const venue = document.getElementById('venueSelect').value;
-  const dA = LINEUP_DEFAULT[tA]||{{formation:'4-3-3',style:'balanced'}};
-  const dB = LINEUP_DEFAULT[tB]||{{formation:'4-3-3',style:'balanced'}};
-  const formA=userFormA||dA.formation, styleA=userStyleA||dA.style;
-  const formB=userFormB||dB.formation, styleB=userStyleB||dB.style;
-
-  const pA_t=applyMod(match.engine_A,tA,formA,styleA,tB,formB,styleB);
-  const pB_t=applyMod(match.engine_B,tA,formA,styleA,tB,formB,styleB);
-  const pA=applyVenueMod(pA_t,formA,styleA,formB,styleB,venue);
-  const pB=applyVenueMod(pB_t,formA,styleA,formB,styleB,venue);
-
-  const lA=match.lambda_A, lB=match.lambda_B;
-
-  // Poisson probabilities for each team
-  const pGoalA = poisson(myGA, lA);
-  const pGoalB = poisson(myGB, lB);
-  const pExact = pGoalA * pGoalB;
-
-  // Result probability from model ensemble
-  const avgRes = {{
-    p_victoria:(pA.p_victoria+pB.p_victoria)/2,
-    p_empate:  (pA.p_empate  +pB.p_empate  )/2,
-    p_derrota: (pA.p_derrota +pB.p_derrota )/2,
-  }};
-  let resultProb, resultLabel;
-  if      (myGA>myGB) {{ resultProb=avgRes.p_victoria; resultLabel='Victoria '+tA; }}
-  else if (myGA===myGB){{ resultProb=avgRes.p_empate;   resultLabel='Empate'; }}
-  else                 {{ resultProb=avgRes.p_derrota;  resultLabel='Victoria '+tB; }}
-
-  // Combined confidence
-  const exactScaled = Math.min(0.30, pExact * 6);
-  const combined = Math.min(0.97, resultProb*0.70 + exactScaled*0.30);
-
-  let vClass,vIcon,vText;
-  if      (combined>=0.65){{vClass='cv-agree';  vIcon='✅';vText='Pronóstico muy alineado — el modelo respalda tu predicción';}}
-  else if (combined>=0.40){{vClass='cv-caution';vIcon='🟡';vText='Pronóstico plausible — el modelo muestra apoyo moderado';}}
-  else                    {{vClass='cv-diverge';vIcon='⚠️';vText='Pronóstico diverge del modelo — el modelo ve otro resultado';}}
-
-  const barCol=combined>=0.65?'var(--green)':combined>=0.40?'var(--yellow)':'var(--red)';
-  const [mGA,mGB]=consistentGoals(lA,lB,avgRes);
-  const modelLabel=mGA>mGB?`Victoria ${{tA}} (${{mGA}}-${{mGB}})`:
-                   mGA===mGB?`Empate (${{mGA}}-${{mGB}})`:`Victoria ${{tB}} (${{mGA}}-${{mGB}})`;
-
-  // Build Poisson distributions for display (k=0..5)
-  function poissonBars(team, lam, myGoal, colorHex) {{
-    let html='';
-    let maxP=0;
-    const ps=[];
-    for(let k=0;k<=5;k++){{ const p=poisson(k,lam); ps.push(p); if(p>maxP)maxP=p; }}
-    for(let k=0;k<=5;k++){{
-      const barW=maxP>0?Math.round(ps[k]/maxP*100):0;
-      const highlight=k===myGoal?' mp-highlight':'';
-      const label=k<5?k:'5+';
-      html+=`<div class="mi-poisson-row${{highlight}}">
-        <span class="mp-k">${{label}}</span>
-        <div class="mp-track"><div class="mp-fill" style="width:${{barW}}%;background:${{colorHex}}"></div></div>
-        <span class="mp-pct-val" style="color:${{k===myGoal?colorHex:'var(--text3)'}}">${{(ps[k]*100).toFixed(1)}}%</span>
-      </div>`;
-    }}
-    return html;
+  if (!fixtures.length) {{
+    el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:18px;font-size:.82rem">Sin partidos programados para hoy (${{today}}).</div>`;
+    return;
   }}
 
-  document.getElementById('confResult').style.display='block';
-  document.getElementById('confResult').innerHTML=`
-    <div style="font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:10px">
-      Análisis: <strong style="color:var(--blue)">${{tA}} ${{myGA}} — ${{myGB}} ${{tB}}</strong>
+  el.innerHTML = `<div class="pron-grid">${{
+    fixtures.map(f => {{
+      const {{teamA:a,teamB:b,grupo}} = f;
+      const m = getPredsFor(a,b);
+      if (!m) return '';
+      const pA=m.engine_A, pB=m.engine_B;
+      const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
+      const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
+      const he = getHistEntry(a,b);
+
+      const headerCenter = he
+        ? `<div class="pron-score">${{he.gA}}–${{he.gB}}</div><div class="pron-grupo">Grupo ${{grupo}} · Jugado</div>`
+        : `<div class="pron-vs">VS</div><div class="pron-grupo">Grupo ${{grupo}}</div>`;
+
+      const bodyA = `
+        <div class="pron-eng-block">
+          <div class="pron-eng-title la">Engine A · MLP</div>
+          <div class="pron-pbar">
+            <div class="pron-pb-w" style="width:${{Math.round(pA.p_victoria*100)}}%"></div>
+            <div class="pron-pb-d" style="width:${{Math.round(pA.p_empate*100)}}%"></div>
+            <div class="pron-pb-l" style="width:${{Math.round(pA.p_derrota*100)}}%"></div>
+          </div>
+          <div class="pron-pbar-vals">
+            <span style="color:var(--green)">${{Math.round(pA.p_victoria*100)}}%</span>
+            <span style="color:var(--yellow)">${{Math.round(pA.p_empate*100)}}%</span>
+            <span style="color:var(--red)">${{Math.round(pA.p_derrota*100)}}%</span>
+          </div>
+          <span class="pron-pred-chip ${{predOutA}}">${{predLabel(predOutA,a,b)}}</span>
+          ${{he ? `<span class="hc-ok ${{he.okA?'yes':'no'}}" style="margin-top:3px">${{he.okA?'✓':'✗'}}</span>` : ''}}
+        </div>`;
+      const bodyB = `
+        <div class="pron-eng-block">
+          <div class="pron-eng-title lb">Engine B · XGBoost</div>
+          <div class="pron-pbar">
+            <div class="pron-pb-w" style="width:${{Math.round(pB.p_victoria*100)}}%"></div>
+            <div class="pron-pb-d" style="width:${{Math.round(pB.p_empate*100)}}%"></div>
+            <div class="pron-pb-l" style="width:${{Math.round(pB.p_derrota*100)}}%"></div>
+          </div>
+          <div class="pron-pbar-vals">
+            <span style="color:var(--green)">${{Math.round(pB.p_victoria*100)}}%</span>
+            <span style="color:var(--yellow)">${{Math.round(pB.p_empate*100)}}%</span>
+            <span style="color:var(--red)">${{Math.round(pB.p_derrota*100)}}%</span>
+          </div>
+          <span class="pron-pred-chip ${{predOutB}}">${{predLabel(predOutB,a,b)}}</span>
+          ${{he ? `<span class="hc-ok ${{he.okB?'yes':'no'}}" style="margin-top:3px">${{he.okB?'✓':'✗'}}</span>` : ''}}
+        </div>`;
+
+      return `<div class="pron-card${{he?' pron-played':''}}" onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()" style="cursor:pointer">
+        <div class="pron-header">
+          <div class="pron-team-a">${{a}}</div>
+          <div class="pron-center">${{headerCenter}}</div>
+          <div class="pron-team-b">${{b}}</div>
+        </div>
+        <div class="pron-body">${{bodyA}}${{bodyB}}</div>
+      </div>`;
+    }}).join('')
+  }}</div>`;
+}}
+
+// ═══════════════════════════════
+// HISTORIAL (cards)
+// ═══════════════════════════════
+function renderHistorial() {{
+  const acc = HISTORIAL.accuracy || {{}};
+  const eA  = acc.engine_A || {{correct:0,total:0}};
+  const eB  = acc.engine_B || {{correct:0,total:0}};
+  const entries = (HISTORIAL.entries||[]).slice().reverse();
+
+  const pctA = eA.total ? Math.round(100*eA.correct/eA.total) : 0;
+  const pctB = eB.total ? Math.round(100*eB.correct/eB.total) : 0;
+  document.getElementById('histAccGrid').innerHTML = `
+    <div class="hist-acc-box eng-a">
+      <div class="hist-acc-label la">Engine A · MLP+Atención</div>
+      <div class="hist-acc-num">${{pctA}}%</div>
+      <div class="hist-acc-sub">${{eA.correct}} de ${{eA.total}} correctas · ${{eA.total}} partidos</div>
     </div>
-    <div class="mi-pred-grid">
-      <div class="mi-pred-poisson">
-        <div class="mi-pred-poisson-title">${{tA}} — Goles marcados</div>
-        ${{poissonBars(tA, lA, myGA, '#2563eb')}}
-        <div style="font-size:.62rem;color:var(--text3);margin-top:4px">λ=${{lA.toFixed(2)}} · Tu gol: <strong style="color:var(--blue)">${{myGA}}</strong> → ${{(pGoalA*100).toFixed(1)}}%</div>
+    <div class="hist-acc-box eng-b">
+      <div class="hist-acc-label lb">Engine B · XGBoost</div>
+      <div class="hist-acc-num">${{pctB}}%</div>
+      <div class="hist-acc-sub">${{eB.correct}} de ${{eB.total}} correctas · ${{eB.total}} partidos</div>
+    </div>`;
+
+  if (!entries.length) {{
+    document.getElementById('historialList').innerHTML =
+      `<div class="hist-empty">Sin predicciones registradas. Los resultados aparecen aquí a medida que se juegan los partidos.</div>`;
+    return;
+  }}
+
+  // Find grupo for each entry from FIXTURES
+  const fixtureGrp = {{}};
+  for (const f of (FIXTURES.schedule||[])) {{
+    fixtureGrp[f.teamA+'|'+f.teamB] = f.grupo;
+    fixtureGrp[f.teamB+'|'+f.teamA] = f.grupo;
+  }}
+
+  document.getElementById('historialList').innerHTML = entries.map(e => {{
+    const a=e.teamA, b=e.teamB;
+    const pA=e.engine_A, pB=e.engine_B;
+    const real=e.resultado_real;
+    const grp = fixtureGrp[a+'|'+b] || '?';
+    const realLabel = {{victoria_A:a,empate:'Empate',victoria_B:b}}[real];
+    const predTextA = {{victoria_A:a,empate:'Empate',victoria_B:b}}[pA.prediccion];
+    const predTextB = {{victoria_A:a,empate:'Empate',victoria_B:b}}[pB.prediccion];
+
+    return `<div class="hc">
+      <div class="hc-top">
+        <div class="hc-team-a">${{a}}</div>
+        <div class="hc-center">
+          <div class="hc-score">${{e.goles_A}} — ${{e.goles_B}}</div>
+          <div class="hc-date-grp">${{e.fecha}} · Grupo ${{grp}}</div>
+          <span class="hc-result-badge ${{real}}">${{realLabel}}</span>
+        </div>
+        <div class="hc-team-b">${{b}}</div>
       </div>
-      <div class="mi-pred-poisson">
-        <div class="mi-pred-poisson-title">${{tB}} — Goles marcados</div>
-        ${{poissonBars(tB, lB, myGB, '#d97706')}}
-        <div style="font-size:.62rem;color:var(--text3);margin-top:4px">λ=${{lB.toFixed(2)}} · Tu gol: <strong style="color:var(--yellow)">${{myGB}}</strong> → ${{(pGoalB*100).toFixed(1)}}%</div>
+      <div class="hc-body">
+        <div class="hc-eng-block">
+          <div class="hc-eng-title la">Engine A · MLP+Atención</div>
+          <div class="hc-pbar">
+            <div class="hc-pb-w" style="width:${{Math.round(pA.p_victoria*100)}}%"></div>
+            <div class="hc-pb-d" style="width:${{Math.round(pA.p_empate*100)}}%"></div>
+            <div class="hc-pb-l" style="width:${{Math.round(pA.p_derrota*100)}}%"></div>
+          </div>
+          <div class="hc-pbar-vals">
+            <span style="color:var(--green)">${{Math.round(pA.p_victoria*100)}}%</span>
+            <span style="color:var(--yellow)">${{Math.round(pA.p_empate*100)}}%</span>
+            <span style="color:var(--red)">${{Math.round(pA.p_derrota*100)}}%</span>
+          </div>
+          <div class="hc-verdict">
+            <span class="hc-ok ${{e.acierto_A?'yes':'no'}}">${{e.acierto_A?'✓':'✗'}}</span>
+            <span class="hc-pred-txt">Predijo: <strong>${{predTextA}}</strong></span>
+          </div>
+        </div>
+        <div class="hc-eng-block">
+          <div class="hc-eng-title lb">Engine B · XGBoost</div>
+          <div class="hc-pbar">
+            <div class="hc-pb-w" style="width:${{Math.round(pB.p_victoria*100)}}%"></div>
+            <div class="hc-pb-d" style="width:${{Math.round(pB.p_empate*100)}}%"></div>
+            <div class="hc-pb-l" style="width:${{Math.round(pB.p_derrota*100)}}%"></div>
+          </div>
+          <div class="hc-pbar-vals">
+            <span style="color:var(--green)">${{Math.round(pB.p_victoria*100)}}%</span>
+            <span style="color:var(--yellow)">${{Math.round(pB.p_empate*100)}}%</span>
+            <span style="color:var(--red)">${{Math.round(pB.p_derrota*100)}}%</span>
+          </div>
+          <div class="hc-verdict">
+            <span class="hc-ok ${{e.acierto_B?'yes':'no'}}">${{e.acierto_B?'✓':'✗'}}</span>
+            <span class="hc-pred-txt">Predijo: <strong>${{predTextB}}</strong></span>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="mi-summary">
-      <div class="conf-bar-row">
-        <div class="conf-bar-label">⚽ P(${{tA}}=${{myGA}}) · Poisson</div>
-        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.min(100,Math.round(pGoalA*300))}}%;background:var(--blue)"></div></div>
-        <div class="conf-bar-pct" style="color:var(--blue)">${{(pGoalA*100).toFixed(1)}}%</div>
-      </div>
-      <div class="conf-bar-row">
-        <div class="conf-bar-label">⚽ P(${{tB}}=${{myGB}}) · Poisson</div>
-        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.min(100,Math.round(pGoalB*300))}}%;background:var(--yellow)"></div></div>
-        <div class="conf-bar-pct" style="color:var(--yellow)">${{(pGoalB*100).toFixed(1)}}%</div>
-      </div>
-      <div class="conf-bar-row" style="border-top:1px solid var(--border);padding-top:7px;margin-top:4px">
-        <div class="conf-bar-label">🎯 Marcador exacto ${{myGA}}-${{myGB}}</div>
-        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.min(100,Math.round(pExact*600))}}%;background:var(--purple)"></div></div>
-        <div class="conf-bar-pct" style="color:var(--purple)">${{(pExact*100).toFixed(1)}}%</div>
-      </div>
-      <div class="conf-bar-row">
-        <div class="conf-bar-label">📊 Resultado (${{resultLabel}})</div>
-        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.round(resultProb*100)}}%;background:var(--green)"></div></div>
-        <div class="conf-bar-pct" style="color:var(--green)">${{pct(resultProb)}}</div>
-      </div>
-      <div class="conf-bar-row" style="border-top:1px solid var(--border);padding-top:7px;margin-top:4px">
-        <div class="conf-bar-label" style="font-weight:700;color:var(--text)">🏆 Confianza combinada</div>
-        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${{Math.round(combined*100)}}%;background:${{barCol}}"></div></div>
-        <div class="conf-bar-pct" style="color:${{barCol}};font-size:.78rem;font-weight:800">${{Math.round(combined*100)}}%</div>
-      </div>
-    </div>
-    <div style="font-size:.72rem;color:var(--text3);margin:8px 0 4px">
-      🤖 Modelo predice: <strong style="color:var(--text)">${{modelLabel}}</strong>
-    </div>
-    <div class="conf-verdict ${{vClass}}">${{vIcon}} ${{vText}}</div>`;
+    </div>`;
+  }}).join('');
 }}
 
 // ═══════════════════════════════

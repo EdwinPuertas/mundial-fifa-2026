@@ -31,6 +31,9 @@ jobs:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
         run: python update_daily.py
 
+      - name: Actualizar historial de predicciones
+        run: python update_historial.py
+
       - name: Reentrenar modelo y regenerar predicciones
         run: python train_model_v3.py
 
@@ -41,7 +44,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add wc2026_updates.json predicciones_v3.json predicciones_v3_compact.json index.html lineup_config.json engine_A_v3.pkl engine_B_v3.pkl
+          git add wc2026_updates.json predicciones_historial.json predicciones_v3.json predicciones_v3_compact.json index.html lineup_config.json engine_A_v3.pkl engine_B_v3.pkl
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update: resultados WC2026 $(date -u +'%Y-%m-%d')"
             git push
