@@ -326,6 +326,10 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .pron-pred-chip.victoria_B{{background:var(--red-light);border-color:var(--red-mid);color:var(--red)}}
 .pron-pred-chip.empate{{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}}
 .pron-played-chip{{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;padding:1px 6px;border-radius:5px;background:var(--green-light);color:var(--green);border:1px solid var(--green-mid);font-weight:700}}
+.pron-goal-pred{{font-size:.72rem;font-weight:800;color:var(--blue);margin-top:2px;letter-spacing:.02em}}
+.pron-goal-footer{{padding:6px 14px 8px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}}
+.pron-lambda-chip{{font-size:.62rem;color:var(--text2);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px}}
+.pron-lambda-sep{{color:var(--text3);font-size:.7rem}}
 
 /* ── Historial de Predicciones ── */
 .hist-acc-grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}}
@@ -1097,10 +1101,16 @@ function renderPronosticosHoy() {{
       const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
       const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
       const he = getHistEntry(a,b);
+      const lA = m.lambda_A ?? 0, lB = m.lambda_B ?? 0;
+      const goalA = discreteGoals(lA), goalB = discreteGoals(lB);
 
       const headerCenter = he
-        ? `<div class="pron-score">${{he.gA}}–${{he.gB}}</div><div class="pron-grupo">Grupo ${{grupo}} · Jugado</div>`
-        : `<div class="pron-vs">VS</div><div class="pron-grupo">Grupo ${{grupo}}</div>`;
+        ? `<div class="pron-score">${{he.gA}}–${{he.gB}}</div>
+           <div class="pron-grupo">Grupo ${{grupo}} · Jugado</div>
+           <div class="pron-goal-pred">Pron. goles: ${{goalA}}–${{goalB}}</div>`
+        : `<div class="pron-vs">VS</div>
+           <div class="pron-grupo">Grupo ${{grupo}}</div>
+           <div class="pron-goal-pred">⚽ ${{goalA}}–${{goalB}}</div>`;
 
       const bodyA = `
         <div class="pron-eng-block">
@@ -1135,6 +1145,13 @@ function renderPronosticosHoy() {{
           ${{he ? `<span class="hc-ok ${{he.okB?'yes':'no'}}" style="margin-top:3px">${{he.okB?'✓':'✗'}}</span>` : ''}}
         </div>`;
 
+      const goalFooter = `
+        <div class="pron-goal-footer">
+          <span class="pron-lambda-chip">${{a}}: λ=${{lA.toFixed(2)}} · ${{goalA}} gol${{goalA!==1?'es':''}}</span>
+          <span class="pron-lambda-sep">·</span>
+          <span class="pron-lambda-chip">${{b}}: λ=${{lB.toFixed(2)}} · ${{goalB}} gol${{goalB!==1?'es':''}}</span>
+        </div>`;
+
       return `<div class="pron-card${{he?' pron-played':''}}" onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()" style="cursor:pointer">
         <div class="pron-header">
           <div class="pron-team-a">${{a}}</div>
@@ -1142,6 +1159,7 @@ function renderPronosticosHoy() {{
           <div class="pron-team-b">${{b}}</div>
         </div>
         <div class="pron-body">${{bodyA}}${{bodyB}}</div>
+        ${{goalFooter}}
       </div>`;
     }}).join('')
   }}</div>`;
