@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-19T16:14:59Z",
+  "last_updated": "2026-06-20T06:19:13Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -293,6 +293,46 @@
       "teamB": "Corea del Sur",
       "goalsA": 1,
       "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "Estados Unidos",
+      "teamB": "Australia",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "Escocia",
+      "teamB": "Marruecos",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-20",
+      "teamA": "Brasil",
+      "teamB": "Haití",
+      "goalsA": 3,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-20",
+      "teamA": "Turquía",
+      "teamB": "Paraguay",
+      "goalsA": 0,
+      "goalsB": 1,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"
