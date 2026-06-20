@@ -203,6 +203,76 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
 .flex{display:flex} .gap8{gap:8px} .items-center{align-items:center} .flex-wrap{flex-wrap:wrap}
 .text-center{text-align:center}
 
+/* ── Group match rows with result ── */
+.gm-match{border-bottom:1px solid var(--border);transition:background .15s}
+.gm-match:last-child{border-bottom:none}
+.gm-match:hover{background:var(--surface2)}
+.gm-match.gm-played{cursor:default}
+.gm-header{display:flex;align-items:center;gap:10px;padding:8px 6px;cursor:pointer}
+.gm-vs{font-size:.72rem;font-weight:700;color:var(--text3);min-width:90px;text-align:center;padding:2px 6px;background:var(--surface2);border-radius:5px}
+.gm-result{background:var(--surface2);border-top:1px solid var(--border);padding:10px 12px;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px}
+.gm-scorebox{text-align:center}
+.gm-score{font-size:1.5rem;font-weight:900;color:var(--text);line-height:1}
+.gm-score-lbl{font-size:.6rem;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.gm-preds{display:flex;flex-direction:column;gap:5px}
+.gm-pred-row{display:flex;align-items:center;gap:6px}
+.gm-eng{font-size:.6rem;font-weight:800;padding:1px 5px;border-radius:4px;min-width:22px;text-align:center}
+.gm-eng.la{background:var(--blue-light);color:var(--blue)} .gm-eng.lb{background:var(--yellow-light);color:var(--yellow)}
+.gm-pred-bar{flex:1;height:6px;border-radius:3px;display:flex;overflow:hidden}
+.gm-pb-w{background:var(--green)} .gm-pb-d{background:var(--yellow)} .gm-pb-l{background:var(--red)}
+.gm-pred-lbl{font-size:.67rem;color:var(--text2);min-width:80px}
+
+/* ── Historial cards ── */
+.hc-grid{display:flex;flex-direction:column;gap:10px}
+.hc{background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.hc-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;gap:10px;border-bottom:1px solid var(--border);background:var(--surface)}
+.hc-team-a{font-size:.85rem;font-weight:700;color:var(--text)}
+.hc-team-b{font-size:.85rem;font-weight:700;color:var(--text);text-align:right}
+.hc-center{text-align:center}
+.hc-score{font-size:1.4rem;font-weight:900;color:var(--text);line-height:1}
+.hc-date-grp{font-size:.62rem;color:var(--text3);margin-top:1px}
+.hc-result-badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:.67rem;font-weight:700;border:1px solid;margin-top:3px}
+.hc-result-badge.victoria_A{background:var(--green-light);border-color:var(--green-mid);color:var(--green)}
+.hc-result-badge.victoria_B{background:var(--red-light);border-color:var(--red-mid);color:var(--red)}
+.hc-result-badge.empate{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}
+.hc-body{padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hc-eng-block{display:flex;flex-direction:column;gap:4px}
+.hc-eng-title{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.hc-eng-title.la{color:var(--blue)} .hc-eng-title.lb{color:var(--yellow)}
+.hc-pbar{height:7px;border-radius:4px;display:flex;overflow:hidden;margin-bottom:2px}
+.hc-pb-w{background:var(--green)} .hc-pb-d{background:var(--yellow)} .hc-pb-l{background:var(--red)}
+.hc-pbar-vals{display:flex;justify-content:space-between;font-size:.6rem;color:var(--text3)}
+.hc-verdict{display:flex;align-items:center;gap:6px;margin-top:2px}
+.hc-ok{width:18px;height:18px;border-radius:50%;font-size:.67rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.hc-ok.yes{background:var(--green-light);color:var(--green)} .hc-ok.no{background:var(--red-light);color:var(--red)}
+.hc-pred-txt{font-size:.7rem;color:var(--text2)}
+
+/* ── Pronósticos del día ── */
+.pron-date-header{font-size:.78rem;font-weight:700;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.pron-badge{font-size:.6rem;padding:2px 7px;border-radius:10px;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-mid);font-weight:700}
+.pron-grid{display:flex;flex-direction:column;gap:8px}
+.pron-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.pron-card.pron-played{border-color:var(--green-mid);background:#f0fdf4}
+.pron-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:9px 14px;gap:10px;background:var(--surface);border-bottom:1px solid var(--border)}
+.pron-team-a{font-size:.85rem;font-weight:700;color:var(--text)}
+.pron-team-b{font-size:.85rem;font-weight:700;color:var(--text);text-align:right}
+.pron-center{text-align:center}
+.pron-grupo{font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.pron-vs{font-size:.72rem;font-weight:700;color:var(--text3)}
+.pron-score{font-size:1.3rem;font-weight:900;color:var(--text);line-height:1}
+.pron-body{padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pron-eng-block{display:flex;flex-direction:column;gap:3px}
+.pron-eng-title{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.pron-eng-title.la{color:var(--blue)} .pron-eng-title.lb{color:var(--yellow)}
+.pron-pbar{height:7px;border-radius:4px;display:flex;overflow:hidden;margin-bottom:2px}
+.pron-pb-w{background:var(--green)} .pron-pb-d{background:var(--yellow)} .pron-pb-l{background:var(--red)}
+.pron-pbar-vals{display:flex;justify-content:space-between;font-size:.6rem;color:var(--text3)}
+.pron-pred-chip{display:inline-block;padding:2px 7px;border-radius:5px;font-size:.67rem;font-weight:700;border:1px solid;margin-top:2px}
+.pron-pred-chip.victoria_A{background:var(--green-light);border-color:var(--green-mid);color:var(--green)}
+.pron-pred-chip.victoria_B{background:var(--red-light);border-color:var(--red-mid);color:var(--red)}
+.pron-pred-chip.empate{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}
+.pron-played-chip{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;padding:1px 6px;border-radius:5px;background:var(--green-light);color:var(--green);border:1px solid var(--green-mid);font-weight:700}
+
 /* ── Historial de Predicciones ── */
 .hist-acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .hist-acc-box{border-radius:8px;padding:10px 14px;border:1px solid}
@@ -508,11 +578,17 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
   </div>
 </div>
 
+<!-- PRONÓSTICOS DEL DÍA -->
+<div class="card">
+  <div class="card-title">🗓️ Pronósticos del Día &nbsp;<span id="fechaHoyLabel" style="font-weight:400;color:var(--text2);text-transform:none;letter-spacing:0"></span></div>
+  <div id="pronosticosHoy"></div>
+</div>
+
 <!-- HISTORIAL DE PREDICCIONES -->
 <div class="card" id="historialCard">
-  <div class="card-title">📅 Historial de Predicciones Diarias</div>
+  <div class="card-title">📊 Predicciones vs Resultados Reales</div>
   <div class="hist-acc-grid" id="histAccGrid"></div>
-  <div id="historialList"></div>
+  <div class="hc-grid" id="historialList"></div>
 </div>
 
 </div><!-- /container -->
@@ -1003,6 +1079,89 @@ const HISTORIAL = {
     }
   ]
 };
+const FIXTURES = {
+  "schedule": [
+    {"fecha":"2026-06-11","grupo":"E","jornada":1,"teamA":"Alemania","teamB":"Curazao"},
+    {"fecha":"2026-06-11","grupo":"F","jornada":1,"teamA":"Suecia","teamB":"Túnez"},
+    {"fecha":"2026-06-12","grupo":"E","jornada":1,"teamA":"Costa de Marfil","teamB":"Ecuador"},
+    {"fecha":"2026-06-12","grupo":"G","jornada":1,"teamA":"Bélgica","teamB":"Egipto"},
+    {"fecha":"2026-06-12","grupo":"H","jornada":1,"teamA":"España","teamB":"Cabo Verde"},
+    {"fecha":"2026-06-13","grupo":"A","jornada":1,"teamA":"México","teamB":"Sudáfrica"},
+    {"fecha":"2026-06-13","grupo":"A","jornada":1,"teamA":"Corea del Sur","teamB":"República Checa"},
+    {"fecha":"2026-06-13","grupo":"B","jornada":1,"teamA":"Canadá","teamB":"Bosnia y Herz."},
+    {"fecha":"2026-06-14","grupo":"B","jornada":1,"teamA":"Qatar","teamB":"Suiza"},
+    {"fecha":"2026-06-14","grupo":"C","jornada":1,"teamA":"Brasil","teamB":"Marruecos"},
+    {"fecha":"2026-06-14","grupo":"C","jornada":1,"teamA":"Escocia","teamB":"Haití"},
+    {"fecha":"2026-06-15","grupo":"D","jornada":1,"teamA":"Estados Unidos","teamB":"Paraguay"},
+    {"fecha":"2026-06-15","grupo":"D","jornada":1,"teamA":"Australia","teamB":"Turquía"},
+    {"fecha":"2026-06-15","grupo":"F","jornada":1,"teamA":"Países Bajos","teamB":"Japón"},
+    {"fecha":"2026-06-16","grupo":"G","jornada":1,"teamA":"Irán","teamB":"Nueva Zelanda"},
+    {"fecha":"2026-06-16","grupo":"H","jornada":1,"teamA":"Uruguay","teamB":"Arabia Saudita"},
+    {"fecha":"2026-06-17","grupo":"I","jornada":1,"teamA":"Francia","teamB":"Senegal"},
+    {"fecha":"2026-06-17","grupo":"I","jornada":1,"teamA":"Noruega","teamB":"Irak"},
+    {"fecha":"2026-06-17","grupo":"L","jornada":1,"teamA":"Inglaterra","teamB":"Panamá"},
+    {"fecha":"2026-06-17","grupo":"L","jornada":1,"teamA":"Croacia","teamB":"Ghana"},
+    {"fecha":"2026-06-18","grupo":"J","jornada":1,"teamA":"Argentina","teamB":"Argelia"},
+    {"fecha":"2026-06-18","grupo":"J","jornada":1,"teamA":"Austria","teamB":"Jordania"},
+    {"fecha":"2026-06-18","grupo":"K","jornada":1,"teamA":"Portugal","teamB":"RD Congo"},
+    {"fecha":"2026-06-18","grupo":"K","jornada":1,"teamA":"Colombia","teamB":"Uzbekistán"},
+    {"fecha":"2026-06-19","grupo":"E","jornada":2,"teamA":"Alemania","teamB":"Ecuador"},
+    {"fecha":"2026-06-19","grupo":"E","jornada":2,"teamA":"Costa de Marfil","teamB":"Curazao"},
+    {"fecha":"2026-06-19","grupo":"F","jornada":2,"teamA":"Países Bajos","teamB":"Túnez"},
+    {"fecha":"2026-06-19","grupo":"F","jornada":2,"teamA":"Japón","teamB":"Suecia"},
+    {"fecha":"2026-06-20","grupo":"G","jornada":2,"teamA":"Bélgica","teamB":"Irán"},
+    {"fecha":"2026-06-20","grupo":"G","jornada":2,"teamA":"Egipto","teamB":"Nueva Zelanda"},
+    {"fecha":"2026-06-20","grupo":"H","jornada":2,"teamA":"España","teamB":"Arabia Saudita"},
+    {"fecha":"2026-06-20","grupo":"H","jornada":2,"teamA":"Uruguay","teamB":"Cabo Verde"},
+    {"fecha":"2026-06-21","grupo":"I","jornada":2,"teamA":"Francia","teamB":"Irak"},
+    {"fecha":"2026-06-21","grupo":"I","jornada":2,"teamA":"Noruega","teamB":"Senegal"},
+    {"fecha":"2026-06-21","grupo":"J","jornada":2,"teamA":"Argentina","teamB":"Jordania"},
+    {"fecha":"2026-06-21","grupo":"J","jornada":2,"teamA":"Austria","teamB":"Argelia"},
+    {"fecha":"2026-06-22","grupo":"K","jornada":2,"teamA":"Portugal","teamB":"Uzbekistán"},
+    {"fecha":"2026-06-22","grupo":"K","jornada":2,"teamA":"Colombia","teamB":"RD Congo"},
+    {"fecha":"2026-06-22","grupo":"L","jornada":2,"teamA":"Inglaterra","teamB":"Ghana"},
+    {"fecha":"2026-06-22","grupo":"L","jornada":2,"teamA":"Croacia","teamB":"Panamá"},
+    {"fecha":"2026-06-23","grupo":"A","jornada":2,"teamA":"Corea del Sur","teamB":"Sudáfrica"},
+    {"fecha":"2026-06-23","grupo":"A","jornada":2,"teamA":"México","teamB":"República Checa"},
+    {"fecha":"2026-06-23","grupo":"B","jornada":2,"teamA":"Canadá","teamB":"Qatar"},
+    {"fecha":"2026-06-23","grupo":"B","jornada":2,"teamA":"Bosnia y Herz.","teamB":"Suiza"},
+    {"fecha":"2026-06-24","grupo":"C","jornada":2,"teamA":"Brasil","teamB":"Haití"},
+    {"fecha":"2026-06-24","grupo":"C","jornada":2,"teamA":"Marruecos","teamB":"Escocia"},
+    {"fecha":"2026-06-24","grupo":"D","jornada":2,"teamA":"Estados Unidos","teamB":"Australia"},
+    {"fecha":"2026-06-24","grupo":"D","jornada":2,"teamA":"Paraguay","teamB":"Turquía"},
+    {"fecha":"2026-06-26","grupo":"A","jornada":3,"teamA":"Corea del Sur","teamB":"México"},
+    {"fecha":"2026-06-26","grupo":"A","jornada":3,"teamA":"Sudáfrica","teamB":"República Checa"},
+    {"fecha":"2026-06-26","grupo":"B","jornada":3,"teamA":"Canadá","teamB":"Suiza"},
+    {"fecha":"2026-06-26","grupo":"B","jornada":3,"teamA":"Bosnia y Herz.","teamB":"Qatar"},
+    {"fecha":"2026-06-26","grupo":"C","jornada":3,"teamA":"Brasil","teamB":"Escocia"},
+    {"fecha":"2026-06-26","grupo":"C","jornada":3,"teamA":"Marruecos","teamB":"Haití"},
+    {"fecha":"2026-06-26","grupo":"D","jornada":3,"teamA":"Estados Unidos","teamB":"Turquía"},
+    {"fecha":"2026-06-26","grupo":"D","jornada":3,"teamA":"Australia","teamB":"Paraguay"},
+    {"fecha":"2026-06-27","grupo":"E","jornada":3,"teamA":"Alemania","teamB":"Costa de Marfil"},
+    {"fecha":"2026-06-27","grupo":"E","jornada":3,"teamA":"Ecuador","teamB":"Curazao"},
+    {"fecha":"2026-06-27","grupo":"F","jornada":3,"teamA":"Países Bajos","teamB":"Suecia"},
+    {"fecha":"2026-06-27","grupo":"F","jornada":3,"teamA":"Japón","teamB":"Túnez"},
+    {"fecha":"2026-06-27","grupo":"G","jornada":3,"teamA":"Bélgica","teamB":"Nueva Zelanda"},
+    {"fecha":"2026-06-27","grupo":"G","jornada":3,"teamA":"Irán","teamB":"Egipto"},
+    {"fecha":"2026-06-27","grupo":"H","jornada":3,"teamA":"España","teamB":"Uruguay"},
+    {"fecha":"2026-06-27","grupo":"H","jornada":3,"teamA":"Arabia Saudita","teamB":"Cabo Verde"},
+    {"fecha":"2026-06-28","grupo":"I","jornada":3,"teamA":"Francia","teamB":"Noruega"},
+    {"fecha":"2026-06-28","grupo":"I","jornada":3,"teamA":"Senegal","teamB":"Irak"},
+    {"fecha":"2026-06-28","grupo":"J","jornada":3,"teamA":"Argentina","teamB":"Austria"},
+    {"fecha":"2026-06-28","grupo":"J","jornada":3,"teamA":"Argelia","teamB":"Jordania"},
+    {"fecha":"2026-06-28","grupo":"K","jornada":3,"teamA":"Portugal","teamB":"Colombia"},
+    {"fecha":"2026-06-28","grupo":"K","jornada":3,"teamA":"Uzbekistán","teamB":"RD Congo"},
+    {"fecha":"2026-06-28","grupo":"L","jornada":3,"teamA":"Inglaterra","teamB":"Croacia"},
+    {"fecha":"2026-06-28","grupo":"L","jornada":3,"teamA":"Panamá","teamB":"Ghana"}
+  ]
+}
+;
+
+// Build fast lookup for played matches
+const HIST_LOOKUP = {};
+for (const e of (HISTORIAL.entries||[])) {
+  HIST_LOOKUP[e.teamA+'|'+e.teamB] = e;
+}
 
 const FORMATIONS = ["4-3-3","4-4-2","4-2-3-1","3-4-3","3-5-2","5-3-2","4-5-1","5-4-1","4-1-4-1"];
 const STYLES = ["attacking","balanced","defensive","counterattack"];
@@ -1061,6 +1220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGroups();
   renderFeatureImportance();
   onTeamChange();
+  renderPronosticosHoy();
   renderHistorial();
 });
 
@@ -1342,31 +1502,111 @@ function setTeamA(team) {
   onTeamChange();
 }
 
+// Helper: get historial entry normalized to (a vs b) perspective
+function getHistEntry(a, b) {
+  const flip = r => r==='victoria_A'?'victoria_B':r==='victoria_B'?'victoria_A':r;
+  const he = HIST_LOOKUP[a+'|'+b];
+  if (he) return {gA:he.goles_A,gB:he.goles_B,real:he.resultado_real,
+    predA:he.engine_A.prediccion,okA:he.acierto_A,pA:he.engine_A,
+    predB:he.engine_B.prediccion,okB:he.acierto_B,pB:he.engine_B};
+  const he2 = HIST_LOOKUP[b+'|'+a];
+  if (he2) return {gA:he2.goles_B,gB:he2.goles_A,real:flip(he2.resultado_real),
+    predA:flip(he2.engine_A.prediccion),okA:he2.acierto_A,
+    pA:{p_victoria:he2.engine_A.p_derrota,p_empate:he2.engine_A.p_empate,p_derrota:he2.engine_A.p_victoria},
+    predB:flip(he2.engine_B.prediccion),okB:he2.acierto_B,
+    pB:{p_victoria:he2.engine_B.p_derrota,p_empate:he2.engine_B.p_empate,p_derrota:he2.engine_B.p_victoria}};
+  return null;
+}
+
+// Helper: get predictions for (a vs b) from PREDS
+function getPredsFor(a, b) {
+  if (PREDS[a]&&PREDS[a][b]) return PREDS[a][b];
+  if (PREDS[b]&&PREDS[b][a]) {
+    const m=PREDS[b][a];
+    return {
+      engine_A:{p_victoria:m.engine_A.p_derrota,p_empate:m.engine_A.p_empate,p_derrota:m.engine_A.p_victoria},
+      engine_B:{p_victoria:m.engine_B.p_derrota,p_empate:m.engine_B.p_empate,p_derrota:m.engine_B.p_victoria},
+      lambda_A:m.lambda_B,lambda_B:m.lambda_A,
+      lineup_A:m.lineup_B,lineup_B:m.lineup_A
+    };
+  }
+  return null;
+}
+
+function predLabel(pred, a, b) {
+  return pred==='victoria_A'?a:pred==='victoria_B'?b:'Empate';
+}
+
+function outcomeOf(pv, pe, pd) {
+  if (pv>=pe&&pv>=pd) return 'victoria_A';
+  if (pd>=pe) return 'victoria_B';
+  return 'empate';
+}
+
 function showGroupMatches(grp) {
   const teams=GROUPS[grp];
   const matches=[];
   for(let i=0;i<teams.length;i++) for(let j=i+1;j<teams.length;j++) matches.push([teams[i],teams[j]]);
   document.getElementById('groupMatchesTitle').textContent=`Partidos Grupo ${grp}`;
   document.getElementById('groupMatchesList').innerHTML=matches.map(([a,b])=>{
-    const m=PREDS[a]&&PREDS[a][b];
+    const m=getPredsFor(a,b);
     if(!m) return '';
-    const avgV=(m.engine_A.p_victoria+m.engine_B.p_victoria)/2;
-    const avgE=(m.engine_A.p_empate+m.engine_B.p_empate)/2;
-    const avgD=(m.engine_A.p_derrota+m.engine_B.p_derrota)/2;
-    return `<div style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid var(--border);cursor:pointer"
-      onclick="document.getElementById('teamA').value='${a}';document.getElementById('teamB').value='${b}';onTeamChange()">
-      <div style="flex:1;font-size:.82rem;font-weight:600;color:var(--text)">${a}</div>
-      <div style="text-align:center;min-width:90px">
-        <div style="display:flex;gap:3px;justify-content:center;font-size:.75rem">
-          <span style="color:var(--green);font-weight:600">${pct(avgV)}</span>
-          <span style="color:var(--text3)">|</span>
-          <span style="color:var(--yellow);font-weight:600">${pct(avgE)}</span>
-          <span style="color:var(--text3)">|</span>
-          <span style="color:var(--red);font-weight:600">${pct(avgD)}</span>
+    const pA=m.engine_A, pB=m.engine_B;
+    const avgV=(pA.p_victoria+pB.p_victoria)/2;
+    const avgE=(pA.p_empate+pB.p_empate)/2;
+    const avgD=(pA.p_derrota+pB.p_derrota)/2;
+    const he=getHistEntry(a,b);
+
+    const predOutA=outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
+    const predOutB=outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
+
+    const resultBox = he ? `
+      <div class="gm-result">
+        <div class="gm-scorebox">
+          <div class="gm-score">${he.gA} — ${he.gB}</div>
+          <div class="gm-score-lbl">Resultado</div>
         </div>
-        <div style="font-size:.64rem;color:var(--text3);margin-top:2px">${discreteGoals(m.lambda_A)}-${discreteGoals(m.lambda_B)} goles</div>
+        <div class="gm-preds">
+          <div class="gm-pred-row">
+            <span class="gm-eng la">A</span>
+            <div class="gm-pred-bar">
+              <div class="gm-pb-w" style="width:${Math.round(he.pA.p_victoria*100)}%"></div>
+              <div class="gm-pb-d" style="width:${Math.round(he.pA.p_empate*100)}%"></div>
+              <div class="gm-pb-l" style="width:${Math.round(he.pA.p_derrota*100)}%"></div>
+            </div>
+            <span class="gm-pred-lbl">${predLabel(he.predA,a,b)}</span>
+            <span class="hist-ok ${he.okA?'yes':'no'}">${he.okA?'✓':'✗'}</span>
+          </div>
+          <div class="gm-pred-row">
+            <span class="gm-eng lb">B</span>
+            <div class="gm-pred-bar">
+              <div class="gm-pb-w" style="width:${Math.round(he.pB.p_victoria*100)}%"></div>
+              <div class="gm-pb-d" style="width:${Math.round(he.pB.p_empate*100)}%"></div>
+              <div class="gm-pb-l" style="width:${Math.round(he.pB.p_derrota*100)}%"></div>
+            </div>
+            <span class="gm-pred-lbl">${predLabel(he.predB,a,b)}</span>
+            <span class="hist-ok ${he.okB?'yes':'no'}">${he.okB?'✓':'✗'}</span>
+          </div>
+        </div>
+      </div>` : '';
+
+    return `<div class="gm-match${he?' gm-played':''}">
+      <div class="gm-header" onclick="document.getElementById('teamA').value='${a}';document.getElementById('teamB').value='${b}';onTeamChange()">
+        <div style="flex:1;font-size:.82rem;font-weight:600;color:var(--text)">${a}</div>
+        <div style="text-align:center;min-width:90px">
+          ${!he ? `<div style="display:flex;gap:3px;justify-content:center;font-size:.75rem">
+            <span style="color:var(--green);font-weight:600">${pct(avgV)}</span>
+            <span style="color:var(--text3)">|</span>
+            <span style="color:var(--yellow);font-weight:600">${pct(avgE)}</span>
+            <span style="color:var(--text3)">|</span>
+            <span style="color:var(--red);font-weight:600">${pct(avgD)}</span>
+          </div>
+          <div style="font-size:.64rem;color:var(--text3);margin-top:2px">${discreteGoals(m.lambda_A)}-${discreteGoals(m.lambda_B)} goles</div>`
+          : `<span class="pron-played-chip">✓ Jugado</span>`}
+        </div>
+        <div style="flex:1;text-align:right;font-size:.82rem;font-weight:600;color:var(--text)">${b}</div>
       </div>
-      <div style="flex:1;text-align:right;font-size:.82rem;font-weight:600;color:var(--text)">${b}</div>
+      ${resultBox}
     </div>`;
   }).join('');
   document.getElementById('groupMatchesPanel').style.display='block';
@@ -1426,79 +1666,172 @@ function switchTab(id,el) {
 }
 
 // ═══════════════════════════════
-// HISTORIAL
+// PRONÓSTICOS DEL DÍA
+// ═══════════════════════════════
+function renderPronosticosHoy() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('fechaHoyLabel').textContent = today;
+
+  const fixtures = (FIXTURES.schedule||[]).filter(f => f.fecha === today);
+  const el = document.getElementById('pronosticosHoy');
+
+  if (!fixtures.length) {
+    el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:18px;font-size:.82rem">Sin partidos programados para hoy (${today}).</div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="pron-grid">${
+    fixtures.map(f => {
+      const {teamA:a,teamB:b,grupo} = f;
+      const m = getPredsFor(a,b);
+      if (!m) return '';
+      const pA=m.engine_A, pB=m.engine_B;
+      const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
+      const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
+      const he = getHistEntry(a,b);
+
+      const headerCenter = he
+        ? `<div class="pron-score">${he.gA}–${he.gB}</div><div class="pron-grupo">Grupo ${grupo} · Jugado</div>`
+        : `<div class="pron-vs">VS</div><div class="pron-grupo">Grupo ${grupo}</div>`;
+
+      const bodyA = `
+        <div class="pron-eng-block">
+          <div class="pron-eng-title la">Engine A · MLP</div>
+          <div class="pron-pbar">
+            <div class="pron-pb-w" style="width:${Math.round(pA.p_victoria*100)}%"></div>
+            <div class="pron-pb-d" style="width:${Math.round(pA.p_empate*100)}%"></div>
+            <div class="pron-pb-l" style="width:${Math.round(pA.p_derrota*100)}%"></div>
+          </div>
+          <div class="pron-pbar-vals">
+            <span style="color:var(--green)">${Math.round(pA.p_victoria*100)}%</span>
+            <span style="color:var(--yellow)">${Math.round(pA.p_empate*100)}%</span>
+            <span style="color:var(--red)">${Math.round(pA.p_derrota*100)}%</span>
+          </div>
+          <span class="pron-pred-chip ${predOutA}">${predLabel(predOutA,a,b)}</span>
+          ${he ? `<span class="hc-ok ${he.okA?'yes':'no'}" style="margin-top:3px">${he.okA?'✓':'✗'}</span>` : ''}
+        </div>`;
+      const bodyB = `
+        <div class="pron-eng-block">
+          <div class="pron-eng-title lb">Engine B · XGBoost</div>
+          <div class="pron-pbar">
+            <div class="pron-pb-w" style="width:${Math.round(pB.p_victoria*100)}%"></div>
+            <div class="pron-pb-d" style="width:${Math.round(pB.p_empate*100)}%"></div>
+            <div class="pron-pb-l" style="width:${Math.round(pB.p_derrota*100)}%"></div>
+          </div>
+          <div class="pron-pbar-vals">
+            <span style="color:var(--green)">${Math.round(pB.p_victoria*100)}%</span>
+            <span style="color:var(--yellow)">${Math.round(pB.p_empate*100)}%</span>
+            <span style="color:var(--red)">${Math.round(pB.p_derrota*100)}%</span>
+          </div>
+          <span class="pron-pred-chip ${predOutB}">${predLabel(predOutB,a,b)}</span>
+          ${he ? `<span class="hc-ok ${he.okB?'yes':'no'}" style="margin-top:3px">${he.okB?'✓':'✗'}</span>` : ''}
+        </div>`;
+
+      return `<div class="pron-card${he?' pron-played':''}" onclick="document.getElementById('teamA').value='${a}';document.getElementById('teamB').value='${b}';onTeamChange()" style="cursor:pointer">
+        <div class="pron-header">
+          <div class="pron-team-a">${a}</div>
+          <div class="pron-center">${headerCenter}</div>
+          <div class="pron-team-b">${b}</div>
+        </div>
+        <div class="pron-body">${bodyA}${bodyB}</div>
+      </div>`;
+    }).join('')
+  }</div>`;
+}
+
+// ═══════════════════════════════
+// HISTORIAL (cards)
 // ═══════════════════════════════
 function renderHistorial() {
-  const acc   = HISTORIAL.accuracy || {};
-  const eA    = acc.engine_A || {correct:0,total:0};
-  const eB    = acc.engine_B || {correct:0,total:0};
-  const entries = (HISTORIAL.entries || []).slice().reverse(); // newest first
+  const acc = HISTORIAL.accuracy || {};
+  const eA  = acc.engine_A || {correct:0,total:0};
+  const eB  = acc.engine_B || {correct:0,total:0};
+  const entries = (HISTORIAL.entries||[]).slice().reverse();
 
-  // Accuracy boxes
   const pctA = eA.total ? Math.round(100*eA.correct/eA.total) : 0;
   const pctB = eB.total ? Math.round(100*eB.correct/eB.total) : 0;
   document.getElementById('histAccGrid').innerHTML = `
     <div class="hist-acc-box eng-a">
       <div class="hist-acc-label la">Engine A · MLP+Atención</div>
       <div class="hist-acc-num">${pctA}%</div>
-      <div class="hist-acc-sub">${eA.correct} de ${eA.total} correctas</div>
+      <div class="hist-acc-sub">${eA.correct} de ${eA.total} correctas · ${eA.total} partidos</div>
     </div>
     <div class="hist-acc-box eng-b">
       <div class="hist-acc-label lb">Engine B · XGBoost</div>
       <div class="hist-acc-num">${pctB}%</div>
-      <div class="hist-acc-sub">${eB.correct} de ${eB.total} correctas</div>
+      <div class="hist-acc-sub">${eB.correct} de ${eB.total} correctas · ${eB.total} partidos</div>
     </div>`;
 
   if (!entries.length) {
     document.getElementById('historialList').innerHTML =
-      `<div class="hist-empty">Sin predicciones registradas todavía.<br>Los resultados aparecerán aquí a medida que se jueguen los partidos.</div>`;
+      `<div class="hist-empty">Sin predicciones registradas. Los resultados aparecen aquí a medida que se juegan los partidos.</div>`;
     return;
   }
 
-  const PRED_LABEL = {victoria_A:'Local',empate:'Empate',victoria_B:'Visitante'};
-  const rows = entries.map(e => {
-    const scoreLabel = e.resultado_real
-      ? `${e.goles_A}-${e.goles_B}`
-      : '—';
-    const realLabel = {victoria_A:`Victoria ${e.teamA}`,empate:'Empate',victoria_B:`Victoria ${e.teamB}`}[e.resultado_real] || '—';
-    const okA = e.acierto_A ? '<span class="hist-ok yes">✓</span>' : '<span class="hist-ok no">✗</span>';
-    const okB = e.acierto_B ? '<span class="hist-ok yes">✓</span>' : '<span class="hist-ok no">✗</span>';
-    const predLabelA = {victoria_A:`${e.teamA}`,empate:'Empate',victoria_B:`${e.teamB}`}[e.engine_A.prediccion] || '—';
-    const predLabelB = {victoria_A:`${e.teamA}`,empate:'Empate',victoria_B:`${e.teamB}`}[e.engine_B.prediccion] || '—';
-    const pctAv = Math.round(e.engine_A.p_victoria*100);
-    const pctBv = Math.round(e.engine_B.p_victoria*100);
-    return `<tr>
-      <td><span class="hist-date">${e.fecha}</span></td>
-      <td><strong>${e.teamA}</strong> <span class="hist-score">${scoreLabel}</span> <strong>${e.teamB}</strong></td>
-      <td>
-        <span class="hist-pred ${e.engine_A.prediccion}">${predLabelA}</span>
-        <span style="font-size:.63rem;color:var(--text3);margin-left:3px">${pctAv}%</span>
-      </td>
-      <td>${okA}</td>
-      <td>
-        <span class="hist-pred ${e.engine_B.prediccion}">${predLabelB}</span>
-        <span style="font-size:.63rem;color:var(--text3);margin-left:3px">${pctBv}%</span>
-      </td>
-      <td>${okB}</td>
-      <td><span class="hist-real">${realLabel}</span></td>
-    </tr>`;
-  }).join('');
+  // Find grupo for each entry from FIXTURES
+  const fixtureGrp = {};
+  for (const f of (FIXTURES.schedule||[])) {
+    fixtureGrp[f.teamA+'|'+f.teamB] = f.grupo;
+    fixtureGrp[f.teamB+'|'+f.teamA] = f.grupo;
+  }
 
-  document.getElementById('historialList').innerHTML = `
-    <table class="hist-table">
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Partido</th>
-          <th>Engine A</th>
-          <th>✓</th>
-          <th>Engine B</th>
-          <th>✓</th>
-          <th>Resultado Real</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+  document.getElementById('historialList').innerHTML = entries.map(e => {
+    const a=e.teamA, b=e.teamB;
+    const pA=e.engine_A, pB=e.engine_B;
+    const real=e.resultado_real;
+    const grp = fixtureGrp[a+'|'+b] || '?';
+    const realLabel = {victoria_A:a,empate:'Empate',victoria_B:b}[real];
+    const predTextA = {victoria_A:a,empate:'Empate',victoria_B:b}[pA.prediccion];
+    const predTextB = {victoria_A:a,empate:'Empate',victoria_B:b}[pB.prediccion];
+
+    return `<div class="hc">
+      <div class="hc-top">
+        <div class="hc-team-a">${a}</div>
+        <div class="hc-center">
+          <div class="hc-score">${e.goles_A} — ${e.goles_B}</div>
+          <div class="hc-date-grp">${e.fecha} · Grupo ${grp}</div>
+          <span class="hc-result-badge ${real}">${realLabel}</span>
+        </div>
+        <div class="hc-team-b">${b}</div>
+      </div>
+      <div class="hc-body">
+        <div class="hc-eng-block">
+          <div class="hc-eng-title la">Engine A · MLP+Atención</div>
+          <div class="hc-pbar">
+            <div class="hc-pb-w" style="width:${Math.round(pA.p_victoria*100)}%"></div>
+            <div class="hc-pb-d" style="width:${Math.round(pA.p_empate*100)}%"></div>
+            <div class="hc-pb-l" style="width:${Math.round(pA.p_derrota*100)}%"></div>
+          </div>
+          <div class="hc-pbar-vals">
+            <span style="color:var(--green)">${Math.round(pA.p_victoria*100)}%</span>
+            <span style="color:var(--yellow)">${Math.round(pA.p_empate*100)}%</span>
+            <span style="color:var(--red)">${Math.round(pA.p_derrota*100)}%</span>
+          </div>
+          <div class="hc-verdict">
+            <span class="hc-ok ${e.acierto_A?'yes':'no'}">${e.acierto_A?'✓':'✗'}</span>
+            <span class="hc-pred-txt">Predijo: <strong>${predTextA}</strong></span>
+          </div>
+        </div>
+        <div class="hc-eng-block">
+          <div class="hc-eng-title lb">Engine B · XGBoost</div>
+          <div class="hc-pbar">
+            <div class="hc-pb-w" style="width:${Math.round(pB.p_victoria*100)}%"></div>
+            <div class="hc-pb-d" style="width:${Math.round(pB.p_empate*100)}%"></div>
+            <div class="hc-pb-l" style="width:${Math.round(pB.p_derrota*100)}%"></div>
+          </div>
+          <div class="hc-pbar-vals">
+            <span style="color:var(--green)">${Math.round(pB.p_victoria*100)}%</span>
+            <span style="color:var(--yellow)">${Math.round(pB.p_empate*100)}%</span>
+            <span style="color:var(--red)">${Math.round(pB.p_derrota*100)}%</span>
+          </div>
+          <div class="hc-verdict">
+            <span class="hc-ok ${e.acierto_B?'yes':'no'}">${e.acierto_B?'✓':'✗'}</span>
+            <span class="hc-pred-txt">Predijo: <strong>${predTextB}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════════════════════
