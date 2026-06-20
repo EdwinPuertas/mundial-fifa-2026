@@ -26,6 +26,11 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: Actualizar calendario de partidos
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+        run: python update_fixtures.py
+
       - name: Obtener nuevos resultados
         env:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
@@ -44,7 +49,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add wc2026_updates.json predicciones_historial.json predicciones_v3.json predicciones_v3_compact.json index.html lineup_config.json engine_A_v3.pkl engine_B_v3.pkl
+          git add wc2026_updates.json predicciones_historial.json predicciones_v3.json predicciones_v3_compact.json index.html lineup_config.json engine_A_v3.pkl engine_B_v3.pkl fixtures.json
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update: resultados WC2026 $(date -u +'%Y-%m-%d')"
             git push

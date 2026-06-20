@@ -367,6 +367,12 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .hist-score{{font-weight:800;color:var(--text);white-space:nowrap}}
 .hist-date{{color:var(--text3);font-size:.68rem;white-space:nowrap}}
 
+.pday-banner-inner{{display:flex;align-items:center;justify-content:space-between;gap:12px}}
+.pday-open-btn{{background:var(--blue);color:#fff;border:none;border-radius:7px;padding:7px 15px;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap}}
+.pday-datenav{{display:flex;align-items:center;gap:8px;margin-left:auto}}
+.pday-nav-btn{{background:none;border:1px solid var(--border);border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:1.1rem;color:var(--text);display:flex;align-items:center;justify-content:center}}
+.pday-nav-label{{font-size:.78rem;font-weight:600;color:var(--text);min-width:90px;text-align:center}}
+
 @media(max-width:860px){{
   .engines-row,.tact-row,.groups-grid{{grid-template-columns:1fr}}
   .groups-grid{{grid-template-columns:repeat(2,1fr)}}
@@ -391,10 +397,15 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 
 <div class="container">
 
-<!-- PRONÓSTICOS DEL DÍA -->
-<div class="card">
-  <div class="card-title">🗓️ Pronósticos del Día &nbsp;<span id="fechaHoyLabel" style="font-weight:400;color:var(--text2);text-transform:none;letter-spacing:0"></span></div>
-  <div id="pronosticosHoy"></div>
+<!-- PRONÓSTICOS DEL DÍA (banner) -->
+<div class="card pday-banner" onclick="openPronosticos()" style="cursor:pointer">
+  <div class="pday-banner-inner">
+    <div>
+      <div class="card-title" style="margin-bottom:4px">🗓️ Pronósticos del Día</div>
+      <div id="pdayBannerSub" style="font-size:.78rem;color:var(--text2)">Cargando partidos...</div>
+    </div>
+    <button class="pday-open-btn" onclick="openPronosticos();event.stopPropagation()">Ver pronósticos →</button>
+  </div>
 </div>
 
 <!-- CONFIGURADOR DE PARTIDO -->
@@ -562,6 +573,23 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 
 </div><!-- /container -->
 
+<!-- PANEL PRONÓSTICOS DEL DÍA -->
+<div id="pronosticosPanel" class="hpanel">
+  <div class="hpanel-bar">
+    <button class="hpanel-back" onclick="closePronosticos()">&#8592; Volver</button>
+    <span class="hpanel-title">🗓️ Pronósticos del Día</span>
+    <div class="pday-datenav">
+      <button class="pday-nav-btn" onclick="changeDay(-1)">&#8249;</button>
+      <span id="pdayPanelLabel" class="pday-nav-label"></span>
+      <button class="pday-nav-btn" onclick="changeDay(1)">&#8250;</button>
+    </div>
+  </div>
+  <div class="hpanel-body">
+    <div id="pronosticosPanelList"></div>
+  </div>
+</div>
+
+
 <!-- BOTÓN FLOTANTE HISTORIAL -->
 <button class="hist-fab" onclick="openHistorial()">📊 Historial</button>
 
@@ -645,6 +673,7 @@ const TEAM_STATS = {{
 // STATE
 // ═══════════════════════════════
 let userFormA=null, userStyleA=null, userFormB=null, userStyleB=null;
+let _pronDate = new Date().toISOString().split('T')[0];
 
 // ═══════════════════════════════
 // INIT
@@ -653,7 +682,11 @@ document.addEventListener('DOMContentLoaded', () => {{
   renderGroups();
   renderFeatureImportance();
   onTeamChange();
-  renderPronosticosHoy();
+  const today = new Date().toISOString().split('T')[0];
+  _pronDate = today;
+  const todayCount = (FIXTURES.schedule||[]).filter(f => f.fecha === today).length;
+  document.getElementById('pdayBannerSub').textContent =
+    todayCount ? `${{todayCount}} partido${{todayCount>1?'s':''}} hoy · ${{today}}` : `Sin partidos hoy · ${{today}}`;
 }});
 
 // ═══════════════════════════════
@@ -1116,15 +1149,16 @@ function switchTab(id,el) {{
 // ═══════════════════════════════
 // PRONÓSTICOS DEL DÍA
 // ═══════════════════════════════
-function renderPronosticosHoy() {{
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('fechaHoyLabel').textContent = today;
+function renderPronosticosHoy(dateStr) {{
+  if (!dateStr) dateStr = new Date().toISOString().split('T')[0];
+  _pronDate = dateStr;
+  document.getElementById('pdayPanelLabel').textContent = dateStr;
 
-  const fixtures = (FIXTURES.schedule||[]).filter(f => f.fecha === today);
-  const el = document.getElementById('pronosticosHoy');
+  const fixtures = (FIXTURES.schedule||[]).filter(f => f.fecha === dateStr);
+  const el = document.getElementById('pronosticosPanelList');
 
   if (!fixtures.length) {{
-    el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:18px;font-size:.82rem">Sin partidos programados para hoy (${{today}}).</div>`;
+    el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:40px;font-size:.85rem">Sin partidos programados para ${{dateStr}}.</div>`;
     return;
   }}
 
@@ -1199,6 +1233,21 @@ function renderPronosticosHoy() {{
       </div>`;
     }}).join('')
   }}</div>`;
+}}
+
+function openPronosticos() {{
+  document.getElementById('pronosticosPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderPronosticosHoy(_pronDate);
+}}
+function closePronosticos() {{
+  document.getElementById('pronosticosPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}}
+function changeDay(delta) {{
+  const d = new Date(_pronDate);
+  d.setDate(d.getDate() + delta);
+  renderPronosticosHoy(d.toISOString().split('T')[0]);
 }}
 
 // ═══════════════════════════════
