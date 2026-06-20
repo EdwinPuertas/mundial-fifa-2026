@@ -5,12 +5,12 @@
       "style": "balanced"
     },
     "España": {
-      "formation": "4-3-3",
+      "formation": "4-2-3-1",
       "style": "attacking"
     },
     "Argentina": {
-      "formation": "4-4-2",
-      "style": "balanced"
+      "formation": "4-3-3",
+      "style": "attacking"
     },
     "Inglaterra": {
       "formation": "4-3-3",
@@ -33,7 +33,7 @@
       "style": "defensive"
     },
     "Bélgica": {
-      "formation": "3-4-3",
+      "formation": "4-2-3-1",
       "style": "balanced"
     },
     "Alemania": {
@@ -81,7 +81,7 @@
       "style": "attacking"
     },
     "Ecuador": {
-      "formation": "4-3-3",
+      "formation": "3-4-3",
       "style": "balanced"
     },
     "Austria": {
@@ -97,7 +97,7 @@
       "style": "defensive"
     },
     "Argelia": {
-      "formation": "4-3-3",
+      "formation": "4-2-3-1",
       "style": "defensive"
     },
     "Egipto": {
@@ -117,11 +117,11 @@
       "style": "defensive"
     },
     "Costa de Marfil": {
-      "formation": "4-3-3",
+      "formation": "4-4-2",
       "style": "attacking"
     },
     "Suecia": {
-      "formation": "4-4-2",
+      "formation": "3-5-2",
       "style": "balanced"
     },
     "Paraguay": {
@@ -137,12 +137,12 @@
       "style": "defensive"
     },
     "Túnez": {
-      "formation": "4-3-3",
+      "formation": "4-2-3-1",
       "style": "defensive"
     },
     "RD Congo": {
-      "formation": "4-3-3",
-      "style": "balanced"
+      "formation": "5-3-2",
+      "style": "defensive"
     },
     "Uzbekistán": {
       "formation": "4-4-2",
@@ -173,15 +173,15 @@
       "style": "balanced"
     },
     "Cabo Verde": {
-      "formation": "4-4-2",
-      "style": "balanced"
+      "formation": "4-5-1",
+      "style": "defensive"
     },
     "Ghana": {
       "formation": "4-2-3-1",
       "style": "balanced"
     },
     "Curazao": {
-      "formation": "4-4-2",
+      "formation": "3-5-2",
       "style": "defensive"
     },
     "Haití": {
@@ -263,5 +263,213 @@
     "balanced": 1.0,
     "defensive": 0.82,
     "counterattack": 0.92
+  },
+  "VENUES": {
+    "Arlington": {
+      "altitude": 185,
+      "temp": 36,
+      "wind": 15,
+      "hydration": 0.8
+    },
+    "EastRutherford": {
+      "altitude": 5,
+      "temp": 28,
+      "wind": 18,
+      "hydration": 0.2
+    },
+    "SantaClara": {
+      "altitude": 15,
+      "temp": 19,
+      "wind": 14,
+      "hydration": 0.0
+    },
+    "Pasadena": {
+      "altitude": 234,
+      "temp": 29,
+      "wind": 8,
+      "hydration": 0.3
+    },
+    "Inglewood": {
+      "altitude": 30,
+      "temp": 24,
+      "wind": 10,
+      "hydration": 0.1
+    },
+    "Philadelphia": {
+      "altitude": 12,
+      "temp": 30,
+      "wind": 14,
+      "hydration": 0.4
+    },
+    "Charlotte": {
+      "altitude": 229,
+      "temp": 31,
+      "wind": 10,
+      "hydration": 0.5
+    },
+    "KansasCity": {
+      "altitude": 282,
+      "temp": 32,
+      "wind": 18,
+      "hydration": 0.6
+    },
+    "Denver": {
+      "altitude": 1609,
+      "temp": 26,
+      "wind": 14,
+      "hydration": 0.2
+    },
+    "Chicago": {
+      "altitude": 179,
+      "temp": 28,
+      "wind": 22,
+      "hydration": 0.2
+    },
+    "Miami": {
+      "altitude": 3,
+      "temp": 32,
+      "wind": 15,
+      "hydration": 0.9
+    },
+    "Boston": {
+      "altitude": 8,
+      "temp": 23,
+      "wind": 17,
+      "hydration": 0.1
+    },
+    "Toronto": {
+      "altitude": 76,
+      "temp": 24,
+      "wind": 14,
+      "hydration": 0.1
+    },
+    "Vancouver": {
+      "altitude": 4,
+      "temp": 19,
+      "wind": 11,
+      "hydration": 0.0
+    },
+    "Montreal": {
+      "altitude": 29,
+      "temp": 25,
+      "wind": 14,
+      "hydration": 0.1
+    },
+    "MexicoCity": {
+      "altitude": 2240,
+      "temp": 18,
+      "wind": 9,
+      "hydration": 0.0
+    },
+    "Monterrey": {
+      "altitude": 538,
+      "temp": 36,
+      "wind": 12,
+      "hydration": 0.9
+    },
+    "Guadalajara": {
+      "altitude": 1566,
+      "temp": 22,
+      "wind": 10,
+      "hydration": 0.1
+    },
+    "Seattle": {
+      "altitude": 5,
+      "temp": 18,
+      "wind": 15,
+      "hydration": 0.1
+    },
+    "Atlanta": {
+      "altitude": 318,
+      "temp": 30,
+      "wind": 11,
+      "hydration": 0.5
+    },
+    "Houston": {
+      "altitude": 12,
+      "temp": 35,
+      "wind": 14,
+      "hydration": 0.8
+    },
+    "neutral": {
+      "altitude": 300,
+      "temp": 22,
+      "wind": 11,
+      "hydration": 0.0
+    }
+  },
+  "MATCH_SCHEDULE": {
+    "México_Sudáfrica": "MexicoCity",
+    "Corea del Sur_República Checa": "EastRutherford",
+    "México_Corea del Sur": "Guadalajara",
+    "Sudáfrica_República Checa": "Monterrey",
+    "República Checa_México": "MexicoCity",
+    "Sudáfrica_Corea del Sur": "Monterrey",
+    "Canadá_Bosnia y Herz.": "Toronto",
+    "Qatar_Suiza": "MexicoCity",
+    "Canadá_Qatar": "Vancouver",
+    "Suiza_Bosnia y Herz.": "Boston",
+    "Suiza_Canadá": "Vancouver",
+    "Bosnia y Herz._Qatar": "Philadelphia",
+    "Brasil_Marruecos": "EastRutherford",
+    "Haití_Escocia": "Boston",
+    "Escocia_Marruecos": "Boston",
+    "Brasil_Haití": "Philadelphia",
+    "Brasil_Escocia": "Miami",
+    "Marruecos_Haití": "Atlanta",
+    "Estados Unidos_Paraguay": "Arlington",
+    "Australia_Turquía": "Vancouver",
+    "Turquía_Estados Unidos": "Inglewood",
+    "Paraguay_Australia": "SantaClara",
+    "Estados Unidos_Australia": "Seattle",
+    "Turquía_Paraguay": "Denver",
+    "Alemania_Curazao": "EastRutherford",
+    "Costa de Marfil_Ecuador": "Miami",
+    "Alemania_Costa de Marfil": "Toronto",
+    "Ecuador_Curazao": "KansasCity",
+    "Alemania_Ecuador": "Charlotte",
+    "Costa de Marfil_Curazao": "Charlotte",
+    "Suecia_Túnez": "EastRutherford",
+    "Países Bajos_Japón": "Toronto",
+    "Japón_Suecia": "Arlington",
+    "Túnez_Países Bajos": "KansasCity",
+    "Países Bajos_Suecia": "Houston",
+    "Japón_Túnez": "Philadelphia",
+    "Bélgica_Egipto": "Charlotte",
+    "Irán_Nueva Zelanda": "Guadalajara",
+    "Bélgica_Irán": "Inglewood",
+    "Nueva Zelanda_Egipto": "Vancouver",
+    "Egipto_Irán": "Seattle",
+    "Nueva Zelanda_Bélgica": "Vancouver",
+    "España_Cabo Verde": "Inglewood",
+    "Uruguay_Arabia Saudita": "Charlotte",
+    "España_Uruguay": "Arlington",
+    "Arabia Saudita_Cabo Verde": "KansasCity",
+    "España_Arabia Saudita": "Miami",
+    "Uruguay_Cabo Verde": "Denver",
+    "Francia_Senegal": "Chicago",
+    "Noruega_Irak": "Pasadena",
+    "Francia_Noruega": "Philadelphia",
+    "Senegal_Irak": "Atlanta",
+    "Francia_Irak": "Boston",
+    "Senegal_Noruega": "EastRutherford",
+    "Argentina_Argelia": "Inglewood",
+    "Austria_Jordania": "MexicoCity",
+    "Argentina_Austria": "Pasadena",
+    "Argelia_Jordania": "Guadalajara",
+    "Argentina_Jordania": "Arlington",
+    "Austria_Argelia": "Houston",
+    "Portugal_RD Congo": "Houston",
+    "Uzbekistán_Colombia": "MexicoCity",
+    "Portugal_Uzbekistán": "Houston",
+    "Colombia_RD Congo": "Guadalajara",
+    "Colombia_Portugal": "Miami",
+    "RD Congo_Uzbekistán": "Atlanta",
+    "Inglaterra_Croacia": "Arlington",
+    "Ghana_Panamá": "Toronto",
+    "Inglaterra_Ghana": "Boston",
+    "Panamá_Croacia": "Toronto",
+    "Panamá_Inglaterra": "EastRutherford",
+    "Croacia_Ghana": "Philadelphia"
   }
 }
