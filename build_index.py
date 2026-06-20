@@ -589,6 +589,7 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
   </div>
 </div>
 
+
 <!-- BOTÓN FLOTANTE HISTORIAL -->
 <button class="hist-fab" onclick="openHistorial()">📊 Historial</button>
 
