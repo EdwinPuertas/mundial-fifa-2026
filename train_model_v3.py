@@ -480,11 +480,14 @@ def make_match_feat(fA, fB, altitude=300, temp=22, wind=11, hydration=0.0, bk_wi
         heat_hydra_pen_A, heat_hydra_pen_B,
         # Bookmaker odds — probabilidades de mercado pre-partido (3 nuevas)
         bk_win_A, bk_draw, bk_win_B,
-        # Draw-context features — 6 features (removed rank_parity, sq_parity,
-        # draw_tendency(def*def), def_balance(avg_def) — those encoded "similar→draw" bias)
+        # Draw-prediction features — capturan condiciones de empate (10 nuevas)
+        fA["form_defense"] * fB["form_defense"],
+        1.0 / (1.0 + abs(fA["rank"] - fB["rank"]) / 15.0),
+        1.0 / (1.0 + abs(fA["squad_rating"] - fB["squad_rating"]) / 20.0),
         float(fA["conf"] == fB["conf"]),
         fA["form_attack"] / (fB["form_defense"] + 1e-3),
         fB["form_attack"] / (fA["form_defense"] + 1e-3),
+        (fA["form_defense"] + fB["form_defense"]) / 2.0,
         1.0 / (1.0 + abs(fA["conf_wc_exp"] - fB["conf_wc_exp"])),
         fA["log_mv"] / (fB["log_mv"] + 0.01),
         bk_draw - 0.25,
@@ -525,9 +528,9 @@ FEAT_COLS = [
     "heat_hydra_pen_A","heat_hydra_pen_B",
     # Bookmaker odds features
     "bk_win_A","bk_draw","bk_win_B",
-    # Draw-context features (6, removed rank_parity/sq_parity/draw_tendency/def_balance)
-    "conf_same",
-    "atk_vs_def_A","atk_vs_def_B","cwe_parity",
+    # Draw-prediction features
+    "draw_tendency","rank_parity","sq_parity","conf_same",
+    "atk_vs_def_A","atk_vs_def_B","def_balance","cwe_parity",
     "mv_ratio","bk_draw_signal",
 ]
 assert len(FEAT_COLS) == N_FEAT, f"Mismatch: cols={len(FEAT_COLS)} feat={N_FEAT}"
@@ -535,38 +538,20 @@ assert len(FEAT_COLS) == N_FEAT, f"Mismatch: cols={len(FEAT_COLS)} feat={N_FEAT}
 # ═══════════════════════════════════════════════════════════════════════════════
 # 4. DATASET HISTÓRICO — v3 (base v2 + columnas tácticas derivadas)
 # ═══════════════════════════════════════════════════════════════════════════════
-# Táctica aproximada por rango: se usa la formación más común históricamente.
-# Se añade ruido amplio (±30% atk, ±35% press) para cubrir el rango completo de formaciones
-# (4-3-3 atacante press=0.95 → 5-4-1 defensivo press=0.38) y reducir el covariate-shift.
+# Táctica aproximada por rango: se usa la formación más común históricamente
 def hist_tact(rank, attacking_bias=0.0):
-    # Noise independent per dimension — covers full formation range seen at prediction time:
-    # form_attack: [0.394 (5-4-1 def), 1.038 (4-3-3 atk)]
-    # form_defense: [0.531 (4-3-3 atk), 1.121 (5-4-1 def)]
-    # pressing: [0.410 (5-4-1 def), 0.952 (4-3-3 atk)]
-    atk_n  = np.random.uniform(-0.40, 0.40)
-    def_n  = np.random.uniform(-0.40, 0.40)   # independent — not coupled to atk_n
-    prs_n  = np.random.uniform(-0.38, 0.38)
-    sty_n  = np.random.uniform(-0.22, 0.22)
     if rank <= 5:
-        base = {"form_attack": 0.88+attacking_bias, "form_defense": 0.65,
+        return {"form_attack": min(0.96, 0.88+attacking_bias), "form_defense": 0.65,
                 "width": 0.85, "pressing": 0.88, "set_piece": 0.70, "style_score": 1.10}
     elif rank <= 15:
-        base = {"form_attack": 0.80+attacking_bias, "form_defense": 0.70,
+        return {"form_attack": 0.80+attacking_bias, "form_defense": 0.70,
                 "width": 0.80, "pressing": 0.80, "set_piece": 0.72, "style_score": 1.02}
     elif rank <= 30:
-        base = {"form_attack": 0.72+attacking_bias, "form_defense": 0.76,
+        return {"form_attack": 0.72+attacking_bias, "form_defense": 0.76,
                 "width": 0.72, "pressing": 0.72, "set_piece": 0.75, "style_score": 0.98}
     else:
-        base = {"form_attack": 0.62+attacking_bias, "form_defense": 0.85,
+        return {"form_attack": 0.62+attacking_bias, "form_defense": 0.85,
                 "width": 0.60, "pressing": 0.60, "set_piece": 0.78, "style_score": 0.85}
-    return {
-        "form_attack":  float(np.clip(base["form_attack"]  + atk_n, 0.32, 1.15)),
-        "form_defense": float(np.clip(base["form_defense"] + def_n, 0.38, 1.25)),
-        "width":        base["width"],
-        "pressing":     float(np.clip(base["pressing"]     + prs_n, 0.35, 1.05)),
-        "set_piece":    base["set_piece"],
-        "style_score":  float(np.clip(base["style_score"]  + sty_n, 0.70, 1.30)),
-    }
 
 # raw: [rA,rB,confA,confB,gf_pgA,ga_pgA,gf_pgB,ga_pgB,sqA,sqB,tsA,tsB,mvA,mvB,ageA,ageB,acA,acB,wcfA,wcfB,gA,gB]
 historical_raw = [
@@ -694,101 +679,6 @@ historical_raw = [
     [17, 22, 1, 0, 1.56, 1.11, 2.40, 1.40, 81.0, 79.5, 6, 7,  430, 490, 27.8, 26.2, 13.0, 14.0, 0.44, 0.60, 1, 1],  # Uruguay 1-1 Turquía
     [19, 25, 0, 4, 2.50, 0.80, 1.78, 1.11, 80.5, 79.0, 5, 6,  450, 380, 27.2, 26.0,  9.0, 13.0, 0.70, 0.50, 0, 0],  # Suiza 0-0 Corea del Sur
     [14, 16, 3, 2, 2.00, 0.83, 2.00, 1.00, 79.5, 80.0, 4, 8,  280, 520, 26.0, 25.2, 10.0, 18.0, 0.67, 0.57, 2, 2],  # Senegal 2-2 USA
-    # ── WC 2022 Qatar — torneo completo (63 partidos) ────────────────────────
-    # Grupo A
-    [55,23, 4,1, 1.11,1.94, 1.44,0.94, 68.5,79.0, 3,5,  75,310, 26.2,24.8,  4.0, 9.9, 0.28,0.44, 0,2],  # Qatar 0-2 Ecuador
-    [14, 7, 3,0, 2.00,0.83, 2.90,1.40, 79.5,84.5, 4,8, 280,870, 26.0,25.8,  9.1,13.8, 0.67,0.70, 0,2],  # Senegal 0-2 Netherlands
-    [ 7,23, 0,1, 2.90,1.40, 1.44,0.94, 84.5,79.0, 8,5, 870,310, 25.8,24.8, 13.8, 9.9, 0.70,0.44, 1,1],  # Netherlands 1-1 Ecuador
-    [ 7,55, 0,4, 2.90,1.40, 1.11,1.94, 84.5,68.5, 8,3, 870, 75, 25.8,26.2, 13.8, 4.0, 0.70,0.28, 2,0],  # Netherlands 2-0 Qatar
-    [23,14, 1,3, 1.44,0.94, 2.00,0.83, 79.0,79.5, 5,4, 310,280, 24.8,26.0,  9.9, 9.1, 0.44,0.67, 1,2],  # Ecuador 1-2 Senegal
-    [55,14, 4,3, 1.11,1.94, 2.00,0.83, 68.5,79.5, 3,4,  75,280, 26.2,26.0,  4.0, 9.1, 0.28,0.67, 1,3],  # Qatar 1-3 Senegal
-    # Grupo B
-    [ 4,21, 0,4, 3.00,0.90, 1.67,1.00, 86.5,77.5, 7,7,1100,180, 26.5,26.5, 17.0, 9.0, 0.80,0.61, 6,2],  # England 6-2 Iran
-    [16,19, 2,0, 2.00,1.00, 2.50,0.80, 80.0,80.5, 8,5, 520,450, 25.2,27.2, 14.0, 8.9, 0.57,0.70, 1,1],  # USA 1-1 Wales
-    [ 4,16, 0,2, 3.00,0.90, 2.00,1.00, 86.5,80.0, 7,8,1100,520, 26.5,25.2, 17.0,14.0, 0.80,0.57, 0,0],  # England 0-0 USA
-    [19,21, 0,4, 2.50,0.80, 1.67,1.00, 80.5,77.5, 5,7, 450,180, 27.2,26.5,  8.9, 9.0, 0.70,0.61, 0,2],  # Wales 0-2 Iran (upset)
-    [21,16, 4,2, 1.67,1.00, 2.00,1.00, 77.5,80.0, 7,8, 180,520, 26.5,25.2,  9.0,14.0, 0.61,0.57, 0,1],  # Iran 0-1 USA
-    [19, 4, 0,0, 2.50,0.80, 3.00,0.90, 80.5,86.5, 5,7, 450,1100,27.2,26.5,  8.9,17.0, 0.70,0.80, 0,3],  # Wales 0-3 England
-    # Grupo C
-    [ 3,61, 1,4, 1.94,0.94, 1.44,1.78, 87.0,68.0, 8,5, 760,110, 28.2,26.5, 15.1, 5.5, 0.67,0.39, 1,2],  # Argentina 1-2 Saudi (mega upset)
-    [15,26, 2,0, 1.86,1.14, 1.60,1.00, 80.5,80.0, 5,5, 390,280, 26.5,28.0,  9.1, 8.0, 0.50,0.70, 0,0],  # Mexico 0-0 Poland
-    [ 3,15, 1,2, 1.94,0.94, 1.86,1.14, 87.0,80.5, 8,5, 760,390, 28.2,26.5, 15.1, 9.1, 0.67,0.50, 2,0],  # Argentina 2-0 Mexico
-    [26,61, 0,4, 1.60,1.00, 1.44,1.78, 80.0,68.0, 5,5, 280,110, 28.0,26.5,  8.0, 5.5, 0.70,0.39, 2,0],  # Poland 2-0 Saudi Arabia
-    [26, 3, 0,1, 1.60,1.00, 1.94,0.94, 80.0,87.0, 5,8, 280,760, 28.0,28.2,  8.0,15.1, 0.70,0.67, 0,2],  # Poland 0-2 Argentina
-    [61,15, 4,2, 1.44,1.78, 1.86,1.14, 68.0,80.5, 5,5, 110,390, 26.5,26.5,  5.5, 9.1, 0.39,0.50, 1,2],  # Saudi 1-2 Mexico
-    # Grupo D
-    [ 1,27, 0,4, 3.20,0.80, 1.44,1.33, 88.2,77.5, 9,5,1050,220, 26.1,26.8, 14.2, 7.0, 0.80,0.44, 4,1],  # France 4-1 Australia
-    [10,44, 0,3, 3.30,1.10, 1.50,1.17, 84.0,71.5, 9,3, 890,120, 25.2,26.8, 18.5, 4.5, 0.80,0.50, 0,0],  # Denmark 0-0 Tunisia
-    [44,27, 3,4, 1.50,1.17, 1.44,1.33, 71.5,77.5, 3,5, 120,220, 26.8,26.8,  4.5, 7.0, 0.50,0.44, 0,1],  # Tunisia 0-1 Australia (upset)
-    [ 1,10, 0,0, 3.20,0.80, 3.30,1.10, 88.2,84.0, 9,9,1050,890, 26.1,25.2, 14.2,18.5, 0.80,0.80, 2,1],  # France 2-1 Denmark
-    [27,10, 4,0, 1.44,1.33, 3.30,1.10, 77.5,84.0, 5,9, 220,890, 26.8,25.2,  7.0,18.5, 0.44,0.80, 1,0],  # Australia 1-0 Denmark (upset)
-    [44, 1, 3,0, 1.50,1.17, 3.20,0.80, 71.5,88.2, 3,9, 120,1050,26.8,26.1,  4.5,14.2, 0.50,0.80, 1,0],  # Tunisia 1-0 France (upset)
-    # Grupo E
-    [ 2,31, 0,2, 3.00,1.00, 1.40,1.00, 87.5,74.0, 7,3, 980, 70, 24.8,28.5, 13.9, 4.5, 0.70,0.45, 7,0],  # Spain 7-0 Costa Rica
-    [10,18, 0,4, 3.30,1.10, 2.67,0.56, 84.0,81.5, 9,9, 890,560, 25.2,25.5, 18.5,18.1, 0.80,0.78, 1,2],  # Germany 1-2 Japan (upset)
-    [18,31, 4,2, 2.67,0.56, 1.40,1.00, 81.5,74.0, 9,3, 560, 70, 25.5,28.5, 18.1, 4.5, 0.78,0.45, 0,1],  # Japan 0-1 Costa Rica (upset)
-    [ 2,10, 0,0, 3.00,1.00, 3.30,1.10, 87.5,84.0, 7,9, 980,890, 24.8,25.2, 13.9,18.5, 0.70,0.80, 1,1],  # Spain 1-1 Germany
-    [18, 2, 4,0, 2.67,0.56, 3.00,1.00, 81.5,87.5, 9,7, 560,980, 25.5,24.8, 18.1,13.9, 0.78,0.70, 2,1],  # Japan 2-1 Spain (upset)
-    [31,10, 2,0, 1.40,1.00, 3.30,1.10, 74.0,84.0, 3,9,  70,890, 28.5,25.2,  4.5,18.5, 0.45,0.80, 2,4],  # Costa Rica 2-4 Germany
-    # Grupo F
-    [ 8,11, 3,0, 2.50,0.50, 2.20,1.10, 80.0,82.5, 4,5, 320,420, 25.2,29.5,  7.6,11.0, 0.83,0.60, 0,0],  # Morocco 0-0 Croatia
-    [ 9,30, 0,2, 2.70,1.20, 1.79,0.86, 83.5,78.0, 6,6, 680,340, 28.5,25.0, 13.1,13.0, 0.70,0.57, 1,0],  # Belgium 1-0 Canada
-    [ 9, 8, 0,3, 2.70,1.20, 2.50,0.50, 83.5,80.0, 6,4, 680,320, 28.5,25.2, 13.1, 7.6, 0.70,0.83, 1,0],  # Belgium 1-0 Morocco
-    [11,30, 0,2, 2.20,1.10, 1.79,0.86, 82.5,78.0, 5,6, 420,340, 29.5,25.0, 11.0,13.0, 0.60,0.57, 4,1],  # Croatia 4-1 Canada
-    [11, 9, 0,0, 2.20,1.10, 2.70,1.20, 82.5,83.5, 5,6, 420,680, 29.5,28.5, 11.0,13.1, 0.60,0.70, 0,0],  # Croatia 0-0 Belgium
-    [ 8,30, 3,2, 2.50,0.50, 1.79,0.86, 80.0,78.0, 4,6, 320,340, 25.2,25.0,  7.6,13.0, 0.83,0.57, 2,1],  # Morocco 2-1 Canada
-    # Grupo G
-    [19,43, 0,3, 2.50,0.80, 1.50,1.20, 80.5,75.0, 5,3, 450,130, 27.2,27.5,  8.9, 5.5, 0.70,0.44, 1,0],  # Switzerland 1-0 Cameroon
-    [ 6,21, 1,0, 1.61,1.22, 1.70,0.70, 86.0,80.5, 5,5,1200,300, 24.5,27.5, 11.5, 9.0, 0.39,0.60, 2,0],  # Brazil 2-0 Serbia
-    [43,21, 3,0, 1.50,1.20, 1.70,0.70, 75.0,80.5, 3,5, 130,300, 27.5,27.5,  5.5, 9.0, 0.44,0.60, 3,3],  # Cameroon 3-3 Serbia
-    [ 6,19, 1,0, 1.61,1.22, 2.50,0.80, 86.0,80.5, 5,5,1200,450, 24.5,27.2, 11.5, 8.9, 0.39,0.70, 1,0],  # Brazil 1-0 Switzerland
-    [43, 6, 3,1, 1.50,1.20, 1.61,1.22, 75.0,86.0, 3,5, 130,1200,27.5,24.5,  5.5,11.5, 0.44,0.39, 1,0],  # Cameroon 1-0 Brazil (upset)
-    [21,19, 0,0, 1.70,0.70, 2.50,0.80, 80.5,80.5, 5,5, 300,450, 27.5,27.2,  9.0, 8.9, 0.60,0.70, 2,3],  # Serbia 2-3 Switzerland
-    # Grupo H
-    [ 5,74, 0,3, 2.80,0.70, 1.33,1.50, 85.8,65.0, 7,2, 920, 70, 27.8,26.0, 14.1, 4.5, 0.90,0.33, 3,2],  # Portugal 3-2 Ghana
-    [17,25, 1,4, 1.56,1.11, 1.78,1.11, 81.0,79.0, 6,6, 430,380, 27.8,26.0,  9.5, 9.1, 0.44,0.56, 0,0],  # Uruguay 0-0 South Korea
-    [25,74, 4,3, 1.78,1.11, 1.33,1.50, 79.0,65.0, 6,2, 380, 70, 26.0,26.0,  9.1, 4.5, 0.56,0.33, 2,3],  # South Korea 2-3 Ghana (upset)
-    [ 5,17, 0,1, 2.80,0.70, 1.56,1.11, 85.8,81.0, 7,6, 920,430, 27.8,27.8, 14.1, 9.5, 0.90,0.44, 2,0],  # Portugal 2-0 Uruguay
-    [74,17, 3,1, 1.33,1.50, 1.56,1.11, 65.0,81.0, 2,6,  70,430, 26.0,27.8,  4.5, 9.5, 0.33,0.44, 0,2],  # Ghana 0-2 Uruguay
-    [25, 5, 4,0, 1.78,1.11, 2.80,0.70, 79.0,85.8, 6,7, 380,920, 26.0,27.8,  9.1,14.1, 0.56,0.90, 2,1],  # South Korea 2-1 Portugal (upset)
-    # Octavos
-    [ 7,16, 0,2, 2.90,1.40, 2.00,1.00, 84.5,80.0, 8,8, 870,520, 25.8,25.2, 13.8,14.0, 0.70,0.57, 3,1],  # Netherlands 3-1 USA
-    [ 3,27, 1,4, 1.94,0.94, 1.44,1.33, 87.0,77.5, 8,5, 760,220, 28.2,26.8, 15.1, 7.0, 0.67,0.44, 2,1],  # Argentina 2-1 Australia
-    [ 1,26, 0,0, 3.20,0.80, 1.60,1.00, 88.2,80.0, 9,5,1050,280, 26.1,28.0, 14.2, 8.0, 0.80,0.70, 3,1],  # France 3-1 Poland
-    [ 4,14, 0,3, 3.00,0.90, 2.00,0.83, 86.5,79.5, 7,4,1100,280, 26.5,26.0, 17.0, 9.1, 0.80,0.67, 3,0],  # England 3-0 Senegal
-    [ 6,25, 1,4, 1.61,1.22, 1.78,1.11, 86.0,79.0, 5,6,1200,380, 24.5,26.0, 11.5, 9.1, 0.39,0.56, 4,1],  # Brazil 4-1 South Korea
-    [ 5,19, 0,0, 2.80,0.70, 2.50,0.80, 85.8,80.5, 7,5, 920,450, 27.8,27.2, 14.1, 8.9, 0.90,0.70, 6,1],  # Portugal 6-1 Switzerland
-    [ 8, 2, 3,0, 2.50,0.50, 3.00,1.00, 80.0,87.5, 4,7, 320,980, 25.2,24.8,  7.6,13.9, 0.83,0.70, 1,0],  # Morocco 1-0 Spain (Morocco wins PKs)
-    [18,11, 4,0, 2.67,0.56, 2.20,1.10, 81.5,82.5, 9,5, 560,420, 25.5,29.5, 18.1,11.0, 0.78,0.60, 1,2],  # Japan 1-2 Croatia (Croatia wins PKs)
-    # Cuartos
-    [ 8, 5, 3,0, 2.50,0.50, 2.80,0.70, 80.0,85.8, 4,7, 320,920, 25.2,27.8,  7.6,14.1, 0.83,0.90, 1,0],  # Morocco 1-0 Portugal (upset)
-    [ 1, 4, 0,0, 3.20,0.80, 3.00,0.90, 88.2,86.5, 9,7,1050,1100,26.1,26.5, 14.2,17.0, 0.80,0.80, 2,1],  # France 2-1 England
-    [ 7, 3, 0,1, 2.90,1.40, 1.94,0.94, 84.5,87.0, 8,8, 870,760, 25.8,28.2, 13.8,15.1, 0.70,0.67, 2,3],  # Netherlands 2-3 Argentina (Arg wins PKs)
-    [11, 6, 0,1, 2.20,1.10, 1.61,1.22, 82.5,86.0, 5,5, 420,1200,29.5,24.5, 11.0,11.5, 0.60,0.39, 2,1],  # Croatia 2-1 Brazil (Cro wins PKs)
-    # Semis + 3er lugar + Final
-    [ 1, 8, 0,3, 3.20,0.80, 2.50,0.50, 88.2,80.0, 9,4,1050,320, 26.1,25.2, 14.2, 7.6, 0.80,0.83, 2,0],  # France 2-0 Morocco
-    [11, 8, 0,3, 2.20,1.10, 2.50,0.50, 82.5,80.0, 5,4, 420,320, 29.5,25.2, 11.0, 7.6, 0.60,0.83, 2,1],  # Croatia 2-1 Morocco (3rd)
-    [ 3, 1, 1,0, 1.94,0.94, 3.20,0.80, 87.0,88.2, 8,9, 760,1050,28.2,26.1, 15.1,14.2, 0.67,0.80, 4,3],  # Argentina 4-3 France (Arg wins PKs)
-    # ── WC 2014 Brasil — partidos adicionales (18 partidos) ──────────────────
-    [18,13, 4,1, 2.67,0.56, 1.44,1.22, 81.5,82.0, 9,7, 560,480, 25.5,25.8, 18.1,10.9, 0.78,0.44, 2,1],  # Japan 2-1 Colombia (2014 upset)
-    [34,18, 3,4, 1.67,1.00, 2.67,0.56, 74.5,81.5, 3,9, 210,560, 26.2,25.5,  6.0,18.1, 0.50,0.78, 2,1],  # Ivory Coast 2-1 Japan
-    [13,34, 1,3, 1.44,1.22, 1.67,1.00, 82.0,74.5, 7,3, 480,210, 25.8,26.2, 10.9, 6.0, 0.44,0.50, 3,0],  # Colombia 3-0 Ivory Coast
-    [17, 4, 1,0, 1.56,1.11, 3.00,0.90, 81.0,86.5, 6,7, 430,1100,27.8,26.5,  9.5,17.0, 0.44,0.80, 2,1],  # Uruguay 2-1 England (2014 upset)
-    [10, 5, 0,0, 3.30,1.10, 2.80,0.70, 84.0,85.8, 9,7, 890, 920,25.2,27.8, 18.5,14.1, 0.80,0.90, 4,0],  # Germany 4-0 Portugal
-    [16, 5, 2,0, 2.00,1.00, 2.80,0.70, 80.0,85.8, 8,7, 520, 920,25.2,27.8, 14.0,14.1, 0.57,0.90, 2,2],  # USA 2-2 Portugal
-    [ 9,16, 0,2, 2.70,1.20, 2.00,1.00, 83.5,80.0, 6,8, 680, 520,28.5,25.2, 13.1,14.0, 0.70,0.57, 2,1],  # Belgium 2-1 USA (R16)
-    [ 3,19, 1,0, 1.94,0.94, 2.50,0.80, 87.0,80.5, 8,5, 760, 450,28.2,27.2, 15.1, 8.9, 0.67,0.70, 1,0],  # Argentina 1-0 Switzerland (R16)
-    [ 7,15, 0,2, 2.90,1.40, 1.86,1.14, 84.5,80.5, 8,5, 870, 390,25.8,26.5, 13.8, 9.1, 0.70,0.50, 2,1],  # Netherlands 2-1 Mexico (R16)
-    [13,17, 1,1, 1.44,1.22, 1.56,1.11, 82.0,81.0, 7,6, 480, 430,25.8,27.8, 10.9, 9.5, 0.44,0.44, 2,0],  # Colombia 2-0 Uruguay (R16)
-    [ 6,13, 1,1, 1.61,1.22, 1.44,1.22, 86.0,82.0, 5,7,1200, 480,24.5,25.8, 11.5,10.9, 0.39,0.44, 2,1],  # Brazil 2-1 Colombia (QF)
-    [10, 6, 0,1, 3.30,1.10, 1.61,1.22, 84.0,86.0, 9,5, 890,1200,25.2,24.5, 18.5,11.5, 0.80,0.39, 7,1],  # Germany 7-1 Brazil (SF)
-    [ 3, 7, 1,0, 1.94,0.94, 2.90,1.40, 87.0,84.5, 8,8, 760, 870,28.2,25.8, 15.1,13.8, 0.67,0.70, 1,0],  # Argentina 1-0 Netherlands SF (Arg wins PKs)
-    [10, 3, 0,1, 3.30,1.10, 1.94,0.94, 84.0,87.0, 9,8, 890, 760,25.2,28.2, 18.5,15.1, 0.80,0.67, 1,0],  # Germany 1-0 Argentina (2014 Final)
-    [10, 1, 0,0, 3.30,1.10, 3.20,0.80, 84.0,88.2, 9,9, 890,1050,25.2,26.1, 18.5,14.2, 0.80,0.80, 1,0],  # Germany 1-0 France (2014 QF)
-    # ── WC 2018 Rusia — partidos adicionales ─────────────────────────────────
-    [11, 4, 0,0, 2.20,1.10, 3.00,0.90, 82.5,86.5, 5,7, 420,1100,29.5,26.5, 11.0,17.0, 0.60,0.80, 2,1],  # Croatia 2-1 England (2018 SF)
-    [ 1,11, 0,0, 3.20,0.80, 2.20,1.10, 88.2,82.5, 9,5,1050, 420,26.1,29.5, 14.2,11.0, 0.80,0.60, 4,2],  # France 4-2 Croatia (2018 Final)
-    [ 1, 9, 0,0, 3.20,0.80, 2.70,1.20, 88.2,83.5, 9,6,1050, 680,26.1,28.5, 14.2,13.1, 0.80,0.70, 2,0],  # France 2-0 Belgium (2018 SF)
 ]
 
 # Datos ambientales por partido (paralelo a historical_raw)
@@ -842,8 +732,6 @@ historical_env = [
     {"altitude":5,   "temp":28, "wind":16, "hydration":0.2},  # Portugal 1-1 RD Congo → MetLife
     # 18 empates adicionales — condiciones neutras
     *[{"altitude":300, "temp":22, "wind":11, "hydration":0.0}] * 18,
-    # WC 2022 completo + WC 2014/2018 extra (81 partidos — estadios controlados/neutros)
-    *[{"altitude":200, "temp":22, "wind":10, "hydration":0.0}] * 81,
 ]
 assert len(historical_env) == len(historical_raw), f"Env list mismatch: {len(historical_env)} vs {len(historical_raw)}"
 
@@ -877,8 +765,6 @@ historical_bk = [
     [0.87, 0.09, 0.04],  # Portugal 1-1 RD Congo      (bk: Por 87% — sorpresa)
     # 18 empates adicionales (bk estimado por fórmula)
     *[None] * 18,
-    # WC 2022 completo + WC 2014/2018 extra (81 partidos)
-    *[None] * 81,
 ]
 assert len(historical_bk) == len(historical_raw), f"BK list mismatch: {len(historical_bk)} vs {len(historical_raw)}"
 
@@ -1063,12 +949,6 @@ yc_tr_bal   = yc_tr_bal[perm_bal]
 bal_counts  = np.bincount(yc_tr_bal)
 print(f"Soporte DESPUÉS del balanceo — Derrota={bal_counts[0]} | Empate={bal_counts[1]} | Victoria={bal_counts[2]} (cada clase={n_max_tr})")
 
-# Sample weights para XGBoost: usar datos ORIGINALES con pesos inversamente proporcionales
-# al tamaño de clase → evita duplicación de registros de empate y reduce sesgo de dibujo
-_sw_tr = np.ones(len(yc_tr), dtype=float)
-for cls in range(3):
-    _sw_tr[yc_tr == cls] = n_max_tr / float(class_counts_tr[cls])
-
 # ───────────────────────────────────────────────────────────────────────────────
 # ENGINE A — Deep MLP con Self-Attention (2ª generación)
 # ───────────────────────────────────────────────────────────────────────────────
@@ -1096,13 +976,13 @@ scaler_A = StandardScaler()
 X_tr_A   = scaler_A.fit_transform(X_tr_att)
 X_te_A   = scaler_A.transform(X_te_att)
 
-# MLP — tamaño reducido para evitar overfit (375 muestras balanceadas, 91 features)
+# MLP profundo — entrenado sobre datos balanceados
 mlp_A = MLPClassifier(
-    hidden_layer_sizes=(128, 64, 32),
+    hidden_layer_sizes=(512, 256, 128, 64, 32),
     activation='relu', solver='adam',
-    alpha=0.01, learning_rate='adaptive', learning_rate_init=0.001,
-    max_iter=3000, random_state=42,
-    early_stopping=True, validation_fraction=0.12, n_iter_no_change=60,
+    alpha=0.0005, learning_rate='adaptive', learning_rate_init=0.001,
+    max_iter=5000, random_state=42,
+    early_stopping=True, validation_fraction=0.10, n_iter_no_change=80,
     batch_size=32,
 )
 mlp_A.fit(X_tr_A, yc_tr_bal)
@@ -1120,21 +1000,20 @@ print(f"  Engine A: Acc={acc_A:.3f} | F1={f1_A:.3f} | AUC={auc_A:.3f}")
 print("\n[ENGINE B] Entrenando XGBoost agresivo...")
 
 scaler_B    = StandardScaler()
-X_tr_B_bal  = scaler_B.fit_transform(X_tr_bal)   # balanced oversampled data
-X_tr_B      = scaler_B.transform(X_tr)            # original scale (for CV scoring reference)
+X_tr_B_bal  = scaler_B.fit_transform(X_tr_bal)   # balanceado → para clasificador
+X_tr_B      = scaler_B.transform(X_tr)            # original  → para regresores de goles
 X_te_B      = scaler_B.transform(X_te)
 
 xgb_B = xgb.XGBClassifier(
     n_estimators=500,
-    max_depth=5,
+    max_depth=6,
     learning_rate=0.04,
-    subsample=0.80,
-    colsample_bytree=0.80,
-    colsample_bylevel=0.70,
-    min_child_weight=3,
-    gamma=0.10,
-    reg_alpha=0.50,
-    reg_lambda=2.5,
+    subsample=0.85,
+    colsample_bytree=0.85,
+    min_child_weight=2,
+    gamma=0.08,
+    reg_alpha=0.15,
+    reg_lambda=1.8,
     objective='multi:softprob',
     num_class=3,
     use_label_encoder=False,
@@ -1142,7 +1021,7 @@ xgb_B = xgb.XGBClassifier(
     random_state=42,
     n_jobs=-1,
 )
-xgb_B.fit(X_tr_B, yc_tr,   # raw unbalanced data — natural class frequencies reduce draw bias
+xgb_B.fit(X_tr_B_bal, yc_tr_bal,
           eval_set=[(X_te_B, yc_te)],
           verbose=False)
 
@@ -1156,17 +1035,16 @@ print(f"  Engine B: Acc={acc_B:.3f} | F1={f1_B:.3f} | AUC={auc_B:.3f}")
 # ───────────────────────────────────────────────────────────────────────────────
 # CALIBRACIÓN DE TEMPERATURA — predicciones más agresivas (T < 1)
 # ───────────────────────────────────────────────────────────────────────────────
-TEMP_A = 0.75  # sharpen Engine A (MLP tends to output flat distributions)
-TEMP_B = 2.00  # smooth Engine B raw probabilities (XGBoost draw-overconfident; T>1 softens)
+TEMP = 0.55  # valores < 1 agudizan las predicciones (menos empates, más decisión)
 
-def apply_temperature(probs, T=1.0):
+def apply_temperature(probs, T=TEMP):
     log_p = np.log(np.clip(probs, 1e-9, 1.0)) / T
     log_p -= log_p.max(axis=1, keepdims=True)
     e = np.exp(log_p)
     return e / e.sum(axis=1, keepdims=True)
 
-prob_A_cal = apply_temperature(prob_A, TEMP_A)
-prob_B_cal = apply_temperature(prob_B, TEMP_B)
+prob_A_cal = apply_temperature(prob_A, TEMP)
+prob_B_cal = apply_temperature(prob_B, TEMP)
 
 pred_A_cal = prob_A_cal.argmax(axis=1)
 pred_B_cal = prob_B_cal.argmax(axis=1)
@@ -1176,7 +1054,7 @@ acc_B_cal  = accuracy_score(yc_te, pred_B_cal)
 f1_A_cal   = f1_score(yc_te, pred_A_cal, average='weighted')
 f1_B_cal   = f1_score(yc_te, pred_B_cal, average='weighted')
 
-print(f"\n[CALIBRADO A:T={TEMP_A} | B:T={TEMP_B}]")
+print(f"\n[CALIBRADO T={TEMP}]")
 print(f"  Engine A calibrado: Acc={acc_A_cal:.3f} | F1={f1_A_cal:.3f}")
 print(f"  Engine B calibrado: Acc={acc_B_cal:.3f} | F1={f1_B_cal:.3f}")
 
@@ -1184,9 +1062,9 @@ print(f"  Engine B calibrado: Acc={acc_B_cal:.3f} | F1={f1_B_cal:.3f}")
 cv5 = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 X_full_scaled = scaler_B.transform(X)
 xgb_cv = xgb.XGBClassifier(
-    n_estimators=500, max_depth=5, learning_rate=0.04,
-    subsample=0.80, colsample_bytree=0.80, colsample_bylevel=0.70,
-    min_child_weight=3, gamma=0.10, reg_alpha=0.50, reg_lambda=2.5,
+    n_estimators=500, max_depth=6, learning_rate=0.04,
+    subsample=0.85, colsample_bytree=0.85, min_child_weight=2,
+    gamma=0.08, reg_alpha=0.15, reg_lambda=1.8,
     objective='multi:softprob', num_class=3,
     use_label_encoder=False, eval_metric='mlogloss',
     random_state=42, n_jobs=-1,
@@ -1217,6 +1095,7 @@ print(classification_report(yc_te, pred_A_cal, target_names=["Derrota","Empate",
 print("CLASSIFICATION REPORT — ENGINE B (calibrado):")
 print(classification_report(yc_te, pred_B_cal, target_names=["Derrota","Empate","Victoria"]))
 
+# Feature importance XGBoost
 fi_xgb = pd.DataFrame({
     "feature": FEAT_COLS,
     "importance": xgb_B.feature_importances_
@@ -1253,12 +1132,12 @@ def predict_match(nameA, nameB, venue="neutral", bk_probs=None):
     xA_att  = attention.transform(xA_pre)
     xA_fin  = scaler_A.transform(xA_att)
     p_A_raw = mlp_A.predict_proba(xA_fin)
-    p_A     = apply_temperature(p_A_raw, TEMP_A)[0]
+    p_A     = apply_temperature(p_A_raw, TEMP)[0]
 
     # Engine B
     xB_fin  = scaler_B.transform(x)
     p_B_raw = xgb_B.predict_proba(xB_fin)
-    p_B     = apply_temperature(p_B_raw, TEMP_B)[0]
+    p_B     = apply_temperature(p_B_raw, TEMP)[0]
 
     # Goles
     lA = float(np.clip(reg_A_goals.predict(xB_fin)[0], 0.2, 5.5))
@@ -1373,7 +1252,7 @@ ax = axes[1, 1]
 for i, (name, color) in enumerate(zip(label_names, colors_3)):
     ax.hist(prob_B_cal[:, i], bins=15, alpha=0.75, color=color, label=name, edgecolor='white', lw=0.3)
 ax.set_facecolor('#161b22')
-ax.set_title(f"Distribución Probs Engine B (T_A={TEMP_A},T_B={TEMP_B} → más agresivo)", color='white', fontsize=11)
+ax.set_title(f"Distribución Probs Engine B (T={TEMP} → más agresivo)", color='white', fontsize=11)
 ax.set_xlabel("Probabilidad", color='lightgray')
 ax.tick_params(colors='white')
 ax.spines[:].set_color('#30363d')
@@ -1398,7 +1277,7 @@ ax.legend(facecolor='#161b22', edgecolor='#30363d', labelcolor='white', fontsize
 fig.text(0.5, 0.01,
          f"Engine A: Acc={acc_A_cal:.3f} F1={f1_A_cal:.3f} AUC={auc_A:.3f}  |  "
          f"Engine B: Acc={acc_B_cal:.3f} F1={f1_B_cal:.3f} AUC={auc_B:.3f}  |  "
-         f"Features={N_FEAT} | Dataset={len(df)} partidos | T_A={TEMP_A},T_B={TEMP_B}",
+         f"Features={N_FEAT} | Dataset={len(df)} partidos | T={TEMP}",
          ha='center', color='lightgray', fontsize=9)
 
 plt.tight_layout(rect=[0, 0.04, 1, 0.96])
@@ -1415,14 +1294,14 @@ print(f"""
 ╠══════════════════════════════════════════════════════════════╣
 ║  Features v3:   {N_FEAT:<5} (tácticas + sin injury + sin is_host)  ║
 ║  Dataset:       {len(df):<5} partidos históricos                   ║
-║  Temperatura:   A={TEMP_A} | B={TEMP_B}                          ║
+║  Temperatura:   {TEMP} (predicciones más agresivas/decisivas) ║
 ║                                                              ║
 ║  ENGINE A — Deep MLP + Self-Attention (2ª generación):      ║
-║    Capas: 512→256→128→64→32 | Heads: 4 | T: {TEMP_A}        ║
+║    Capas: 512→256→128→64→32 | Heads: 4 | T: {TEMP}         ║
 ║    Acc: {acc_A_cal:.3f} | F1: {f1_A_cal:.3f} | AUC: {auc_A:.3f}            ║
 ║                                                              ║
-║  ENGINE B — XGBoost Regularizado:                           ║
-║    depth=5 | estimators=500 | lr=0.04 | T: {TEMP_B}         ║
+║  ENGINE B — XGBoost Agresivo:                               ║
+║    depth=7 | estimators=400 | lr=0.06                       ║
 ║    Acc: {acc_B_cal:.3f} | F1: {f1_B_cal:.3f} | AUC: {auc_B:.3f}            ║
 ║                                                              ║
 ║  MAE Goles: A={mae_A:.3f} | B={mae_B:.3f}                       ║

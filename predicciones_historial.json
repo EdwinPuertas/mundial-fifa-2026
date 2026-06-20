@@ -2,12 +2,12 @@
   "generated": "2026-06-20",
   "accuracy": {
     "engine_A": {
-      "correct": 10,
-      "total": 21
+      "correct": 28,
+      "total": 50
     },
     "engine_B": {
-      "correct": 9,
-      "total": 21
+      "correct": 26,
+      "total": 50
     }
   },
   "entries": [
@@ -469,6 +469,644 @@
       },
       "resultado_real": "empate",
       "goles_A": 1,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-17",
+      "teamA": "Inglaterra",
+      "teamB": "Croacia",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9999,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9986,
+        "p_empate": 0.0011,
+        "p_derrota": 0.0003
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 4,
+      "goles_B": 2,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-17",
+      "teamA": "Ghana",
+      "teamB": "Panamá",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9628,
+        "p_empate": 0.0028,
+        "p_derrota": 0.0343
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9811,
+        "p_empate": 0.0016,
+        "p_derrota": 0.0173
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 1,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-17",
+      "teamA": "Colombia",
+      "teamB": "Uzbekistán",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9996,
+        "p_empate": 0.0002,
+        "p_derrota": 0.0003
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9994,
+        "p_empate": 0.0001,
+        "p_derrota": 0.0004
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-17",
+      "teamA": "Argentina",
+      "teamB": "Argelia",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9985,
+        "p_empate": 0.0,
+        "p_derrota": 0.0015
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9966,
+        "p_empate": 0.0008,
+        "p_derrota": 0.0027
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 3,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-17",
+      "teamA": "Austria",
+      "teamB": "Jordania",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9999,
+        "p_empate": 0.0001,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9993,
+        "p_empate": 0.0002,
+        "p_derrota": 0.0005
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 3,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-17",
+      "teamA": "Portugal",
+      "teamB": "RD Congo",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.999,
+        "p_empate": 0.0008,
+        "p_derrota": 0.0002
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9036,
+        "p_empate": 0.0816,
+        "p_derrota": 0.0148
+      },
+      "resultado_real": "empate",
+      "goles_A": 1,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-18",
+      "teamA": "República Checa",
+      "teamB": "Sudáfrica",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9976,
+        "p_empate": 0.0006,
+        "p_derrota": 0.0018
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9761,
+        "p_empate": 0.0009,
+        "p_derrota": 0.023
+      },
+      "resultado_real": "empate",
+      "goles_A": 1,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-18",
+      "teamA": "Suiza",
+      "teamB": "Bosnia y Herz.",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9937,
+        "p_empate": 0.006,
+        "p_derrota": 0.0004
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.549,
+        "p_empate": 0.3314,
+        "p_derrota": 0.1195
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 4,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-18",
+      "teamA": "Canadá",
+      "teamB": "Qatar",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9953,
+        "p_empate": 0.0029,
+        "p_derrota": 0.0018
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 6,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-11",
+      "teamA": "México",
+      "teamB": "Sudáfrica",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9947,
+        "p_empate": 0.0053,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9902,
+        "p_empate": 0.0008,
+        "p_derrota": 0.009
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-12",
+      "teamA": "Corea del Sur",
+      "teamB": "República Checa",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.8931,
+        "p_empate": 0.0979,
+        "p_derrota": 0.009
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.5758,
+        "p_empate": 0.0902,
+        "p_derrota": 0.334
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-13",
+      "teamA": "Estados Unidos",
+      "teamB": "Paraguay",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9987,
+        "p_empate": 0.0009,
+        "p_derrota": 0.0004
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 4,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-13",
+      "teamA": "Qatar",
+      "teamB": "Suiza",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0004,
+        "p_empate": 0.0,
+        "p_derrota": 0.9996
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0048,
+        "p_empate": 0.0299,
+        "p_derrota": 0.9652
+      },
+      "resultado_real": "empate",
+      "goles_A": 1,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-13",
+      "teamA": "Brasil",
+      "teamB": "Marruecos",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9726,
+        "p_empate": 0.0,
+        "p_derrota": 0.0274
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9848,
+        "p_empate": 0.0136,
+        "p_derrota": 0.0016
+      },
+      "resultado_real": "empate",
+      "goles_A": 1,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-14",
+      "teamA": "Haití",
+      "teamB": "Escocia",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0002,
+        "p_empate": 0.0,
+        "p_derrota": 0.9998
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0099,
+        "p_empate": 0.0028,
+        "p_derrota": 0.9873
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-14",
+      "teamA": "Australia",
+      "teamB": "Turquía",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0026,
+        "p_empate": 0.003,
+        "p_derrota": 0.9944
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0199,
+        "p_empate": 0.0254,
+        "p_derrota": 0.9547
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 0,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-14",
+      "teamA": "Alemania",
+      "teamB": "Curazao",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.999,
+        "p_empate": 0.0008,
+        "p_derrota": 0.0002
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 7,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-14",
+      "teamA": "Países Bajos",
+      "teamB": "Japón",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0954,
+        "p_empate": 0.0003,
+        "p_derrota": 0.9044
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.1824,
+        "p_empate": 0.389,
+        "p_derrota": 0.4286
+      },
+      "resultado_real": "empate",
+      "goles_A": 2,
+      "goles_B": 2,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-14",
+      "teamA": "Costa de Marfil",
+      "teamB": "Ecuador",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0472,
+        "p_empate": 0.0009,
+        "p_derrota": 0.9519
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.01,
+        "p_empate": 0.0544,
+        "p_derrota": 0.9356
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 1,
+      "goles_B": 0,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-15",
+      "teamA": "Suecia",
+      "teamB": "Túnez",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9998,
+        "p_empate": 0.0002,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9963,
+        "p_empate": 0.0021,
+        "p_derrota": 0.0016
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 5,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-15",
+      "teamA": "Bélgica",
+      "teamB": "Egipto",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9928,
+        "p_empate": 0.0053,
+        "p_derrota": 0.0019
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9834,
+        "p_empate": 0.0131,
+        "p_derrota": 0.0035
+      },
+      "resultado_real": "empate",
+      "goles_A": 1,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-15",
+      "teamA": "Arabia Saudita",
+      "teamB": "Uruguay",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0031,
+        "p_empate": 0.0007,
+        "p_derrota": 0.9962
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0453,
+        "p_empate": 0.0516,
+        "p_derrota": 0.903
+      },
+      "resultado_real": "empate",
+      "goles_A": 1,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-16",
+      "teamA": "Francia",
+      "teamB": "Senegal",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9999,
+        "p_empate": 0.0001,
+        "p_derrota": 0.0001
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9035,
+        "p_empate": 0.0666,
+        "p_derrota": 0.0299
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 3,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-16",
+      "teamA": "Irak",
+      "teamB": "Noruega",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0,
+        "p_empate": 0.0,
+        "p_derrota": 1.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0012,
+        "p_empate": 0.0006,
+        "p_derrota": 0.9982
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 1,
+      "goles_B": 4,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-19",
+      "teamA": "México",
+      "teamB": "Corea del Sur",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.7449,
+        "p_empate": 0.1147,
+        "p_derrota": 0.1404
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0374,
+        "p_empate": 0.1684,
+        "p_derrota": 0.7942
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 1,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-19",
+      "teamA": "Estados Unidos",
+      "teamB": "Australia",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9627,
+        "p_empate": 0.0363,
+        "p_derrota": 0.001
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9989,
+        "p_empate": 0.0004,
+        "p_derrota": 0.0007
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-19",
+      "teamA": "Escocia",
+      "teamB": "Marruecos",
+      "engine_A": {
+        "prediccion": "empate",
+        "p_victoria": 0.0678,
+        "p_empate": 0.7481,
+        "p_derrota": 0.1841
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.7083,
+        "p_empate": 0.0744,
+        "p_derrota": 0.2173
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-20",
+      "teamA": "Brasil",
+      "teamB": "Haití",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9975,
+        "p_empate": 0.0003,
+        "p_derrota": 0.0022
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 3,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-20",
+      "teamA": "Turquía",
+      "teamB": "Paraguay",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9983,
+        "p_empate": 0.0002,
+        "p_derrota": 0.0015
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
       "goles_B": 1,
       "acierto_A": false,
       "acierto_B": false

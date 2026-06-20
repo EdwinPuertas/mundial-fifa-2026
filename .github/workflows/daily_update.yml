@@ -1,9 +1,9 @@
-name: Daily WC 2026 Update
+name: Daily WC2026 Update
 
 on:
   schedule:
-    - cron: '0 2 * * *'   # 2:00 AM UTC every day
-  workflow_dispatch:        # allow manual trigger
+    - cron: '0 2 * * *'   # 2am UTC todos los días
+  workflow_dispatch:        # permite lanzar manualmente desde GitHub
 
 jobs:
   update:
@@ -12,41 +12,42 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repositorio
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
-      - name: Set up Python 3.11
+      - name: Configurar Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Instalar dependencias
         run: |
-          pip install --upgrade pip
-          pip install numpy scikit-learn xgboost
+          pip install -r requirements.txt
 
-      - name: Update prediction history
+      - name: Obtener nuevos resultados
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
         run: python update_daily.py
 
-      - name: Retrain model with latest data
+      - name: Actualizar historial de predicciones
+        run: python update_historial.py
+
+      - name: Reentrenar modelo y regenerar predicciones
         run: python train_model_v3.py
 
-      - name: Rebuild index.html
+      - name: Reconstruir sitio estático
         run: python build_index.py
 
-      - name: Commit and push changes
+      - name: Confirmar y publicar cambios
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add wc2026_updates.json \
-                  predicciones_historial.json \
-                  predicciones_v3.json \
-                  predicciones_v3_compact.json \
-                  index.html \
-                  lineup_config.json \
-                  engine_A_v3.pkl \
-                  engine_B_v3.pkl
-          git diff --cached --quiet || git commit -m "chore: daily model update $(date -u +%Y-%m-%d)"
-          git push
+          git add wc2026_updates.json predicciones_historial.json predicciones_v3.json predicciones_v3_compact.json index.html lineup_config.json engine_A_v3.pkl engine_B_v3.pkl
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update: resultados WC2026 $(date -u +'%Y-%m-%d')"
+            git push
+          else
+            echo "Sin cambios — no se genera commit."
+          fi

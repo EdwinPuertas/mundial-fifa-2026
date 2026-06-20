@@ -1,159 +1,255 @@
-#!/usr/bin/env python3
 """
-Daily update: compare model predictions vs actual WC 2026 results.
-Reads  wc2026_updates.json   → new match scores
-Reads  predicciones_v3_compact.json → pre-computed predictions
-Writes predicciones_historial.json  → running accuracy log
-"""
+update_daily.py — Actualización diaria de resultados del Mundial 2026
+======================================================================
+Fuente primaria : football-data.org API (requiere FOOTBALL_DATA_API_KEY en env)
+Fuente de respaldo: resultados_hoy.json (actualización manual)
 
+Flujo:
+  1. Lee wc2026_updates.json (partidos ya registrados)
+  2. Intenta obtener resultados nuevos vía API
+  3. Si la API falla, carga resultados_hoy.json como fallback
+  4. Escribe los partidos nuevos en wc2026_updates.json
+
+Llamado por GitHub Actions (.github/workflows/daily_update.yml) a las 2am UTC.
+"""
 import json
 import os
-from datetime import datetime
+import sys
+from datetime import datetime, timezone
+import urllib.request
+import urllib.error
 
-HISTORIAL_FILE = "predicciones_historial.json"
-UPDATES_FILE   = "wc2026_updates.json"
-COMPACT_FILE   = "predicciones_v3_compact.json"
+OUT = os.path.dirname(os.path.abspath(__file__)) + "/"
+
+# Mapeo: nombres football-data.org → nombres internos en español
+TEAM_MAP = {
+    "France":                   "Francia",
+    "Spain":                    "España",
+    "Argentina":                "Argentina",
+    "England":                  "Inglaterra",
+    "Portugal":                 "Portugal",
+    "Brazil":                   "Brasil",
+    "Netherlands":              "Países Bajos",
+    "Morocco":                  "Marruecos",
+    "Belgium":                  "Bélgica",
+    "Germany":                  "Alemania",
+    "Croatia":                  "Croacia",
+    "Colombia":                 "Colombia",
+    "Senegal":                  "Senegal",
+    "Mexico":                   "México",
+    "United States":            "Estados Unidos",
+    "USA":                      "Estados Unidos",
+    "Uruguay":                  "Uruguay",
+    "Japan":                    "Japón",
+    "Switzerland":              "Suiza",
+    "IR Iran":                  "Irán",
+    "Iran":                     "Irán",
+    "Turkey":                   "Turquía",
+    "Ecuador":                  "Ecuador",
+    "Austria":                  "Austria",
+    "Korea Republic":           "Corea del Sur",
+    "South Korea":              "Corea del Sur",
+    "Australia":                "Australia",
+    "Algeria":                  "Argelia",
+    "Egypt":                    "Egipto",
+    "Canada":                   "Canadá",
+    "Norway":                   "Noruega",
+    "Panama":                   "Panamá",
+    "Côte d'Ivoire":            "Costa de Marfil",
+    "Ivory Coast":              "Costa de Marfil",
+    "Sweden":                   "Suecia",
+    "Paraguay":                 "Paraguay",
+    "Czech Republic":           "República Checa",
+    "Czechia":                  "República Checa",
+    "Scotland":                 "Escocia",
+    "Tunisia":                  "Túnez",
+    "DR Congo":                 "RD Congo",
+    "Uzbekistan":               "Uzbekistán",
+    "Qatar":                    "Qatar",
+    "Iraq":                     "Irak",
+    "South Africa":             "Sudáfrica",
+    "Saudi Arabia":             "Arabia Saudita",
+    "Jordan":                   "Jordania",
+    "Bosnia and Herzegovina":   "Bosnia y Herz.",
+    "Cape Verde":               "Cabo Verde",
+    "Ghana":                    "Ghana",
+    "Curaçao":                  "Curazao",
+    "Haiti":                    "Haití",
+    "New Zealand":              "Nueva Zelanda",
+}
+
+# Mapeo: nombre del estadio (football-data.org) → clave de sede interna
+STADIUM_VENUE_MAP = {
+    "AT&T Stadium":                   "Arlington",
+    "MetLife Stadium":                 "EastRutherford",
+    "Levi's Stadium":                  "SantaClara",
+    "Rose Bowl":                       "Pasadena",
+    "SoFi Stadium":                    "Inglewood",
+    "Lincoln Financial Field":         "Philadelphia",
+    "Bank of America Stadium":         "Charlotte",
+    "Arrowhead Stadium":               "KansasCity",
+    "Empower Field at Mile High":      "Denver",
+    "Soldier Field":                   "Chicago",
+    "Hard Rock Stadium":               "Miami",
+    "Gillette Stadium":                "Boston",
+    "BMO Field":                       "Toronto",
+    "BC Place":                        "Vancouver",
+    "Stade Olympique de Montréal":     "Montreal",
+    "Estadio Azteca":                  "MexicoCity",
+    "Estadio BBVA":                    "Monterrey",
+    "Estadio Akron":                   "Guadalajara",
+}
 
 
-def load_json(path, default):
+def load_updates():
+    path = OUT + "wc2026_updates.json"
     if os.path.exists(path):
-        with open(path, encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
-    return default
+    return {"last_updated": None, "matches": []}
 
 
-def outcome_label(p_victoria, p_empate, p_derrota):
-    if p_victoria >= p_empate and p_victoria >= p_derrota:
-        return "victoria_A"
-    elif p_derrota >= p_empate:
-        return "victoria_B"
-    return "empate"
+def save_updates(data):
+    data["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    with open(OUT + "wc2026_updates.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print(f"wc2026_updates.json guardado ({len(data['matches'])} partidos en total)")
 
 
-def real_outcome(golesA, golesB):
-    if golesA > golesB:
-        return "victoria_A"
-    elif golesB > golesA:
-        return "victoria_B"
-    return "empate"
+def match_key(team_a, team_b):
+    return f"{team_a}:{team_b}"
 
 
-def get_probs(engine_probs, swapped):
-    """Return probs dict oriented so team A is always the first team."""
-    if swapped:
-        return {
-            "p_victoria": engine_probs["p_derrota"],
-            "p_empate":   engine_probs["p_empate"],
-            "p_derrota":  engine_probs["p_victoria"],
+def existing_keys(matches):
+    keys = set()
+    for m in matches:
+        keys.add(match_key(m["teamA"], m["teamB"]))
+        keys.add(match_key(m["teamB"], m["teamA"]))
+    return keys
+
+
+def fetch_from_api(api_key):
+    url = "https://api.football-data.org/v4/competitions/WC/matches?status=FINISHED"
+    req = urllib.request.Request(url, headers={"X-Auth-Token": api_key})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        print(f"[API] HTTP {e.code}: {e.reason}", file=sys.stderr)
+    except Exception as e:
+        print(f"[API] Error: {e}", file=sys.stderr)
+    return None
+
+
+def parse_api_response(data, seen_keys):
+    new_matches = []
+    if not data or "matches" not in data:
+        return new_matches
+
+    for m in data["matches"]:
+        if m.get("status") != "FINISHED":
+            continue
+
+        score     = m.get("score", {})
+        full_time = score.get("fullTime", {})
+        home_g    = full_time.get("home")
+        away_g    = full_time.get("away")
+        if home_g is None or away_g is None:
+            continue
+
+        home_raw = m.get("homeTeam", {}).get("name", "")
+        away_raw = m.get("awayTeam", {}).get("name", "")
+        team_a   = TEAM_MAP.get(home_raw)
+        team_b   = TEAM_MAP.get(away_raw)
+
+        if not team_a or not team_b:
+            print(f"[SKIP] Equipo desconocido: '{home_raw}' vs '{away_raw}'", file=sys.stderr)
+            continue
+
+        if match_key(team_a, team_b) in seen_keys:
+            continue
+
+        venue_raw = m.get("venue", "")
+        venue     = STADIUM_VENUE_MAP.get(venue_raw, "neutral")
+        date_str  = m.get("utcDate", "")[:10]
+
+        entry = {
+            "date":      date_str,
+            "teamA":     team_a,
+            "teamB":     team_b,
+            "goalsA":    int(home_g),
+            "goalsB":    int(away_g),
+            "venue":     venue,
+            "bk_probs":  None,
+            "source":    "football-data.org",
         }
-    return {
-        "p_victoria": engine_probs["p_victoria"],
-        "p_empate":   engine_probs["p_empate"],
-        "p_derrota":  engine_probs["p_derrota"],
-    }
+        new_matches.append(entry)
+        print(f"  [API] {team_a} {int(home_g)}-{int(away_g)} {team_b}  [{venue}]")
+
+    return new_matches
+
+
+def load_manual_results(seen_keys):
+    path = OUT + "resultados_hoy.json"
+    if not os.path.exists(path):
+        return []
+
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    new_matches = []
+    for m in data.get("matches", []):
+        team_a = m.get("teamA", "")
+        team_b = m.get("teamB", "")
+        if not team_a or not team_b:
+            continue
+        if match_key(team_a, team_b) in seen_keys:
+            continue
+
+        entry = {
+            "date":      m.get("date", datetime.now().strftime("%Y-%m-%d")),
+            "teamA":     team_a,
+            "teamB":     team_b,
+            "goalsA":    int(m.get("goalsA", 0)),
+            "goalsB":    int(m.get("goalsB", 0)),
+            "venue":     m.get("venue", "neutral"),
+            "bk_probs":  m.get("bk_probs"),
+            "source":    "manual",
+        }
+        new_matches.append(entry)
+        print(f"  [manual] {team_a} {entry['goalsA']}-{entry['goalsB']} {team_b}  [{entry['venue']}]")
+
+    return new_matches
 
 
 def main():
-    historial = load_json(HISTORIAL_FILE, {
-        "generated": datetime.now().strftime("%Y-%m-%d"),
-        "accuracy": {
-            "engine_A": {"correct": 0, "total": 0},
-            "engine_B": {"correct": 0, "total": 0},
-        },
-        "entries": [],
-    })
+    updates    = load_updates()
+    seen       = existing_keys(updates["matches"])
+    new_matches = []
 
-    updates = load_json(UPDATES_FILE, {"matches": []})
-    preds   = load_json(COMPACT_FILE, {})
-
-    recorded = {
-        (e["fecha"], e["teamA"], e["teamB"])
-        for e in historial.get("entries", [])
-    }
-
-    new_entries = []
-    for match in updates.get("matches", []):
-        fecha  = match.get("fecha", "")
-        teamA  = match.get("teamA", "")
-        teamB  = match.get("teamB", "")
-        golesA = int(match.get("golesA", 0))
-        golesB = int(match.get("golesB", 0))
-
-        if (fecha, teamA, teamB) in recorded:
-            continue
-
-        # Look up prediction — try both orderings
-        pred    = None
-        swapped = False
-        if teamA in preds and teamB in preds[teamA]:
-            pred = preds[teamA][teamB]
-        elif teamB in preds and teamA in preds[teamB]:
-            pred = preds[teamB][teamA]
-            swapped = True
-
-        if pred is None:
-            print(f"  [SKIP] Sin predicción para {teamA} vs {teamB}")
-            continue
-
-        pA = get_probs(pred["engine_A"], swapped)
-        pB = get_probs(pred["engine_B"], swapped)
-
-        pred_A = outcome_label(pA["p_victoria"], pA["p_empate"], pA["p_derrota"])
-        pred_B = outcome_label(pB["p_victoria"], pB["p_empate"], pB["p_derrota"])
-        real   = real_outcome(golesA, golesB)
-
-        entry = {
-            "fecha":   fecha,
-            "teamA":   teamA,
-            "teamB":   teamB,
-            "engine_A": {
-                "prediccion": pred_A,
-                "p_victoria": round(pA["p_victoria"], 4),
-                "p_empate":   round(pA["p_empate"],   4),
-                "p_derrota":  round(pA["p_derrota"],  4),
-            },
-            "engine_B": {
-                "prediccion": pred_B,
-                "p_victoria": round(pB["p_victoria"], 4),
-                "p_empate":   round(pB["p_empate"],   4),
-                "p_derrota":  round(pB["p_derrota"],  4),
-            },
-            "resultado_real": real,
-            "goles_A":   golesA,
-            "goles_B":   golesB,
-            "acierto_A": pred_A == real,
-            "acierto_B": pred_B == real,
-        }
-        new_entries.append(entry)
-        recorded.add((fecha, teamA, teamB))
-
-        ok_A = "✓" if pred_A == real else "✗"
-        ok_B = "✓" if pred_B == real else "✗"
-        print(f"  [{ok_A}/{ok_B}] {teamA} {golesA}-{golesB} {teamB} "
-              f"| real={real} | predA={pred_A} | predB={pred_B}")
-
-    if new_entries:
-        historial["entries"].extend(new_entries)
-        correct_A = sum(1 for e in historial["entries"] if e["acierto_A"])
-        correct_B = sum(1 for e in historial["entries"] if e["acierto_B"])
-        total     = len(historial["entries"])
-        historial["accuracy"] = {
-            "engine_A": {"correct": correct_A, "total": total},
-            "engine_B": {"correct": correct_B, "total": total},
-        }
-        historial["generated"] = datetime.now().strftime("%Y-%m-%d")
-
-        with open(HISTORIAL_FILE, "w", encoding="utf-8") as f:
-            json.dump(historial, f, ensure_ascii=False, indent=2)
-
-        pct_A = round(100 * correct_A / total) if total else 0
-        pct_B = round(100 * correct_B / total) if total else 0
-        print(f"\n[HISTORIAL] {len(new_entries)} nuevas. Total={total}")
-        print(f"  Engine A: {correct_A}/{total} ({pct_A}%)")
-        print(f"  Engine B: {correct_B}/{total} ({pct_B}%)")
+    api_key = os.environ.get("FOOTBALL_DATA_API_KEY", "").strip()
+    if api_key:
+        print("Consultando football-data.org API...")
+        api_data = fetch_from_api(api_key)
+        if api_data:
+            new_matches = parse_api_response(api_data, seen)
+        else:
+            print("API no disponible — usando resultados_hoy.json como respaldo")
+            new_matches = load_manual_results(seen)
     else:
-        print("[HISTORIAL] Sin partidas nuevas.")
+        print("Sin API key — usando resultados_hoy.json como respaldo")
+        new_matches = load_manual_results(seen)
+
+    if new_matches:
+        updates["matches"].extend(new_matches)
+        print(f"\nAgregados {len(new_matches)} partido(s) nuevo(s).")
+    else:
+        print("Sin partidos nuevos.")
+
+    save_updates(updates)
+    return len(new_matches)
 
 
 if __name__ == "__main__":
-    main()
+    count = main()
+    sys.exit(0)

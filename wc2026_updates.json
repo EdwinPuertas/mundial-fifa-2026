@@ -1,26 +1,341 @@
 {
-  "last_updated": "2026-06-20",
+  "last_updated": "2026-06-20T06:19:13Z",
   "matches": [
-    {"fecha":"2026-06-11","teamA":"Alemania",       "teamB":"Curazao",          "golesA":7,"golesB":1},
-    {"fecha":"2026-06-11","teamA":"Suecia",          "teamB":"Túnez",            "golesA":5,"golesB":1},
-    {"fecha":"2026-06-12","teamA":"Costa de Marfil", "teamB":"Ecuador",          "golesA":1,"golesB":0},
-    {"fecha":"2026-06-12","teamA":"Bélgica",         "teamB":"Egipto",           "golesA":1,"golesB":1},
-    {"fecha":"2026-06-12","teamA":"España",          "teamB":"Cabo Verde",       "golesA":0,"golesB":0},
-    {"fecha":"2026-06-13","teamA":"México",          "teamB":"Sudáfrica",        "golesA":2,"golesB":0},
-    {"fecha":"2026-06-13","teamA":"Corea del Sur",   "teamB":"República Checa",  "golesA":2,"golesB":1},
-    {"fecha":"2026-06-13","teamA":"Canadá",          "teamB":"Bosnia y Herz.",   "golesA":1,"golesB":1},
-    {"fecha":"2026-06-14","teamA":"Qatar",           "teamB":"Suiza",            "golesA":1,"golesB":1},
-    {"fecha":"2026-06-14","teamA":"Brasil",          "teamB":"Marruecos",        "golesA":1,"golesB":1},
-    {"fecha":"2026-06-14","teamA":"Escocia",         "teamB":"Haití",            "golesA":1,"golesB":0},
-    {"fecha":"2026-06-15","teamA":"Estados Unidos",  "teamB":"Paraguay",         "golesA":4,"golesB":1},
-    {"fecha":"2026-06-15","teamA":"Australia",       "teamB":"Turquía",          "golesA":2,"golesB":0},
-    {"fecha":"2026-06-15","teamA":"Países Bajos",    "teamB":"Japón",            "golesA":2,"golesB":2},
-    {"fecha":"2026-06-16","teamA":"Irán",            "teamB":"Nueva Zelanda",    "golesA":2,"golesB":2},
-    {"fecha":"2026-06-16","teamA":"Uruguay",         "teamB":"Arabia Saudita",   "golesA":1,"golesB":1},
-    {"fecha":"2026-06-17","teamA":"Francia",         "teamB":"Senegal",          "golesA":3,"golesB":1},
-    {"fecha":"2026-06-17","teamA":"Noruega",         "teamB":"Irak",             "golesA":4,"golesB":1},
-    {"fecha":"2026-06-18","teamA":"Argentina",       "teamB":"Argelia",          "golesA":3,"golesB":0},
-    {"fecha":"2026-06-18","teamA":"Austria",         "teamB":"Jordania",         "golesA":3,"golesB":1},
-    {"fecha":"2026-06-18","teamA":"Portugal",        "teamB":"RD Congo",         "golesA":1,"golesB":1}
+    {
+      "date": "2026-06-17",
+      "teamA": "Inglaterra",
+      "teamB": "Croacia",
+      "goalsA": 4,
+      "goalsB": 2,
+      "venue": "Arlington",
+      "bk_probs": [
+        0.68,
+        0.19,
+        0.13
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Ghana",
+      "teamB": "Panamá",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "Toronto",
+      "bk_probs": [
+        0.32,
+        0.29,
+        0.39
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Colombia",
+      "teamB": "Uzbekistán",
+      "goalsA": 2,
+      "goalsB": 1,
+      "venue": "MexicoCity",
+      "bk_probs": [
+        0.72,
+        0.18,
+        0.1
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Argentina",
+      "teamB": "Argelia",
+      "goalsA": 3,
+      "goalsB": 0,
+      "venue": "KansasCity",
+      "bk_probs": [
+        0.82,
+        0.12,
+        0.06
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Austria",
+      "teamB": "Jordania",
+      "goalsA": 3,
+      "goalsB": 1,
+      "venue": "SantaClara",
+      "bk_probs": [
+        0.68,
+        0.2,
+        0.12
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Portugal",
+      "teamB": "RD Congo",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "Houston",
+      "bk_probs": [
+        0.75,
+        0.15,
+        0.1
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "República Checa",
+      "teamB": "Sudáfrica",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "Atlanta",
+      "bk_probs": [
+        0.52,
+        0.26,
+        0.22
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "Suiza",
+      "teamB": "Bosnia y Herz.",
+      "goalsA": 4,
+      "goalsB": 1,
+      "venue": "Inglewood",
+      "bk_probs": [
+        0.65,
+        0.2,
+        0.15
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "Canadá",
+      "teamB": "Qatar",
+      "goalsA": 6,
+      "goalsB": 0,
+      "venue": "Vancouver",
+      "bk_probs": [
+        0.75,
+        0.15,
+        0.1
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-11",
+      "teamA": "México",
+      "teamB": "Sudáfrica",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-12",
+      "teamA": "Corea del Sur",
+      "teamB": "República Checa",
+      "goalsA": 2,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Estados Unidos",
+      "teamB": "Paraguay",
+      "goalsA": 4,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Qatar",
+      "teamB": "Suiza",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Brasil",
+      "teamB": "Marruecos",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Haití",
+      "teamB": "Escocia",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Australia",
+      "teamB": "Turquía",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Alemania",
+      "teamB": "Curazao",
+      "goalsA": 7,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Países Bajos",
+      "teamB": "Japón",
+      "goalsA": 2,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Costa de Marfil",
+      "teamB": "Ecuador",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Suecia",
+      "teamB": "Túnez",
+      "goalsA": 5,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Bélgica",
+      "teamB": "Egipto",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Arabia Saudita",
+      "teamB": "Uruguay",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Irán",
+      "teamB": "Nueva Zelanda",
+      "goalsA": 2,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Francia",
+      "teamB": "Senegal",
+      "goalsA": 3,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Irak",
+      "teamB": "Noruega",
+      "goalsA": 1,
+      "goalsB": 4,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "México",
+      "teamB": "Corea del Sur",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "Estados Unidos",
+      "teamB": "Australia",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "Escocia",
+      "teamB": "Marruecos",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-20",
+      "teamA": "Brasil",
+      "teamB": "Haití",
+      "goalsA": 3,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-20",
+      "teamA": "Turquía",
+      "teamB": "Paraguay",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    }
   ]
 }
