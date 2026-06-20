@@ -10,6 +10,12 @@ lineup_js = json.dumps(lineup_cfg["LINEUP"], ensure_ascii=False)
 formation_js = json.dumps(lineup_cfg["FORMATION_FEATURES"], ensure_ascii=False)
 style_js = json.dumps(lineup_cfg["STYLE_SCORE"], ensure_ascii=False)
 
+try:
+    with open('predicciones_historial.json', encoding='utf-8') as f:
+        historial_raw = f.read()
+except FileNotFoundError:
+    historial_raw = '{"generated":"","accuracy":{"engine_A":{"correct":0,"total":0},"engine_B":{"correct":0,"total":0}},"entries":[]}'
+
 GROUPS = {
     "A":["México","Corea del Sur","Sudáfrica","República Checa"],
     "B":["Canadá","Bosnia y Herz.","Qatar","Suiza"],
@@ -245,6 +251,31 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .flex{{display:flex}} .gap8{{gap:8px}} .items-center{{align-items:center}} .flex-wrap{{flex-wrap:wrap}}
 .text-center{{text-align:center}}
 
+/* ── Historial de Predicciones ── */
+.hist-acc-grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}}
+.hist-acc-box{{border-radius:8px;padding:10px 14px;border:1px solid}}
+.hist-acc-box.eng-a{{background:var(--blue-light);border-color:var(--blue-mid)}}
+.hist-acc-box.eng-b{{background:var(--yellow-light);border-color:var(--yellow-mid)}}
+.hist-acc-label{{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}}
+.hist-acc-label.la{{color:var(--blue)}} .hist-acc-label.lb{{color:var(--yellow)}}
+.hist-acc-num{{font-size:1.6rem;font-weight:900;color:var(--text);line-height:1}}
+.hist-acc-sub{{font-size:.68rem;color:var(--text2);margin-top:2px}}
+.hist-table{{width:100%;border-collapse:collapse;font-size:.75rem}}
+.hist-table th{{padding:6px 8px;text-align:left;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);border-bottom:2px solid var(--border);font-weight:700}}
+.hist-table td{{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:middle}}
+.hist-table tr:last-child td{{border-bottom:none}}
+.hist-table tr:hover td{{background:var(--surface2)}}
+.hist-pred{{display:inline-block;padding:2px 7px;border-radius:5px;font-size:.67rem;font-weight:700;border:1px solid}}
+.hist-pred.victoria_A{{background:var(--green-light);border-color:var(--green-mid);color:var(--green)}}
+.hist-pred.victoria_B{{background:var(--red-light);border-color:var(--red-mid);color:var(--red)}}
+.hist-pred.empate{{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}}
+.hist-real{{font-weight:700;color:var(--text)}}
+.hist-ok{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.75rem;font-weight:800}}
+.hist-ok.yes{{background:var(--green-light);color:var(--green)}} .hist-ok.no{{background:var(--red-light);color:var(--red)}}
+.hist-empty{{text-align:center;padding:24px;color:var(--text3);font-size:.82rem}}
+.hist-score{{font-weight:800;color:var(--text);white-space:nowrap}}
+.hist-date{{color:var(--text3);font-size:.68rem;white-space:nowrap}}
+
 @media(max-width:860px){{
   .engines-row,.tact-row,.groups-grid{{grid-template-columns:1fr}}
   .groups-grid{{grid-template-columns:repeat(2,1fr)}}
@@ -431,6 +462,13 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
   </div>
 </div>
 
+<!-- HISTORIAL DE PREDICCIONES -->
+<div class="card" id="historialCard">
+  <div class="card-title">📅 Historial de Predicciones Diarias</div>
+  <div class="hist-acc-grid" id="histAccGrid"></div>
+  <div id="historialList"></div>
+</div>
+
 </div><!-- /container -->
 
 <script>
@@ -442,6 +480,7 @@ const LINEUP_DEFAULT = {lineup_js};
 const FORMATION_FEATURES = {formation_js};
 const STYLE_SCORE = {style_js};
 const GROUPS = {groups_js};
+const HISTORIAL = {historial_raw};
 
 const FORMATIONS = ["4-3-3","4-4-2","4-2-3-1","3-4-3","3-5-2","5-3-2","4-5-1","5-4-1","4-1-4-1"];
 const STYLES = ["attacking","balanced","defensive","counterattack"];
@@ -500,6 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {{
   renderGroups();
   renderFeatureImportance();
   onTeamChange();
+  renderHistorial();
 }});
 
 // ═══════════════════════════════
@@ -861,6 +901,82 @@ function switchTab(id,el) {{
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   if(el) el.classList.add('active');
   document.getElementById('tab-'+id).classList.add('active');
+}}
+
+// ═══════════════════════════════
+// HISTORIAL
+// ═══════════════════════════════
+function renderHistorial() {{
+  const acc   = HISTORIAL.accuracy || {{}};
+  const eA    = acc.engine_A || {{correct:0,total:0}};
+  const eB    = acc.engine_B || {{correct:0,total:0}};
+  const entries = (HISTORIAL.entries || []).slice().reverse(); // newest first
+
+  // Accuracy boxes
+  const pctA = eA.total ? Math.round(100*eA.correct/eA.total) : 0;
+  const pctB = eB.total ? Math.round(100*eB.correct/eB.total) : 0;
+  document.getElementById('histAccGrid').innerHTML = `
+    <div class="hist-acc-box eng-a">
+      <div class="hist-acc-label la">Engine A · MLP+Atención</div>
+      <div class="hist-acc-num">${{pctA}}%</div>
+      <div class="hist-acc-sub">${{eA.correct}} de ${{eA.total}} correctas</div>
+    </div>
+    <div class="hist-acc-box eng-b">
+      <div class="hist-acc-label lb">Engine B · XGBoost</div>
+      <div class="hist-acc-num">${{pctB}}%</div>
+      <div class="hist-acc-sub">${{eB.correct}} de ${{eB.total}} correctas</div>
+    </div>`;
+
+  if (!entries.length) {{
+    document.getElementById('historialList').innerHTML =
+      `<div class="hist-empty">Sin predicciones registradas todavía.<br>Los resultados aparecerán aquí a medida que se jueguen los partidos.</div>`;
+    return;
+  }}
+
+  const PRED_LABEL = {{victoria_A:'Local',empate:'Empate',victoria_B:'Visitante'}};
+  const rows = entries.map(e => {{
+    const scoreLabel = e.resultado_real
+      ? `${{e.goles_A}}-${{e.goles_B}}`
+      : '—';
+    const realLabel = {{victoria_A:`Victoria ${{e.teamA}}`,empate:'Empate',victoria_B:`Victoria ${{e.teamB}}`}}[e.resultado_real] || '—';
+    const okA = e.acierto_A ? '<span class="hist-ok yes">✓</span>' : '<span class="hist-ok no">✗</span>';
+    const okB = e.acierto_B ? '<span class="hist-ok yes">✓</span>' : '<span class="hist-ok no">✗</span>';
+    const predLabelA = {{victoria_A:`${{e.teamA}}`,empate:'Empate',victoria_B:`${{e.teamB}}`}}[e.engine_A.prediccion] || '—';
+    const predLabelB = {{victoria_A:`${{e.teamA}}`,empate:'Empate',victoria_B:`${{e.teamB}}`}}[e.engine_B.prediccion] || '—';
+    const pctAv = Math.round(e.engine_A.p_victoria*100);
+    const pctBv = Math.round(e.engine_B.p_victoria*100);
+    return `<tr>
+      <td><span class="hist-date">${{e.fecha}}</span></td>
+      <td><strong>${{e.teamA}}</strong> <span class="hist-score">${{scoreLabel}}</span> <strong>${{e.teamB}}</strong></td>
+      <td>
+        <span class="hist-pred ${{e.engine_A.prediccion}}">${{predLabelA}}</span>
+        <span style="font-size:.63rem;color:var(--text3);margin-left:3px">${{pctAv}}%</span>
+      </td>
+      <td>${{okA}}</td>
+      <td>
+        <span class="hist-pred ${{e.engine_B.prediccion}}">${{predLabelB}}</span>
+        <span style="font-size:.63rem;color:var(--text3);margin-left:3px">${{pctBv}}%</span>
+      </td>
+      <td>${{okB}}</td>
+      <td><span class="hist-real">${{realLabel}}</span></td>
+    </tr>`;
+  }}).join('');
+
+  document.getElementById('historialList').innerHTML = `
+    <table class="hist-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Partido</th>
+          <th>Engine A</th>
+          <th>✓</th>
+          <th>Engine B</th>
+          <th>✓</th>
+          <th>Resultado Real</th>
+        </tr>
+      </thead>
+      <tbody>${{rows}}</tbody>
+    </table>`;
 }}
 
 // ═══════════════════════════════

@@ -1,0 +1,52 @@
+name: Daily WC 2026 Update
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 2:00 AM UTC every day
+  workflow_dispatch:        # allow manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install numpy scikit-learn xgboost
+
+      - name: Update prediction history
+        run: python update_daily.py
+
+      - name: Retrain model with latest data
+        run: python train_model_v3.py
+
+      - name: Rebuild index.html
+        run: python build_index.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add wc2026_updates.json \
+                  predicciones_historial.json \
+                  predicciones_v3.json \
+                  predicciones_v3_compact.json \
+                  index.html \
+                  lineup_config.json \
+                  engine_A_v3.pkl \
+                  engine_B_v3.pkl
+          git diff --cached --quiet || git commit -m "chore: daily model update $(date -u +%Y-%m-%d)"
+          git push

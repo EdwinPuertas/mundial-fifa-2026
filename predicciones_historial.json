@@ -1,0 +1,8 @@
+{
+  "generated": "2026-06-20",
+  "accuracy": {
+    "engine_A": {"correct": 0, "total": 0},
+    "engine_B": {"correct": 0, "total": 0}
+  },
+  "entries": []
+}
