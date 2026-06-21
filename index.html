@@ -656,15 +656,15 @@ const FORMATION_FEATURES = {"4-3-3": {"attack": 0.88, "defense": 0.62, "width": 
 const STYLE_SCORE = {"attacking": 1.18, "balanced": 1.0, "defensive": 0.82, "counterattack": 0.92};
 const GROUPS = {"A": ["México", "Corea del Sur", "Sudáfrica", "República Checa"], "B": ["Canadá", "Bosnia y Herz.", "Qatar", "Suiza"], "C": ["Brasil", "Marruecos", "Haití", "Escocia"], "D": ["Estados Unidos", "Australia", "Paraguay", "Turquía"], "E": ["Alemania", "Ecuador", "Costa de Marfil", "Curazao"], "F": ["Países Bajos", "Japón", "Túnez", "Suecia"], "G": ["Bélgica", "Irán", "Egipto", "Nueva Zelanda"], "H": ["España", "Uruguay", "Arabia Saudita", "Cabo Verde"], "I": ["Francia", "Senegal", "Noruega", "Irak"], "J": ["Argentina", "Austria", "Argelia", "Jordania"], "K": ["Portugal", "Colombia", "Uzbekistán", "RD Congo"], "L": ["Inglaterra", "Croacia", "Panamá", "Ghana"]};
 const HISTORIAL = {
-  "generated": "2026-06-20",
+  "generated": "2026-06-21",
   "accuracy": {
     "engine_A": {
-      "correct": 29,
-      "total": 51
+      "correct": 31,
+      "total": 54
     },
     "engine_B": {
-      "correct": 27,
-      "total": 51
+      "correct": 29,
+      "total": 54
     }
   },
   "entries": [
@@ -1789,11 +1789,77 @@ const HISTORIAL = {
       "goles_B": 1,
       "acierto_A": true,
       "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-20",
+      "teamA": "Alemania",
+      "teamB": "Costa de Marfil",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9985,
+        "p_empate": 0.0014,
+        "p_derrota": 0.0001
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-21",
+      "teamA": "Ecuador",
+      "teamB": "Curazao",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9976,
+        "p_empate": 0.0003,
+        "p_derrota": 0.002
+      },
+      "resultado_real": "empate",
+      "goles_A": 0,
+      "goles_B": 0,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-21",
+      "teamA": "Túnez",
+      "teamB": "Japón",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0001,
+        "p_empate": 0.001,
+        "p_derrota": 0.9989
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0003,
+        "p_empate": 0.0118,
+        "p_derrota": 0.9879
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 4,
+      "acierto_A": true,
+      "acierto_B": true
     }
   ]
 };
 const FIXTURES = {
-  "updated": "2026-06-20T21:21:37Z",
+  "updated": "2026-06-21T06:49:39Z",
   "schedule": [
     {
       "fecha": "2026-06-11",
@@ -1811,10 +1877,10 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-13",
-      "grupo": "B",
+      "grupo": "D",
       "jornada": 1,
-      "teamA": "Canadá",
-      "teamB": "Bosnia y Herz."
+      "teamA": "Estados Unidos",
+      "teamB": "Paraguay"
     },
     {
       "fecha": "2026-06-13",
@@ -1838,13 +1904,6 @@ const FIXTURES = {
       "teamB": "Escocia"
     },
     {
-      "fecha": "2026-06-13",
-      "grupo": "D",
-      "jornada": 1,
-      "teamA": "Estados Unidos",
-      "teamB": "Paraguay"
-    },
-    {
       "fecha": "2026-06-14",
       "grupo": "D",
       "jornada": 1,
@@ -1860,17 +1919,17 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-14",
-      "grupo": "E",
-      "jornada": 1,
-      "teamA": "Costa de Marfil",
-      "teamB": "Ecuador"
-    },
-    {
-      "fecha": "2026-06-14",
       "grupo": "F",
       "jornada": 1,
       "teamA": "Países Bajos",
       "teamB": "Japón"
+    },
+    {
+      "fecha": "2026-06-14",
+      "grupo": "E",
+      "jornada": 1,
+      "teamA": "Costa de Marfil",
+      "teamB": "Ecuador"
     },
     {
       "fecha": "2026-06-15",
@@ -1887,13 +1946,6 @@ const FIXTURES = {
       "teamB": "Egipto"
     },
     {
-      "fecha": "2026-06-16",
-      "grupo": "G",
-      "jornada": 1,
-      "teamA": "Irán",
-      "teamB": "Nueva Zelanda"
-    },
-    {
       "fecha": "2026-06-15",
       "grupo": "H",
       "jornada": 1,
@@ -1901,11 +1953,11 @@ const FIXTURES = {
       "teamB": "Uruguay"
     },
     {
-      "fecha": "2026-06-15",
-      "grupo": "H",
+      "fecha": "2026-06-16",
+      "grupo": "G",
       "jornada": 1,
-      "teamA": "España",
-      "teamB": "Cabo Verde"
+      "teamA": "Irán",
+      "teamB": "Nueva Zelanda"
     },
     {
       "fecha": "2026-06-16",
@@ -1937,20 +1989,6 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-17",
-      "grupo": "K",
-      "jornada": 1,
-      "teamA": "Portugal",
-      "teamB": "RD Congo"
-    },
-    {
-      "fecha": "2026-06-17",
-      "grupo": "K",
-      "jornada": 1,
-      "teamA": "Colombia",
-      "teamB": "Uzbekistán"
-    },
-    {
-      "fecha": "2026-06-17",
       "grupo": "L",
       "jornada": 1,
       "teamA": "Inglaterra",
@@ -1965,17 +2003,17 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-18",
+      "grupo": "K",
+      "jornada": 1,
+      "teamA": "Uzbekistán",
+      "teamB": "Colombia"
+    },
+    {
+      "fecha": "2026-06-18",
       "grupo": "A",
       "jornada": 2,
       "teamA": "República Checa",
       "teamB": "Sudáfrica"
-    },
-    {
-      "fecha": "2026-06-19",
-      "grupo": "A",
-      "jornada": 2,
-      "teamA": "México",
-      "teamB": "Corea del Sur"
     },
     {
       "fecha": "2026-06-18",
@@ -1985,11 +2023,18 @@ const FIXTURES = {
       "teamB": "Qatar"
     },
     {
-      "fecha": "2026-06-18",
-      "grupo": "B",
+      "fecha": "2026-06-19",
+      "grupo": "A",
       "jornada": 2,
-      "teamA": "Suiza",
-      "teamB": "Bosnia y Herz."
+      "teamA": "México",
+      "teamB": "Corea del Sur"
+    },
+    {
+      "fecha": "2026-06-19",
+      "grupo": "D",
+      "jornada": 2,
+      "teamA": "Estados Unidos",
+      "teamB": "Australia"
     },
     {
       "fecha": "2026-06-19",
@@ -2006,32 +2051,11 @@ const FIXTURES = {
       "teamB": "Haití"
     },
     {
-      "fecha": "2026-06-19",
-      "grupo": "D",
-      "jornada": 2,
-      "teamA": "Estados Unidos",
-      "teamB": "Australia"
-    },
-    {
       "fecha": "2026-06-20",
       "grupo": "D",
       "jornada": 2,
       "teamA": "Turquía",
       "teamB": "Paraguay"
-    },
-    {
-      "fecha": "2026-06-20",
-      "grupo": "E",
-      "jornada": 2,
-      "teamA": "Alemania",
-      "teamB": "Costa de Marfil"
-    },
-    {
-      "fecha": "2026-06-20",
-      "grupo": "E",
-      "jornada": 2,
-      "teamA": "Ecuador",
-      "teamB": "Curazao"
     },
     {
       "fecha": "2026-06-20",
@@ -2042,24 +2066,24 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-20",
+      "grupo": "E",
+      "jornada": 2,
+      "teamA": "Alemania",
+      "teamB": "Costa de Marfil"
+    },
+    {
+      "fecha": "2026-06-21",
+      "grupo": "E",
+      "jornada": 2,
+      "teamA": "Ecuador",
+      "teamB": "Curazao"
+    },
+    {
+      "fecha": "2026-06-21",
       "grupo": "F",
       "jornada": 2,
-      "teamA": "Japón",
-      "teamB": "Túnez"
-    },
-    {
-      "fecha": "2026-06-20",
-      "grupo": "G",
-      "jornada": 2,
-      "teamA": "Bélgica",
-      "teamB": "Irán"
-    },
-    {
-      "fecha": "2026-06-20",
-      "grupo": "G",
-      "jornada": 2,
-      "teamA": "Egipto",
-      "teamB": "Nueva Zelanda"
+      "teamA": "Túnez",
+      "teamB": "Japón"
     },
     {
       "fecha": "2026-06-21",
@@ -2070,146 +2094,125 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-21",
-      "grupo": "H",
+      "grupo": "G",
       "jornada": 2,
-      "teamA": "Uruguay",
-      "teamB": "Cabo Verde"
+      "teamA": "Bélgica",
+      "teamB": "Irán"
     },
     {
-      "fecha": "2026-06-21",
-      "grupo": "I",
+      "fecha": "2026-06-22",
+      "grupo": "G",
       "jornada": 2,
-      "teamA": "Francia",
-      "teamB": "Noruega"
-    },
-    {
-      "fecha": "2026-06-21",
-      "grupo": "I",
-      "jornada": 2,
-      "teamA": "Senegal",
-      "teamB": "Irak"
+      "teamA": "Nueva Zelanda",
+      "teamB": "Egipto"
     },
     {
       "fecha": "2026-06-22",
       "grupo": "J",
       "jornada": 2,
       "teamA": "Argentina",
-      "teamB": "Jordania"
+      "teamB": "Austria"
     },
     {
       "fecha": "2026-06-22",
+      "grupo": "I",
+      "jornada": 2,
+      "teamA": "Francia",
+      "teamB": "Irak"
+    },
+    {
+      "fecha": "2026-06-23",
+      "grupo": "I",
+      "jornada": 2,
+      "teamA": "Noruega",
+      "teamB": "Senegal"
+    },
+    {
+      "fecha": "2026-06-23",
       "grupo": "J",
       "jornada": 2,
-      "teamA": "Austria",
+      "teamA": "Jordania",
       "teamB": "Argelia"
     },
     {
-      "fecha": "2026-06-22",
+      "fecha": "2026-06-23",
       "grupo": "K",
       "jornada": 2,
       "teamA": "Portugal",
       "teamB": "Uzbekistán"
     },
     {
-      "fecha": "2026-06-22",
-      "grupo": "K",
-      "jornada": 2,
-      "teamA": "Colombia",
-      "teamB": "RD Congo"
-    },
-    {
-      "fecha": "2026-06-22",
+      "fecha": "2026-06-23",
       "grupo": "L",
       "jornada": 2,
       "teamA": "Inglaterra",
       "teamB": "Ghana"
     },
     {
-      "fecha": "2026-06-22",
+      "fecha": "2026-06-23",
       "grupo": "L",
       "jornada": 2,
-      "teamA": "Croacia",
-      "teamB": "Panamá"
-    },
-    {
-      "fecha": "2026-06-24",
-      "grupo": "A",
-      "jornada": 3,
-      "teamA": "México",
-      "teamB": "República Checa"
-    },
-    {
-      "fecha": "2026-06-24",
-      "grupo": "A",
-      "jornada": 3,
-      "teamA": "Sudáfrica",
-      "teamB": "Corea del Sur"
+      "teamA": "Panamá",
+      "teamB": "Croacia"
     },
     {
       "fecha": "2026-06-24",
       "grupo": "B",
       "jornada": 3,
-      "teamA": "Canadá",
-      "teamB": "Suiza"
+      "teamA": "Suiza",
+      "teamB": "Canadá"
     },
     {
       "fecha": "2026-06-24",
-      "grupo": "B",
-      "jornada": 3,
-      "teamA": "Bosnia y Herz.",
-      "teamB": "Qatar"
-    },
-    {
-      "fecha": "2026-06-25",
-      "grupo": "C",
-      "jornada": 3,
-      "teamA": "Brasil",
-      "teamB": "Escocia"
-    },
-    {
-      "fecha": "2026-06-25",
       "grupo": "C",
       "jornada": 3,
       "teamA": "Marruecos",
       "teamB": "Haití"
     },
     {
-      "fecha": "2026-06-25",
-      "grupo": "D",
+      "fecha": "2026-06-24",
+      "grupo": "C",
       "jornada": 3,
-      "teamA": "Estados Unidos",
-      "teamB": "Turquía"
+      "teamA": "Escocia",
+      "teamB": "Brasil"
     },
     {
       "fecha": "2026-06-25",
-      "grupo": "D",
+      "grupo": "A",
       "jornada": 3,
-      "teamA": "Australia",
-      "teamB": "Paraguay"
+      "teamA": "República Checa",
+      "teamB": "México"
     },
     {
-      "fecha": "2026-06-26",
+      "fecha": "2026-06-25",
+      "grupo": "A",
+      "jornada": 3,
+      "teamA": "Sudáfrica",
+      "teamB": "Corea del Sur"
+    },
+    {
+      "fecha": "2026-06-25",
       "grupo": "E",
       "jornada": 3,
-      "teamA": "Alemania",
-      "teamB": "Ecuador"
+      "teamA": "Ecuador",
+      "teamB": "Alemania"
     },
     {
-      "fecha": "2026-06-26",
+      "fecha": "2026-06-25",
       "grupo": "E",
       "jornada": 3,
-      "teamA": "Costa de Marfil",
-      "teamB": "Curazao"
+      "teamA": "Curazao",
+      "teamB": "Costa de Marfil"
     },
     {
-      "fecha": "2026-06-26",
+      "fecha": "2026-06-25",
       "grupo": "F",
       "jornada": 3,
-      "teamA": "Países Bajos",
-      "teamB": "Túnez"
+      "teamA": "Túnez",
+      "teamB": "Países Bajos"
     },
     {
-      "fecha": "2026-06-26",
+      "fecha": "2026-06-25",
       "grupo": "F",
       "jornada": 3,
       "teamA": "Japón",
@@ -2217,80 +2220,59 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-26",
-      "grupo": "G",
+      "grupo": "D",
       "jornada": 3,
-      "teamA": "Bélgica",
-      "teamB": "Nueva Zelanda"
+      "teamA": "Turquía",
+      "teamB": "Estados Unidos"
     },
     {
       "fecha": "2026-06-26",
-      "grupo": "G",
+      "grupo": "D",
       "jornada": 3,
-      "teamA": "Irán",
-      "teamB": "Egipto"
+      "teamA": "Paraguay",
+      "teamB": "Australia"
     },
     {
       "fecha": "2026-06-26",
-      "grupo": "H",
-      "jornada": 3,
-      "teamA": "España",
-      "teamB": "Uruguay"
-    },
-    {
-      "fecha": "2026-06-26",
-      "grupo": "H",
-      "jornada": 3,
-      "teamA": "Arabia Saudita",
-      "teamB": "Cabo Verde"
-    },
-    {
-      "fecha": "2026-06-27",
       "grupo": "I",
       "jornada": 3,
-      "teamA": "Francia",
+      "teamA": "Noruega",
+      "teamB": "Francia"
+    },
+    {
+      "fecha": "2026-06-26",
+      "grupo": "I",
+      "jornada": 3,
+      "teamA": "Senegal",
       "teamB": "Irak"
     },
     {
       "fecha": "2026-06-27",
-      "grupo": "I",
+      "grupo": "H",
       "jornada": 3,
-      "teamA": "Noruega",
-      "teamB": "Senegal"
+      "teamA": "Uruguay",
+      "teamB": "España"
     },
     {
       "fecha": "2026-06-27",
-      "grupo": "J",
+      "grupo": "G",
       "jornada": 3,
-      "teamA": "Argentina",
-      "teamB": "Austria"
+      "teamA": "Nueva Zelanda",
+      "teamB": "Bélgica"
     },
     {
       "fecha": "2026-06-27",
-      "grupo": "J",
+      "grupo": "G",
       "jornada": 3,
-      "teamA": "Argelia",
-      "teamB": "Jordania"
-    },
-    {
-      "fecha": "2026-06-27",
-      "grupo": "K",
-      "jornada": 3,
-      "teamA": "Portugal",
-      "teamB": "Colombia"
-    },
-    {
-      "fecha": "2026-06-27",
-      "grupo": "K",
-      "jornada": 3,
-      "teamA": "Uzbekistán",
-      "teamB": "RD Congo"
+      "teamA": "Egipto",
+      "teamB": "Irán"
     },
     {
       "fecha": "2026-06-27",
       "grupo": "L",
       "jornada": 3,
-      "teamA": "Inglaterra",
-      "teamB": "Panamá"
+      "teamA": "Panamá",
+      "teamB": "Inglaterra"
     },
     {
       "fecha": "2026-06-27",
@@ -2298,6 +2280,27 @@ const FIXTURES = {
       "jornada": 3,
       "teamA": "Croacia",
       "teamB": "Ghana"
+    },
+    {
+      "fecha": "2026-06-27",
+      "grupo": "K",
+      "jornada": 3,
+      "teamA": "Colombia",
+      "teamB": "Portugal"
+    },
+    {
+      "fecha": "2026-06-28",
+      "grupo": "J",
+      "jornada": 3,
+      "teamA": "Jordania",
+      "teamB": "Argentina"
+    },
+    {
+      "fecha": "2026-06-28",
+      "grupo": "J",
+      "jornada": 3,
+      "teamA": "Argelia",
+      "teamB": "Austria"
     }
   ]
 };

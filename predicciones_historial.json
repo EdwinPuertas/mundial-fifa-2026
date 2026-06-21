@@ -1,13 +1,13 @@
 {
-  "generated": "2026-06-20",
+  "generated": "2026-06-21",
   "accuracy": {
     "engine_A": {
-      "correct": 29,
-      "total": 51
+      "correct": 31,
+      "total": 54
     },
     "engine_B": {
-      "correct": 27,
-      "total": 51
+      "correct": 29,
+      "total": 54
     }
   },
   "entries": [
@@ -1130,6 +1130,72 @@
       "resultado_real": "victoria_A",
       "goles_A": 5,
       "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-20",
+      "teamA": "Alemania",
+      "teamB": "Costa de Marfil",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9985,
+        "p_empate": 0.0014,
+        "p_derrota": 0.0001
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true
+    },
+    {
+      "fecha": "2026-06-21",
+      "teamA": "Ecuador",
+      "teamB": "Curazao",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9976,
+        "p_empate": 0.0003,
+        "p_derrota": 0.002
+      },
+      "resultado_real": "empate",
+      "goles_A": 0,
+      "goles_B": 0,
+      "acierto_A": false,
+      "acierto_B": false
+    },
+    {
+      "fecha": "2026-06-21",
+      "teamA": "Túnez",
+      "teamB": "Japón",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0001,
+        "p_empate": 0.001,
+        "p_derrota": 0.9989
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0003,
+        "p_empate": 0.0118,
+        "p_derrota": 0.9879
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 4,
       "acierto_A": true,
       "acierto_B": true
     }
