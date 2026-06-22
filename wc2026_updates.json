@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-21T06:49:39Z",
+  "last_updated": "2026-06-22T07:22:20Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -373,6 +373,36 @@
       "teamB": "Japón",
       "goalsA": 0,
       "goalsB": 4,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-21",
+      "teamA": "España",
+      "teamB": "Arabia Saudita",
+      "goalsA": 4,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-21",
+      "teamA": "Bélgica",
+      "teamB": "Irán",
+      "goalsA": 0,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-22",
+      "teamA": "Nueva Zelanda",
+      "teamB": "Egipto",
+      "goalsA": 1,
+      "goalsB": 3,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"
