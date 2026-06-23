@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-22T07:22:20Z",
+  "last_updated": "2026-06-23T06:05:14Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -403,6 +403,46 @@
       "teamB": "Egipto",
       "goalsA": 1,
       "goalsB": 3,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-22",
+      "teamA": "Argentina",
+      "teamB": "Austria",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-22",
+      "teamA": "Francia",
+      "teamB": "Irak",
+      "goalsA": 3,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-23",
+      "teamA": "Noruega",
+      "teamB": "Senegal",
+      "goalsA": 3,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-23",
+      "teamA": "Jordania",
+      "teamB": "Argelia",
+      "goalsA": 1,
+      "goalsB": 2,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"
