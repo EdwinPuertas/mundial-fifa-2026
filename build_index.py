@@ -22,6 +22,12 @@ try:
 except FileNotFoundError:
     fixtures_raw = '{"schedule":[]}'
 
+try:
+    with open('today.json', encoding='utf-8') as f:
+        today_raw = f.read()
+except FileNotFoundError:
+    today_raw = '{"fecha":"","updated":"","matches":[]}'
+
 GROUPS = {
     "A":["México","Corea del Sur","Sudáfrica","República Checa"],
     "B":["Canadá","Bosnia y Herz.","Qatar","Suiza"],
@@ -327,6 +333,9 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .pron-pred-chip.empate{{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}}
 .pron-played-chip{{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;padding:1px 6px;border-radius:5px;background:var(--green-light);color:var(--green);border:1px solid var(--green-mid);font-weight:700}}
 .pron-goal-pred{{font-size:.72rem;font-weight:800;color:var(--blue);margin-top:2px;letter-spacing:.02em}}
+.pron-live-badge{{font-size:.65rem;font-weight:800;color:#dc2626;letter-spacing:.03em;animation:pulse 1.5s infinite}}
+@keyframes pulse{{0%,100%{{opacity:1}}50%{{opacity:.5}}}}
+.pron-hora{{font-size:.7rem;color:var(--text2);font-weight:600}}
 .pron-goal-footer{{padding:6px 14px 8px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}}
 .pron-lambda-chip{{font-size:.62rem;color:var(--text2);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px}}
 .pron-lambda-sep{{color:var(--text3);font-size:.7rem}}
@@ -617,6 +626,7 @@ const STYLE_SCORE = {style_js};
 const GROUPS = {groups_js};
 const HISTORIAL = {historial_raw};
 const FIXTURES = {fixtures_raw};
+const TODAY_DATA = {today_raw};
 
 // Build fast lookup for played matches
 const HIST_LOOKUP = {{}};
@@ -684,9 +694,11 @@ document.addEventListener('DOMContentLoaded', () => {{
   onTeamChange();
   const today = new Date().toISOString().split('T')[0];
   _pronDate = today;
-  const todayCount = (FIXTURES.schedule||[]).filter(f => f.fecha === today).length;
+  const cnt = (TODAY_DATA.fecha === today && TODAY_DATA.matches)
+    ? TODAY_DATA.matches.length
+    : (FIXTURES.schedule||[]).filter(f => f.fecha === today).length;
   document.getElementById('pdayBannerSub').textContent =
-    todayCount ? `${{todayCount}} partido${{todayCount>1?'s':''}} hoy · ${{today}}` : `Sin partidos hoy · ${{today}}`;
+    cnt ? `${{cnt}} partido${{cnt>1?'s':''}} hoy · ${{today}}` : `Sin partidos hoy · ${{today}}`;
 }});
 
 // ═══════════════════════════════
@@ -1154,85 +1166,99 @@ function renderPronosticosHoy(dateStr) {{
   _pronDate = dateStr;
   document.getElementById('pdayPanelLabel').textContent = dateStr;
 
-  const fixtures = (FIXTURES.schedule||[]).filter(f => f.fecha === dateStr);
-  const el = document.getElementById('pronosticosPanelList');
+  // Use TODAY_DATA for today, FIXTURES for other dates
+  let fixtures;
+  if (dateStr === TODAY_DATA.fecha && TODAY_DATA.matches && TODAY_DATA.matches.length) {{
+    fixtures = TODAY_DATA.matches;
+  }} else {{
+    fixtures = (FIXTURES.schedule||[])
+      .filter(f => f.fecha === dateStr)
+      .map(f => ({{...f, status:'SCHEDULED', goalsA:null, goalsB:null, hora_utc:''}}));
+  }}
 
+  const el = document.getElementById('pronosticosPanelList');
   if (!fixtures.length) {{
     el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:40px;font-size:.85rem">Sin partidos programados para ${{dateStr}}.</div>`;
     return;
   }}
 
-  el.innerHTML = `<div class="pron-grid">${{
-    fixtures.map(f => {{
-      const {{teamA:a,teamB:b,grupo}} = f;
-      const m = getPredsFor(a,b);
-      if (!m) return '';
-      const pA=m.engine_A, pB=m.engine_B;
-      const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
-      const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
-      const he = getHistEntry(a,b);
-      const lA = m.lambda_A ?? 0, lB = m.lambda_B ?? 0;
-      const goalA = discreteGoals(lA), goalB = discreteGoals(lB);
+  el.innerHTML = `<div class="pron-grid">${{fixtures.map(f => {{
+    const {{teamA:a, teamB:b, grupo, jornada, status, goalsA, goalsB, hora_utc}} = f;
+    const m = getPredsFor(a, b);
+    if (!m) return '';
+    const pA=m.engine_A, pB=m.engine_B;
+    const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
+    const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
+    const lA = m.lambda_A ?? 0, lB = m.lambda_B ?? 0;
+    const goalA = discreteGoals(lA), goalB = discreteGoals(lB);
+    const isFinished = status === 'FINISHED';
+    const isLive = status === 'IN_PLAY' || status === 'PAUSED';
+    const he = isFinished ? getHistEntry(a, b) : null;
 
-      const headerCenter = he
-        ? `<div class="pron-score">${{he.gA}}–${{he.gB}}</div>
-           <div class="pron-grupo">Grupo ${{grupo}} · Jugado</div>
-           <div class="pron-goal-pred">Pron. goles: ${{goalA}}–${{goalB}}</div>`
-        : `<div class="pron-vs">VS</div>
-           <div class="pron-grupo">Grupo ${{grupo}}</div>
-           <div class="pron-goal-pred">⚽ ${{goalA}}–${{goalB}}</div>`;
+    // Status badge / center info
+    let centerTop, centerSub;
+    if (isFinished) {{
+      centerTop = `<div class="pron-score">${{goalsA}}–${{goalsB}}</div>`;
+      centerSub = `<div class="pron-grupo">Grupo ${{grupo}} J${{jornada}} · Jugado</div><div class="pron-goal-pred">Pron: ${{goalA}}–${{goalB}}</div>`;
+    }} else if (isLive) {{
+      centerTop = `<div class="pron-score">${{goalsA??0}}–${{goalsB??0}}</div>`;
+      centerSub = `<div class="pron-live-badge">● EN VIVO</div><div class="pron-grupo">Grupo ${{grupo}} J${{jornada}}</div>`;
+    }} else {{
+      const hora = hora_utc ? `<div class="pron-hora">${{hora_utc}} UTC</div>` : '';
+      centerTop = `<div class="pron-vs">VS</div>`;
+      centerSub = `${{hora}}<div class="pron-grupo">Grupo ${{grupo}} J${{jornada}}</div><div class="pron-goal-pred">⚽ ${{goalA}}–${{goalB}}</div>`;
+    }}
 
-      const bodyA = `
-        <div class="pron-eng-block">
-          <div class="pron-eng-title la">Engine A · MLP</div>
-          <div class="pron-pbar">
-            <div class="pron-pb-w" style="width:${{Math.round(pA.p_victoria*100)}}%"></div>
-            <div class="pron-pb-d" style="width:${{Math.round(pA.p_empate*100)}}%"></div>
-            <div class="pron-pb-l" style="width:${{Math.round(pA.p_derrota*100)}}%"></div>
-          </div>
-          <div class="pron-pbar-vals">
-            <span style="color:var(--green)">${{Math.round(pA.p_victoria*100)}}%</span>
-            <span style="color:var(--yellow)">${{Math.round(pA.p_empate*100)}}%</span>
-            <span style="color:var(--red)">${{Math.round(pA.p_derrota*100)}}%</span>
-          </div>
-          <span class="pron-pred-chip ${{predOutA}}">${{predLabel(predOutA,a,b)}}</span>
-          ${{he ? `<span class="hc-ok ${{he.okA?'yes':'no'}}" style="margin-top:3px">${{he.okA?'✓':'✗'}}</span>` : ''}}
-        </div>`;
-      const bodyB = `
-        <div class="pron-eng-block">
-          <div class="pron-eng-title lb">Engine B · XGBoost</div>
-          <div class="pron-pbar">
-            <div class="pron-pb-w" style="width:${{Math.round(pB.p_victoria*100)}}%"></div>
-            <div class="pron-pb-d" style="width:${{Math.round(pB.p_empate*100)}}%"></div>
-            <div class="pron-pb-l" style="width:${{Math.round(pB.p_derrota*100)}}%"></div>
-          </div>
-          <div class="pron-pbar-vals">
-            <span style="color:var(--green)">${{Math.round(pB.p_victoria*100)}}%</span>
-            <span style="color:var(--yellow)">${{Math.round(pB.p_empate*100)}}%</span>
-            <span style="color:var(--red)">${{Math.round(pB.p_derrota*100)}}%</span>
-          </div>
-          <span class="pron-pred-chip ${{predOutB}}">${{predLabel(predOutB,a,b)}}</span>
-          ${{he ? `<span class="hc-ok ${{he.okB?'yes':'no'}}" style="margin-top:3px">${{he.okB?'✓':'✗'}}</span>` : ''}}
-        </div>`;
-
-      const goalFooter = `
-        <div class="pron-goal-footer">
-          <span class="pron-lambda-chip">${{a}}: λ=${{lA.toFixed(2)}} · ${{goalA}} gol${{goalA!==1?'es':''}}</span>
-          <span class="pron-lambda-sep">·</span>
-          <span class="pron-lambda-chip">${{b}}: λ=${{lB.toFixed(2)}} · ${{goalB}} gol${{goalB!==1?'es':''}}</span>
-        </div>`;
-
-      return `<div class="pron-card${{he?' pron-played':''}}" onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()" style="cursor:pointer">
-        <div class="pron-header">
-          <div class="pron-team-a">${{a}}</div>
-          <div class="pron-center">${{headerCenter}}</div>
-          <div class="pron-team-b">${{b}}</div>
+    const bodyA = `
+      <div class="pron-eng-block">
+        <div class="pron-eng-title la">Engine A · MLP</div>
+        <div class="pron-pbar">
+          <div class="pron-pb-w" style="width:${{Math.round(pA.p_victoria*100)}}%"></div>
+          <div class="pron-pb-d" style="width:${{Math.round(pA.p_empate*100)}}%"></div>
+          <div class="pron-pb-l" style="width:${{Math.round(pA.p_derrota*100)}}%"></div>
         </div>
-        <div class="pron-body">${{bodyA}}${{bodyB}}</div>
-        ${{goalFooter}}
+        <div class="pron-pbar-vals">
+          <span style="color:var(--green)">${{Math.round(pA.p_victoria*100)}}%</span>
+          <span style="color:var(--yellow)">${{Math.round(pA.p_empate*100)}}%</span>
+          <span style="color:var(--red)">${{Math.round(pA.p_derrota*100)}}%</span>
+        </div>
+        <span class="pron-pred-chip ${{predOutA}}">${{predLabel(predOutA,a,b)}}</span>
+        ${{he ? `<span class="hc-ok ${{he.okA?'yes':'no'}}" style="margin-top:3px">${{he.okA?'✓':'✗'}}</span>` : ''}}
       </div>`;
-    }}).join('')
-  }}</div>`;
+    const bodyB = `
+      <div class="pron-eng-block">
+        <div class="pron-eng-title lb">Engine B · XGBoost</div>
+        <div class="pron-pbar">
+          <div class="pron-pb-w" style="width:${{Math.round(pB.p_victoria*100)}}%"></div>
+          <div class="pron-pb-d" style="width:${{Math.round(pB.p_empate*100)}}%"></div>
+          <div class="pron-pb-l" style="width:${{Math.round(pB.p_derrota*100)}}%"></div>
+        </div>
+        <div class="pron-pbar-vals">
+          <span style="color:var(--green)">${{Math.round(pB.p_victoria*100)}}%</span>
+          <span style="color:var(--yellow)">${{Math.round(pB.p_empate*100)}}%</span>
+          <span style="color:var(--red)">${{Math.round(pB.p_derrota*100)}}%</span>
+        </div>
+        <span class="pron-pred-chip ${{predOutB}}">${{predLabel(predOutB,a,b)}}</span>
+        ${{he ? `<span class="hc-ok ${{he.okB?'yes':'no'}}" style="margin-top:3px">${{he.okB?'✓':'✗'}}</span>` : ''}}
+      </div>`;
+
+    const goalFooter = !isFinished ? `
+      <div class="pron-goal-footer">
+        <span class="pron-lambda-chip">${{a}}: λ=${{lA.toFixed(2)}} · ${{goalA}} gol${{goalA!==1?'es':''}}</span>
+        <span class="pron-lambda-sep">·</span>
+        <span class="pron-lambda-chip">${{b}}: λ=${{lB.toFixed(2)}} · ${{goalB}} gol${{goalB!==1?'es':''}}</span>
+      </div>` : '';
+
+    return `<div class="pron-card${{isFinished?' pron-played':''}}" onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()" style="cursor:pointer">
+      <div class="pron-header">
+        <div class="pron-team-a">${{a}}</div>
+        <div class="pron-center">${{centerTop}}${{centerSub}}</div>
+        <div class="pron-team-b">${{b}}</div>
+      </div>
+      <div class="pron-body">${{bodyA}}${{bodyB}}</div>
+      ${{goalFooter}}
+    </div>`;
+  }}).join('')}}</div>`;
 }}
 
 function openPronosticos() {{

@@ -273,6 +273,9 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
 .pron-pred-chip.empate{background:var(--yellow-light);border-color:var(--yellow-mid);color:var(--yellow)}
 .pron-played-chip{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;padding:1px 6px;border-radius:5px;background:var(--green-light);color:var(--green);border:1px solid var(--green-mid);font-weight:700}
 .pron-goal-pred{font-size:.72rem;font-weight:800;color:var(--blue);margin-top:2px;letter-spacing:.02em}
+.pron-live-badge{font-size:.65rem;font-weight:800;color:#dc2626;letter-spacing:.03em;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.pron-hora{font-size:.7rem;color:var(--text2);font-weight:600}
 .pron-goal-footer{padding:6px 14px 8px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
 .pron-lambda-chip{font-size:.62rem;color:var(--text2);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px}
 .pron-lambda-sep{color:var(--text3);font-size:.7rem}
@@ -2013,7 +2016,7 @@ const HISTORIAL = {
   ]
 };
 const FIXTURES = {
-  "updated": "2026-06-23T06:05:13Z",
+  "updated": "2026-06-20T21:21:37Z",
   "schedule": [
     {
       "fecha": "2026-06-11",
@@ -2031,10 +2034,10 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-13",
-      "grupo": "D",
+      "grupo": "B",
       "jornada": 1,
-      "teamA": "Estados Unidos",
-      "teamB": "Paraguay"
+      "teamA": "Canadá",
+      "teamB": "Bosnia y Herz."
     },
     {
       "fecha": "2026-06-13",
@@ -2058,6 +2061,13 @@ const FIXTURES = {
       "teamB": "Escocia"
     },
     {
+      "fecha": "2026-06-13",
+      "grupo": "D",
+      "jornada": 1,
+      "teamA": "Estados Unidos",
+      "teamB": "Paraguay"
+    },
+    {
       "fecha": "2026-06-14",
       "grupo": "D",
       "jornada": 1,
@@ -2073,17 +2083,17 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-14",
-      "grupo": "F",
-      "jornada": 1,
-      "teamA": "Países Bajos",
-      "teamB": "Japón"
-    },
-    {
-      "fecha": "2026-06-14",
       "grupo": "E",
       "jornada": 1,
       "teamA": "Costa de Marfil",
       "teamB": "Ecuador"
+    },
+    {
+      "fecha": "2026-06-14",
+      "grupo": "F",
+      "jornada": 1,
+      "teamA": "Países Bajos",
+      "teamB": "Japón"
     },
     {
       "fecha": "2026-06-15",
@@ -2100,6 +2110,13 @@ const FIXTURES = {
       "teamB": "Egipto"
     },
     {
+      "fecha": "2026-06-16",
+      "grupo": "G",
+      "jornada": 1,
+      "teamA": "Irán",
+      "teamB": "Nueva Zelanda"
+    },
+    {
       "fecha": "2026-06-15",
       "grupo": "H",
       "jornada": 1,
@@ -2107,11 +2124,11 @@ const FIXTURES = {
       "teamB": "Uruguay"
     },
     {
-      "fecha": "2026-06-16",
-      "grupo": "G",
+      "fecha": "2026-06-15",
+      "grupo": "H",
       "jornada": 1,
-      "teamA": "Irán",
-      "teamB": "Nueva Zelanda"
+      "teamA": "España",
+      "teamB": "Cabo Verde"
     },
     {
       "fecha": "2026-06-16",
@@ -2143,6 +2160,20 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-17",
+      "grupo": "K",
+      "jornada": 1,
+      "teamA": "Portugal",
+      "teamB": "RD Congo"
+    },
+    {
+      "fecha": "2026-06-17",
+      "grupo": "K",
+      "jornada": 1,
+      "teamA": "Colombia",
+      "teamB": "Uzbekistán"
+    },
+    {
+      "fecha": "2026-06-17",
       "grupo": "L",
       "jornada": 1,
       "teamA": "Inglaterra",
@@ -2157,24 +2188,10 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-18",
-      "grupo": "K",
-      "jornada": 1,
-      "teamA": "Uzbekistán",
-      "teamB": "Colombia"
-    },
-    {
-      "fecha": "2026-06-18",
       "grupo": "A",
       "jornada": 2,
       "teamA": "República Checa",
       "teamB": "Sudáfrica"
-    },
-    {
-      "fecha": "2026-06-18",
-      "grupo": "B",
-      "jornada": 2,
-      "teamA": "Canadá",
-      "teamB": "Qatar"
     },
     {
       "fecha": "2026-06-19",
@@ -2184,11 +2201,18 @@ const FIXTURES = {
       "teamB": "Corea del Sur"
     },
     {
-      "fecha": "2026-06-19",
-      "grupo": "D",
+      "fecha": "2026-06-18",
+      "grupo": "B",
       "jornada": 2,
-      "teamA": "Estados Unidos",
-      "teamB": "Australia"
+      "teamA": "Canadá",
+      "teamB": "Qatar"
+    },
+    {
+      "fecha": "2026-06-18",
+      "grupo": "B",
+      "jornada": 2,
+      "teamA": "Suiza",
+      "teamB": "Bosnia y Herz."
     },
     {
       "fecha": "2026-06-19",
@@ -2205,11 +2229,32 @@ const FIXTURES = {
       "teamB": "Haití"
     },
     {
+      "fecha": "2026-06-19",
+      "grupo": "D",
+      "jornada": 2,
+      "teamA": "Estados Unidos",
+      "teamB": "Australia"
+    },
+    {
       "fecha": "2026-06-20",
       "grupo": "D",
       "jornada": 2,
       "teamA": "Turquía",
       "teamB": "Paraguay"
+    },
+    {
+      "fecha": "2026-06-20",
+      "grupo": "E",
+      "jornada": 2,
+      "teamA": "Alemania",
+      "teamB": "Costa de Marfil"
+    },
+    {
+      "fecha": "2026-06-20",
+      "grupo": "E",
+      "jornada": 2,
+      "teamA": "Ecuador",
+      "teamB": "Curazao"
     },
     {
       "fecha": "2026-06-20",
@@ -2220,72 +2265,65 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-20",
-      "grupo": "E",
-      "jornada": 2,
-      "teamA": "Alemania",
-      "teamB": "Costa de Marfil"
-    },
-    {
-      "fecha": "2026-06-21",
-      "grupo": "E",
-      "jornada": 2,
-      "teamA": "Ecuador",
-      "teamB": "Curazao"
-    },
-    {
-      "fecha": "2026-06-21",
       "grupo": "F",
       "jornada": 2,
-      "teamA": "Túnez",
-      "teamB": "Japón"
+      "teamA": "Japón",
+      "teamB": "Túnez"
     },
     {
-      "fecha": "2026-06-21",
-      "grupo": "H",
-      "jornada": 2,
-      "teamA": "España",
-      "teamB": "Arabia Saudita"
-    },
-    {
-      "fecha": "2026-06-21",
+      "fecha": "2026-06-20",
       "grupo": "G",
       "jornada": 2,
       "teamA": "Bélgica",
       "teamB": "Irán"
     },
     {
-      "fecha": "2026-06-22",
+      "fecha": "2026-06-20",
       "grupo": "G",
       "jornada": 2,
-      "teamA": "Nueva Zelanda",
-      "teamB": "Egipto"
+      "teamA": "Egipto",
+      "teamB": "Nueva Zelanda"
     },
     {
       "fecha": "2026-06-22",
-      "grupo": "J",
+      "grupo": "H",
       "jornada": 2,
-      "teamA": "Argentina",
-      "teamB": "Austria"
+      "teamA": "España",
+      "teamB": "Arabia Saudita"
+    },
+    {
+      "fecha": "2026-06-22",
+      "grupo": "H",
+      "jornada": 2,
+      "teamA": "Uruguay",
+      "teamB": "Cabo Verde"
     },
     {
       "fecha": "2026-06-22",
       "grupo": "I",
       "jornada": 2,
       "teamA": "Francia",
-      "teamB": "Irak"
+      "teamB": "Noruega"
     },
     {
-      "fecha": "2026-06-23",
+      "fecha": "2026-06-22",
       "grupo": "I",
       "jornada": 2,
-      "teamA": "Noruega",
-      "teamB": "Senegal"
+      "teamA": "Senegal",
+      "teamB": "Irak"
     },
     {
       "fecha": "2026-06-23",
       "grupo": "J",
       "jornada": 2,
-      "teamA": "Jordania",
+      "teamA": "Argentina",
+      "teamB": "Jordania"
+    },
+    {
+      "fecha": "2026-06-23",
+      "grupo": "J",
+      "jornada": 2,
+      "teamA": "Austria",
       "teamB": "Argelia"
     },
     {
@@ -2294,6 +2332,13 @@ const FIXTURES = {
       "jornada": 2,
       "teamA": "Portugal",
       "teamB": "Uzbekistán"
+    },
+    {
+      "fecha": "2026-06-23",
+      "grupo": "K",
+      "jornada": 2,
+      "teamA": "Colombia",
+      "teamB": "RD Congo"
     },
     {
       "fecha": "2026-06-23",
@@ -2306,36 +2351,15 @@ const FIXTURES = {
       "fecha": "2026-06-23",
       "grupo": "L",
       "jornada": 2,
-      "teamA": "Panamá",
-      "teamB": "Croacia"
-    },
-    {
-      "fecha": "2026-06-24",
-      "grupo": "B",
-      "jornada": 3,
-      "teamA": "Suiza",
-      "teamB": "Canadá"
-    },
-    {
-      "fecha": "2026-06-24",
-      "grupo": "C",
-      "jornada": 3,
-      "teamA": "Marruecos",
-      "teamB": "Haití"
-    },
-    {
-      "fecha": "2026-06-24",
-      "grupo": "C",
-      "jornada": 3,
-      "teamA": "Escocia",
-      "teamB": "Brasil"
+      "teamA": "Croacia",
+      "teamB": "Panamá"
     },
     {
       "fecha": "2026-06-25",
       "grupo": "A",
       "jornada": 3,
-      "teamA": "República Checa",
-      "teamB": "México"
+      "teamA": "México",
+      "teamB": "República Checa"
     },
     {
       "fecha": "2026-06-25",
@@ -2346,115 +2370,223 @@ const FIXTURES = {
     },
     {
       "fecha": "2026-06-25",
-      "grupo": "E",
+      "grupo": "B",
       "jornada": 3,
-      "teamA": "Ecuador",
-      "teamB": "Alemania"
+      "teamA": "Canadá",
+      "teamB": "Suiza"
     },
     {
       "fecha": "2026-06-25",
-      "grupo": "E",
+      "grupo": "B",
       "jornada": 3,
-      "teamA": "Curazao",
-      "teamB": "Costa de Marfil"
+      "teamA": "Bosnia y Herz.",
+      "teamB": "Qatar"
     },
     {
-      "fecha": "2026-06-25",
+      "fecha": "2026-06-26",
+      "grupo": "C",
+      "jornada": 3,
+      "teamA": "Brasil",
+      "teamB": "Escocia"
+    },
+    {
+      "fecha": "2026-06-26",
+      "grupo": "C",
+      "jornada": 3,
+      "teamA": "Marruecos",
+      "teamB": "Haití"
+    },
+    {
+      "fecha": "2026-06-26",
+      "grupo": "D",
+      "jornada": 3,
+      "teamA": "Estados Unidos",
+      "teamB": "Turquía"
+    },
+    {
+      "fecha": "2026-06-26",
+      "grupo": "D",
+      "jornada": 3,
+      "teamA": "Australia",
+      "teamB": "Paraguay"
+    },
+    {
+      "fecha": "2026-06-27",
+      "grupo": "E",
+      "jornada": 3,
+      "teamA": "Alemania",
+      "teamB": "Ecuador"
+    },
+    {
+      "fecha": "2026-06-27",
+      "grupo": "E",
+      "jornada": 3,
+      "teamA": "Costa de Marfil",
+      "teamB": "Curazao"
+    },
+    {
+      "fecha": "2026-06-27",
       "grupo": "F",
       "jornada": 3,
-      "teamA": "Túnez",
-      "teamB": "Países Bajos"
+      "teamA": "Países Bajos",
+      "teamB": "Túnez"
     },
     {
-      "fecha": "2026-06-25",
+      "fecha": "2026-06-27",
       "grupo": "F",
       "jornada": 3,
       "teamA": "Japón",
       "teamB": "Suecia"
     },
     {
-      "fecha": "2026-06-26",
-      "grupo": "D",
+      "fecha": "2026-06-27",
+      "grupo": "G",
       "jornada": 3,
-      "teamA": "Turquía",
-      "teamB": "Estados Unidos"
+      "teamA": "Bélgica",
+      "teamB": "Nueva Zelanda"
     },
     {
-      "fecha": "2026-06-26",
-      "grupo": "D",
+      "fecha": "2026-06-27",
+      "grupo": "G",
       "jornada": 3,
-      "teamA": "Paraguay",
-      "teamB": "Australia"
-    },
-    {
-      "fecha": "2026-06-26",
-      "grupo": "I",
-      "jornada": 3,
-      "teamA": "Noruega",
-      "teamB": "Francia"
-    },
-    {
-      "fecha": "2026-06-26",
-      "grupo": "I",
-      "jornada": 3,
-      "teamA": "Senegal",
-      "teamB": "Irak"
+      "teamA": "Irán",
+      "teamB": "Egipto"
     },
     {
       "fecha": "2026-06-27",
       "grupo": "H",
       "jornada": 3,
-      "teamA": "Uruguay",
-      "teamB": "España"
+      "teamA": "España",
+      "teamB": "Uruguay"
     },
     {
       "fecha": "2026-06-27",
-      "grupo": "G",
+      "grupo": "H",
       "jornada": 3,
-      "teamA": "Nueva Zelanda",
-      "teamB": "Bélgica"
+      "teamA": "Arabia Saudita",
+      "teamB": "Cabo Verde"
     },
     {
-      "fecha": "2026-06-27",
-      "grupo": "G",
+      "fecha": "2026-06-28",
+      "grupo": "I",
       "jornada": 3,
-      "teamA": "Egipto",
-      "teamB": "Irán"
+      "teamA": "Francia",
+      "teamB": "Irak"
     },
     {
-      "fecha": "2026-06-27",
-      "grupo": "L",
+      "fecha": "2026-06-28",
+      "grupo": "I",
       "jornada": 3,
-      "teamA": "Panamá",
-      "teamB": "Inglaterra"
-    },
-    {
-      "fecha": "2026-06-27",
-      "grupo": "L",
-      "jornada": 3,
-      "teamA": "Croacia",
-      "teamB": "Ghana"
-    },
-    {
-      "fecha": "2026-06-27",
-      "grupo": "K",
-      "jornada": 3,
-      "teamA": "Colombia",
-      "teamB": "Portugal"
+      "teamA": "Noruega",
+      "teamB": "Senegal"
     },
     {
       "fecha": "2026-06-28",
       "grupo": "J",
       "jornada": 3,
-      "teamA": "Jordania",
-      "teamB": "Argentina"
+      "teamA": "Argentina",
+      "teamB": "Austria"
     },
     {
       "fecha": "2026-06-28",
       "grupo": "J",
       "jornada": 3,
       "teamA": "Argelia",
-      "teamB": "Austria"
+      "teamB": "Jordania"
+    },
+    {
+      "fecha": "2026-06-28",
+      "grupo": "K",
+      "jornada": 3,
+      "teamA": "Portugal",
+      "teamB": "Colombia"
+    },
+    {
+      "fecha": "2026-06-28",
+      "grupo": "K",
+      "jornada": 3,
+      "teamA": "Uzbekistán",
+      "teamB": "RD Congo"
+    },
+    {
+      "fecha": "2026-06-28",
+      "grupo": "L",
+      "jornada": 3,
+      "teamA": "Inglaterra",
+      "teamB": "Panamá"
+    },
+    {
+      "fecha": "2026-06-28",
+      "grupo": "L",
+      "jornada": 3,
+      "teamA": "Croacia",
+      "teamB": "Ghana"
+    }
+  ]
+};
+const TODAY_DATA = {
+  "fecha": "2026-06-23",
+  "updated": "2026-06-23T14:04:12Z",
+  "matches": [
+    {
+      "teamA": "Argentina",
+      "teamB": "Jordania",
+      "grupo": "J",
+      "jornada": 2,
+      "hora_utc": "",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Austria",
+      "teamB": "Argelia",
+      "grupo": "J",
+      "jornada": 2,
+      "hora_utc": "",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Portugal",
+      "teamB": "Uzbekistán",
+      "grupo": "K",
+      "jornada": 2,
+      "hora_utc": "",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Colombia",
+      "teamB": "RD Congo",
+      "grupo": "K",
+      "jornada": 2,
+      "hora_utc": "",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Inglaterra",
+      "teamB": "Ghana",
+      "grupo": "L",
+      "jornada": 2,
+      "hora_utc": "",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Croacia",
+      "teamB": "Panamá",
+      "grupo": "L",
+      "jornada": 2,
+      "hora_utc": "",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     }
   ]
 };
@@ -2525,9 +2657,11 @@ document.addEventListener('DOMContentLoaded', () => {
   onTeamChange();
   const today = new Date().toISOString().split('T')[0];
   _pronDate = today;
-  const todayCount = (FIXTURES.schedule||[]).filter(f => f.fecha === today).length;
+  const cnt = (TODAY_DATA.fecha === today && TODAY_DATA.matches)
+    ? TODAY_DATA.matches.length
+    : (FIXTURES.schedule||[]).filter(f => f.fecha === today).length;
   document.getElementById('pdayBannerSub').textContent =
-    todayCount ? `${todayCount} partido${todayCount>1?'s':''} hoy · ${today}` : `Sin partidos hoy · ${today}`;
+    cnt ? `${cnt} partido${cnt>1?'s':''} hoy · ${today}` : `Sin partidos hoy · ${today}`;
 });
 
 // ═══════════════════════════════
@@ -2995,85 +3129,99 @@ function renderPronosticosHoy(dateStr) {
   _pronDate = dateStr;
   document.getElementById('pdayPanelLabel').textContent = dateStr;
 
-  const fixtures = (FIXTURES.schedule||[]).filter(f => f.fecha === dateStr);
-  const el = document.getElementById('pronosticosPanelList');
+  // Use TODAY_DATA for today, FIXTURES for other dates
+  let fixtures;
+  if (dateStr === TODAY_DATA.fecha && TODAY_DATA.matches && TODAY_DATA.matches.length) {
+    fixtures = TODAY_DATA.matches;
+  } else {
+    fixtures = (FIXTURES.schedule||[])
+      .filter(f => f.fecha === dateStr)
+      .map(f => ({...f, status:'SCHEDULED', goalsA:null, goalsB:null, hora_utc:''}));
+  }
 
+  const el = document.getElementById('pronosticosPanelList');
   if (!fixtures.length) {
     el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:40px;font-size:.85rem">Sin partidos programados para ${dateStr}.</div>`;
     return;
   }
 
-  el.innerHTML = `<div class="pron-grid">${
-    fixtures.map(f => {
-      const {teamA:a,teamB:b,grupo} = f;
-      const m = getPredsFor(a,b);
-      if (!m) return '';
-      const pA=m.engine_A, pB=m.engine_B;
-      const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
-      const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
-      const he = getHistEntry(a,b);
-      const lA = m.lambda_A ?? 0, lB = m.lambda_B ?? 0;
-      const goalA = discreteGoals(lA), goalB = discreteGoals(lB);
+  el.innerHTML = `<div class="pron-grid">${fixtures.map(f => {
+    const {teamA:a, teamB:b, grupo, jornada, status, goalsA, goalsB, hora_utc} = f;
+    const m = getPredsFor(a, b);
+    if (!m) return '';
+    const pA=m.engine_A, pB=m.engine_B;
+    const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
+    const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
+    const lA = m.lambda_A ?? 0, lB = m.lambda_B ?? 0;
+    const goalA = discreteGoals(lA), goalB = discreteGoals(lB);
+    const isFinished = status === 'FINISHED';
+    const isLive = status === 'IN_PLAY' || status === 'PAUSED';
+    const he = isFinished ? getHistEntry(a, b) : null;
 
-      const headerCenter = he
-        ? `<div class="pron-score">${he.gA}–${he.gB}</div>
-           <div class="pron-grupo">Grupo ${grupo} · Jugado</div>
-           <div class="pron-goal-pred">Pron. goles: ${goalA}–${goalB}</div>`
-        : `<div class="pron-vs">VS</div>
-           <div class="pron-grupo">Grupo ${grupo}</div>
-           <div class="pron-goal-pred">⚽ ${goalA}–${goalB}</div>`;
+    // Status badge / center info
+    let centerTop, centerSub;
+    if (isFinished) {
+      centerTop = `<div class="pron-score">${goalsA}–${goalsB}</div>`;
+      centerSub = `<div class="pron-grupo">Grupo ${grupo} J${jornada} · Jugado</div><div class="pron-goal-pred">Pron: ${goalA}–${goalB}</div>`;
+    } else if (isLive) {
+      centerTop = `<div class="pron-score">${goalsA??0}–${goalsB??0}</div>`;
+      centerSub = `<div class="pron-live-badge">● EN VIVO</div><div class="pron-grupo">Grupo ${grupo} J${jornada}</div>`;
+    } else {
+      const hora = hora_utc ? `<div class="pron-hora">${hora_utc} UTC</div>` : '';
+      centerTop = `<div class="pron-vs">VS</div>`;
+      centerSub = `${hora}<div class="pron-grupo">Grupo ${grupo} J${jornada}</div><div class="pron-goal-pred">⚽ ${goalA}–${goalB}</div>`;
+    }
 
-      const bodyA = `
-        <div class="pron-eng-block">
-          <div class="pron-eng-title la">Engine A · MLP</div>
-          <div class="pron-pbar">
-            <div class="pron-pb-w" style="width:${Math.round(pA.p_victoria*100)}%"></div>
-            <div class="pron-pb-d" style="width:${Math.round(pA.p_empate*100)}%"></div>
-            <div class="pron-pb-l" style="width:${Math.round(pA.p_derrota*100)}%"></div>
-          </div>
-          <div class="pron-pbar-vals">
-            <span style="color:var(--green)">${Math.round(pA.p_victoria*100)}%</span>
-            <span style="color:var(--yellow)">${Math.round(pA.p_empate*100)}%</span>
-            <span style="color:var(--red)">${Math.round(pA.p_derrota*100)}%</span>
-          </div>
-          <span class="pron-pred-chip ${predOutA}">${predLabel(predOutA,a,b)}</span>
-          ${he ? `<span class="hc-ok ${he.okA?'yes':'no'}" style="margin-top:3px">${he.okA?'✓':'✗'}</span>` : ''}
-        </div>`;
-      const bodyB = `
-        <div class="pron-eng-block">
-          <div class="pron-eng-title lb">Engine B · XGBoost</div>
-          <div class="pron-pbar">
-            <div class="pron-pb-w" style="width:${Math.round(pB.p_victoria*100)}%"></div>
-            <div class="pron-pb-d" style="width:${Math.round(pB.p_empate*100)}%"></div>
-            <div class="pron-pb-l" style="width:${Math.round(pB.p_derrota*100)}%"></div>
-          </div>
-          <div class="pron-pbar-vals">
-            <span style="color:var(--green)">${Math.round(pB.p_victoria*100)}%</span>
-            <span style="color:var(--yellow)">${Math.round(pB.p_empate*100)}%</span>
-            <span style="color:var(--red)">${Math.round(pB.p_derrota*100)}%</span>
-          </div>
-          <span class="pron-pred-chip ${predOutB}">${predLabel(predOutB,a,b)}</span>
-          ${he ? `<span class="hc-ok ${he.okB?'yes':'no'}" style="margin-top:3px">${he.okB?'✓':'✗'}</span>` : ''}
-        </div>`;
-
-      const goalFooter = `
-        <div class="pron-goal-footer">
-          <span class="pron-lambda-chip">${a}: λ=${lA.toFixed(2)} · ${goalA} gol${goalA!==1?'es':''}</span>
-          <span class="pron-lambda-sep">·</span>
-          <span class="pron-lambda-chip">${b}: λ=${lB.toFixed(2)} · ${goalB} gol${goalB!==1?'es':''}</span>
-        </div>`;
-
-      return `<div class="pron-card${he?' pron-played':''}" onclick="document.getElementById('teamA').value='${a}';document.getElementById('teamB').value='${b}';onTeamChange()" style="cursor:pointer">
-        <div class="pron-header">
-          <div class="pron-team-a">${a}</div>
-          <div class="pron-center">${headerCenter}</div>
-          <div class="pron-team-b">${b}</div>
+    const bodyA = `
+      <div class="pron-eng-block">
+        <div class="pron-eng-title la">Engine A · MLP</div>
+        <div class="pron-pbar">
+          <div class="pron-pb-w" style="width:${Math.round(pA.p_victoria*100)}%"></div>
+          <div class="pron-pb-d" style="width:${Math.round(pA.p_empate*100)}%"></div>
+          <div class="pron-pb-l" style="width:${Math.round(pA.p_derrota*100)}%"></div>
         </div>
-        <div class="pron-body">${bodyA}${bodyB}</div>
-        ${goalFooter}
+        <div class="pron-pbar-vals">
+          <span style="color:var(--green)">${Math.round(pA.p_victoria*100)}%</span>
+          <span style="color:var(--yellow)">${Math.round(pA.p_empate*100)}%</span>
+          <span style="color:var(--red)">${Math.round(pA.p_derrota*100)}%</span>
+        </div>
+        <span class="pron-pred-chip ${predOutA}">${predLabel(predOutA,a,b)}</span>
+        ${he ? `<span class="hc-ok ${he.okA?'yes':'no'}" style="margin-top:3px">${he.okA?'✓':'✗'}</span>` : ''}
       </div>`;
-    }).join('')
-  }</div>`;
+    const bodyB = `
+      <div class="pron-eng-block">
+        <div class="pron-eng-title lb">Engine B · XGBoost</div>
+        <div class="pron-pbar">
+          <div class="pron-pb-w" style="width:${Math.round(pB.p_victoria*100)}%"></div>
+          <div class="pron-pb-d" style="width:${Math.round(pB.p_empate*100)}%"></div>
+          <div class="pron-pb-l" style="width:${Math.round(pB.p_derrota*100)}%"></div>
+        </div>
+        <div class="pron-pbar-vals">
+          <span style="color:var(--green)">${Math.round(pB.p_victoria*100)}%</span>
+          <span style="color:var(--yellow)">${Math.round(pB.p_empate*100)}%</span>
+          <span style="color:var(--red)">${Math.round(pB.p_derrota*100)}%</span>
+        </div>
+        <span class="pron-pred-chip ${predOutB}">${predLabel(predOutB,a,b)}</span>
+        ${he ? `<span class="hc-ok ${he.okB?'yes':'no'}" style="margin-top:3px">${he.okB?'✓':'✗'}</span>` : ''}
+      </div>`;
+
+    const goalFooter = !isFinished ? `
+      <div class="pron-goal-footer">
+        <span class="pron-lambda-chip">${a}: λ=${lA.toFixed(2)} · ${goalA} gol${goalA!==1?'es':''}</span>
+        <span class="pron-lambda-sep">·</span>
+        <span class="pron-lambda-chip">${b}: λ=${lB.toFixed(2)} · ${goalB} gol${goalB!==1?'es':''}</span>
+      </div>` : '';
+
+    return `<div class="pron-card${isFinished?' pron-played':''}" onclick="document.getElementById('teamA').value='${a}';document.getElementById('teamB').value='${b}';onTeamChange()" style="cursor:pointer">
+      <div class="pron-header">
+        <div class="pron-team-a">${a}</div>
+        <div class="pron-center">${centerTop}${centerSub}</div>
+        <div class="pron-team-b">${b}</div>
+      </div>
+      <div class="pron-body">${bodyA}${bodyB}</div>
+      ${goalFooter}
+    </div>`;
+  }).join('')}</div>`;
 }
 
 function openPronosticos() {
