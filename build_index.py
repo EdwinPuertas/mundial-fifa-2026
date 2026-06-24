@@ -719,7 +719,8 @@ const TEAM_STATS = {{
 // STATE
 // ═══════════════════════════════
 let userFormA=null, userStyleA=null, userFormB=null, userStyleB=null;
-let _pronDate = new Date().toISOString().split('T')[0];
+// Default to today.json date so panel always shows correct matches regardless of UTC offset
+let _pronDate = TODAY_DATA.fecha || new Date().toISOString().split('T')[0];
 
 // ═══════════════════════════════
 // INIT
@@ -728,10 +729,10 @@ document.addEventListener('DOMContentLoaded', () => {{
   renderGroups();
   renderFeatureImportance();
   onTeamChange();
-  const today = new Date().toISOString().split('T')[0];
+  // Use TODAY_DATA.fecha as "today" (avoids UTC offset issues for Colombian users)
+  const today = TODAY_DATA.fecha || new Date().toISOString().split('T')[0];
   _pronDate = today;
-  const cnt = (TODAY_DATA.fecha === today && TODAY_DATA.matches)
-    ? TODAY_DATA.matches.length
+  const cnt = TODAY_DATA.matches ? TODAY_DATA.matches.length
     : (FIXTURES.schedule||[]).filter(f => f.fecha === today).length;
   document.getElementById('pdayBannerSub').textContent =
     cnt ? `${{cnt}} partido${{cnt>1?'s':''}} hoy · ${{today}}` : `Sin partidos hoy · ${{today}}`;
