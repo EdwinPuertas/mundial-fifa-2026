@@ -26,15 +26,17 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Actualizar partidos del día y resultados
+      - name: Actualizar resultados y calendario
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+        run: |
+          python update_daily.py
+          python update_fixtures.py
+
+      - name: Actualizar partidos del día
         env:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
         run: python update_today.py
-
-      - name: Actualizar calendario de partidos
-        env:
-          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
-        run: python update_fixtures.py
 
       - name: Actualizar historial de predicciones
         run: python update_historial.py

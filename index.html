@@ -300,6 +300,12 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
 .pb-label{font-size:.58rem;color:var(--text3)}
 .eng-goles{background:#f5f3ff;border-color:#c4b5fd}
 .eng-margen{background:#fffbeb;border-color:#fcd34d}
+/* ── Team Form Trend ── */
+.team-form{display:flex;gap:4px;justify-content:center;margin-top:5px}
+.form-entry{display:flex;flex-direction:column;align-items:center;gap:1px}
+.form-dot{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.6rem;font-weight:800;color:#fff}
+.form-w{background:#16a34a}.form-d{background:#ca8a04}.form-l{background:#dc2626}
+.form-score{font-size:.52rem;color:var(--text3);font-weight:700;white-space:nowrap}
 
 /* ── Historial de Predicciones ── */
 .hist-acc-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px}
@@ -3080,6 +3086,457 @@ const TODAY_DATA = {
   ]
 }
 ;
+const UPDATES = {
+  "last_updated": "2026-06-23T06:05:14Z",
+  "matches": [
+    {
+      "date": "2026-06-17",
+      "teamA": "Inglaterra",
+      "teamB": "Croacia",
+      "goalsA": 4,
+      "goalsB": 2,
+      "venue": "Arlington",
+      "bk_probs": [
+        0.68,
+        0.19,
+        0.13
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Ghana",
+      "teamB": "Panamá",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "Toronto",
+      "bk_probs": [
+        0.32,
+        0.29,
+        0.39
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Colombia",
+      "teamB": "Uzbekistán",
+      "goalsA": 2,
+      "goalsB": 1,
+      "venue": "MexicoCity",
+      "bk_probs": [
+        0.72,
+        0.18,
+        0.1
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Argentina",
+      "teamB": "Argelia",
+      "goalsA": 3,
+      "goalsB": 0,
+      "venue": "KansasCity",
+      "bk_probs": [
+        0.82,
+        0.12,
+        0.06
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Austria",
+      "teamB": "Jordania",
+      "goalsA": 3,
+      "goalsB": 1,
+      "venue": "SantaClara",
+      "bk_probs": [
+        0.68,
+        0.2,
+        0.12
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-17",
+      "teamA": "Portugal",
+      "teamB": "RD Congo",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "Houston",
+      "bk_probs": [
+        0.75,
+        0.15,
+        0.1
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "República Checa",
+      "teamB": "Sudáfrica",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "Atlanta",
+      "bk_probs": [
+        0.52,
+        0.26,
+        0.22
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "Suiza",
+      "teamB": "Bosnia y Herz.",
+      "goalsA": 4,
+      "goalsB": 1,
+      "venue": "Inglewood",
+      "bk_probs": [
+        0.65,
+        0.2,
+        0.15
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-18",
+      "teamA": "Canadá",
+      "teamB": "Qatar",
+      "goalsA": 6,
+      "goalsB": 0,
+      "venue": "Vancouver",
+      "bk_probs": [
+        0.75,
+        0.15,
+        0.1
+      ],
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-11",
+      "teamA": "México",
+      "teamB": "Sudáfrica",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-12",
+      "teamA": "Corea del Sur",
+      "teamB": "República Checa",
+      "goalsA": 2,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Estados Unidos",
+      "teamB": "Paraguay",
+      "goalsA": 4,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Qatar",
+      "teamB": "Suiza",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-13",
+      "teamA": "Brasil",
+      "teamB": "Marruecos",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Haití",
+      "teamB": "Escocia",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Australia",
+      "teamB": "Turquía",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Alemania",
+      "teamB": "Curazao",
+      "goalsA": 7,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Países Bajos",
+      "teamB": "Japón",
+      "goalsA": 2,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-14",
+      "teamA": "Costa de Marfil",
+      "teamB": "Ecuador",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Suecia",
+      "teamB": "Túnez",
+      "goalsA": 5,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Bélgica",
+      "teamB": "Egipto",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-15",
+      "teamA": "Arabia Saudita",
+      "teamB": "Uruguay",
+      "goalsA": 1,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Irán",
+      "teamB": "Nueva Zelanda",
+      "goalsA": 2,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Francia",
+      "teamB": "Senegal",
+      "goalsA": 3,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-16",
+      "teamA": "Irak",
+      "teamB": "Noruega",
+      "goalsA": 1,
+      "goalsB": 4,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "México",
+      "teamB": "Corea del Sur",
+      "goalsA": 1,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "Estados Unidos",
+      "teamB": "Australia",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-19",
+      "teamA": "Escocia",
+      "teamB": "Marruecos",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-20",
+      "teamA": "Brasil",
+      "teamB": "Haití",
+      "goalsA": 3,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-20",
+      "teamA": "Turquía",
+      "teamB": "Paraguay",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-20",
+      "teamA": "Países Bajos",
+      "teamB": "Suecia",
+      "goalsA": 5,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "manual"
+    },
+    {
+      "date": "2026-06-20",
+      "teamA": "Alemania",
+      "teamB": "Costa de Marfil",
+      "goalsA": 2,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-21",
+      "teamA": "Ecuador",
+      "teamB": "Curazao",
+      "goalsA": 0,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-21",
+      "teamA": "Túnez",
+      "teamB": "Japón",
+      "goalsA": 0,
+      "goalsB": 4,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-21",
+      "teamA": "España",
+      "teamB": "Arabia Saudita",
+      "goalsA": 4,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-21",
+      "teamA": "Bélgica",
+      "teamB": "Irán",
+      "goalsA": 0,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-22",
+      "teamA": "Nueva Zelanda",
+      "teamB": "Egipto",
+      "goalsA": 1,
+      "goalsB": 3,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-22",
+      "teamA": "Argentina",
+      "teamB": "Austria",
+      "goalsA": 2,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-22",
+      "teamA": "Francia",
+      "teamB": "Irak",
+      "goalsA": 3,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-23",
+      "teamA": "Noruega",
+      "teamB": "Senegal",
+      "goalsA": 3,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-23",
+      "teamA": "Jordania",
+      "teamB": "Argelia",
+      "goalsA": 1,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    }
+  ]
+};
 
 // Build fast lookup for played matches
 const HIST_LOOKUP = {};
@@ -3190,6 +3647,29 @@ function runAnalysis() {
 // ═══════════════════════════════
 function discreteGoals(lambda) {
   return Math.min(5, Math.max(0, Math.round(lambda)));
+}
+
+// ═══════════════════════════════
+// TEAM FORM TREND
+// ═══════════════════════════════
+function getTeamForm(teamName) {
+  const all = (UPDATES.matches || []).filter(m => m.teamA === teamName || m.teamB === teamName);
+  return all.slice(-4).reverse();
+}
+
+function renderTeamForm(teamName) {
+  const form = getTeamForm(teamName);
+  if (!form.length) return '';
+  const dots = form.map(m => {
+    const isHome = m.teamA === teamName;
+    const gF = isHome ? m.goalsA : m.goalsB;
+    const gA = isHome ? m.goalsB : m.goalsA;
+    const opp = isHome ? m.teamB : m.teamA;
+    const res = gF > gA ? 'W' : gF < gA ? 'L' : 'D';
+    const cls = res === 'W' ? 'form-w' : res === 'D' ? 'form-d' : 'form-l';
+    return `<div class="form-entry"><span class="form-dot ${cls}" title="${gF}-${gA} vs ${opp}">${res}</span><div class="form-score">${gF}-${gA}</div></div>`;
+  }).join('');
+  return `<div class="team-form">${dots}</div>`;
 }
 
 // ═══════════════════════════════
@@ -3668,23 +4148,23 @@ function renderPronosticosHoy(dateStr) {
     const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
     const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
     const lA = m.lambda_A ?? 0, lB = m.lambda_B ?? 0;
-    const goalA = discreteGoals(lA), goalB = discreteGoals(lB);
     const isFinished = status === 'FINISHED';
     const isLive = status === 'IN_PLAY' || status === 'PAUSED';
     const he = isFinished ? getHistEntry(a, b) : null;
+    const scorePred = predictScore(lA, lB);
 
     // Status badge / center info
     let centerTop, centerSub;
     if (isFinished) {
       centerTop = `<div class="pron-score">${goalsA}–${goalsB}</div>`;
-      centerSub = `<div class="pron-grupo">Grupo ${grupo} J${jornada} · Jugado</div><div class="pron-goal-pred">Pron: ${goalA}–${goalB}</div>`;
+      centerSub = `<div class="pron-grupo">Grupo ${grupo} J${jornada} · Jugado</div><div class="pron-goal-pred">🎯 ${scorePred.a}–${scorePred.b}</div>`;
     } else if (isLive) {
       centerTop = `<div class="pron-score">${goalsA??0}–${goalsB??0}</div>`;
       centerSub = `<div class="pron-live-badge">● EN VIVO</div><div class="pron-grupo">Grupo ${grupo} J${jornada}</div>`;
     } else {
       const hora = hora_utc ? `<div class="pron-hora">${hora_utc} UTC</div>` : '';
       centerTop = `<div class="pron-vs">VS</div>`;
-      centerSub = `${hora}<div class="pron-grupo">Grupo ${grupo} J${jornada}</div><div class="pron-goal-pred">⚽ ${goalA}–${goalB}</div>`;
+      centerSub = `${hora}<div class="pron-grupo">Grupo ${grupo} J${jornada}</div><div class="pron-goal-pred">🎯 ${scorePred.a}–${scorePred.b}</div>`;
     }
 
     const bodyA = `
@@ -3720,7 +4200,6 @@ function renderPronosticosHoy(dateStr) {
         ${he ? `<span class="hc-ok ${he.okB?'yes':'no'}" style="margin-top:3px">${he.okB?'✓':'✗'}</span>` : ''}
       </div>`;
 
-    const scorePred = predictScore(lA, lB);
     const margen = lA - lB;
     const margenStr = margen > 0 ? `+${margen.toFixed(2)}` : margen.toFixed(2);
     const margenLabel = Math.abs(margen) < 0.2 ? 'Empate técnico'
@@ -3745,9 +4224,9 @@ function renderPronosticosHoy(dateStr) {
 
     return `<div class="pron-card${isFinished?' pron-played':''}" onclick="document.getElementById('teamA').value='${a}';document.getElementById('teamB').value='${b}';onTeamChange()" style="cursor:pointer">
       <div class="pron-header">
-        <div class="pron-team-a">${a}</div>
+        <div class="pron-team-a">${a}${renderTeamForm(a)}</div>
         <div class="pron-center">${centerTop}${centerSub}</div>
-        <div class="pron-team-b">${b}</div>
+        <div class="pron-team-b">${b}${renderTeamForm(b)}</div>
       </div>
       <div class="pron-body">${bodyA}${bodyB}</div>
       ${goalFooter}
