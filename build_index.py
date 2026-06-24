@@ -28,6 +28,12 @@ try:
 except FileNotFoundError:
     today_raw = '{"fecha":"","updated":"","matches":[]}'
 
+try:
+    with open('wc2026_updates.json', encoding='utf-8') as f:
+        updates_raw = f.read()
+except FileNotFoundError:
+    updates_raw = '{"last_updated":null,"matches":[]}'
+
 GROUPS = {
     "A":["México","Corea del Sur","Sudáfrica","República Checa"],
     "B":["Canadá","Bosnia y Herz.","Qatar","Suiza"],
@@ -360,6 +366,12 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .pb-label{{font-size:.58rem;color:var(--text3)}}
 .eng-goles{{background:#f5f3ff;border-color:#c4b5fd}}
 .eng-margen{{background:#fffbeb;border-color:#fcd34d}}
+/* ── Team Form Trend ── */
+.team-form{{display:flex;gap:4px;justify-content:center;margin-top:5px}}
+.form-entry{{display:flex;flex-direction:column;align-items:center;gap:1px}}
+.form-dot{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.6rem;font-weight:800;color:#fff}}
+.form-w{{background:#16a34a}}.form-d{{background:#ca8a04}}.form-l{{background:#dc2626}}
+.form-score{{font-size:.52rem;color:var(--text3);font-weight:700;white-space:nowrap}}
 
 /* ── Historial de Predicciones ── */
 .hist-acc-grid{{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px}}
@@ -650,6 +662,7 @@ const GROUPS = {groups_js};
 const HISTORIAL = {historial_raw};
 const FIXTURES = {fixtures_raw};
 const TODAY_DATA = {today_raw};
+const UPDATES = {updates_raw};
 
 // Build fast lookup for played matches
 const HIST_LOOKUP = {{}};
@@ -760,6 +773,29 @@ function runAnalysis() {{
 // ═══════════════════════════════
 function discreteGoals(lambda) {{
   return Math.min(5, Math.max(0, Math.round(lambda)));
+}}
+
+// ═══════════════════════════════
+// TEAM FORM TREND
+// ═══════════════════════════════
+function getTeamForm(teamName) {{
+  const all = (UPDATES.matches || []).filter(m => m.teamA === teamName || m.teamB === teamName);
+  return all.slice(-4).reverse();
+}}
+
+function renderTeamForm(teamName) {{
+  const form = getTeamForm(teamName);
+  if (!form.length) return '';
+  const dots = form.map(m => {{
+    const isHome = m.teamA === teamName;
+    const gF = isHome ? m.goalsA : m.goalsB;
+    const gA = isHome ? m.goalsB : m.goalsA;
+    const opp = isHome ? m.teamB : m.teamA;
+    const res = gF > gA ? 'W' : gF < gA ? 'L' : 'D';
+    const cls = res === 'W' ? 'form-w' : res === 'D' ? 'form-d' : 'form-l';
+    return `<div class="form-entry"><span class="form-dot ${{cls}}" title="${{gF}}-${{gA}} vs ${{opp}}">${{res}}</span><div class="form-score">${{gF}}-${{gA}}</div></div>`;
+  }}).join('');
+  return `<div class="team-form">${{dots}}</div>`;
 }}
 
 // ═══════════════════════════════
@@ -1238,23 +1274,23 @@ function renderPronosticosHoy(dateStr) {{
     const predOutA = outcomeOf(pA.p_victoria,pA.p_empate,pA.p_derrota);
     const predOutB = outcomeOf(pB.p_victoria,pB.p_empate,pB.p_derrota);
     const lA = m.lambda_A ?? 0, lB = m.lambda_B ?? 0;
-    const goalA = discreteGoals(lA), goalB = discreteGoals(lB);
     const isFinished = status === 'FINISHED';
     const isLive = status === 'IN_PLAY' || status === 'PAUSED';
     const he = isFinished ? getHistEntry(a, b) : null;
+    const scorePred = predictScore(lA, lB);
 
     // Status badge / center info
     let centerTop, centerSub;
     if (isFinished) {{
       centerTop = `<div class="pron-score">${{goalsA}}–${{goalsB}}</div>`;
-      centerSub = `<div class="pron-grupo">Grupo ${{grupo}} J${{jornada}} · Jugado</div><div class="pron-goal-pred">Pron: ${{goalA}}–${{goalB}}</div>`;
+      centerSub = `<div class="pron-grupo">Grupo ${{grupo}} J${{jornada}} · Jugado</div><div class="pron-goal-pred">🎯 ${{scorePred.a}}–${{scorePred.b}}</div>`;
     }} else if (isLive) {{
       centerTop = `<div class="pron-score">${{goalsA??0}}–${{goalsB??0}}</div>`;
       centerSub = `<div class="pron-live-badge">● EN VIVO</div><div class="pron-grupo">Grupo ${{grupo}} J${{jornada}}</div>`;
     }} else {{
       const hora = hora_utc ? `<div class="pron-hora">${{hora_utc}} UTC</div>` : '';
       centerTop = `<div class="pron-vs">VS</div>`;
-      centerSub = `${{hora}}<div class="pron-grupo">Grupo ${{grupo}} J${{jornada}}</div><div class="pron-goal-pred">⚽ ${{goalA}}–${{goalB}}</div>`;
+      centerSub = `${{hora}}<div class="pron-grupo">Grupo ${{grupo}} J${{jornada}}</div><div class="pron-goal-pred">🎯 ${{scorePred.a}}–${{scorePred.b}}</div>`;
     }}
 
     const bodyA = `
@@ -1290,7 +1326,6 @@ function renderPronosticosHoy(dateStr) {{
         ${{he ? `<span class="hc-ok ${{he.okB?'yes':'no'}}" style="margin-top:3px">${{he.okB?'✓':'✗'}}</span>` : ''}}
       </div>`;
 
-    const scorePred = predictScore(lA, lB);
     const margen = lA - lB;
     const margenStr = margen > 0 ? `+${{margen.toFixed(2)}}` : margen.toFixed(2);
     const margenLabel = Math.abs(margen) < 0.2 ? 'Empate técnico'
@@ -1315,9 +1350,9 @@ function renderPronosticosHoy(dateStr) {{
 
     return `<div class="pron-card${{isFinished?' pron-played':''}}" onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()" style="cursor:pointer">
       <div class="pron-header">
-        <div class="pron-team-a">${{a}}</div>
+        <div class="pron-team-a">${{a}}${{renderTeamForm(a)}}</div>
         <div class="pron-center">${{centerTop}}${{centerSub}}</div>
-        <div class="pron-team-b">${{b}}</div>
+        <div class="pron-team-b">${{b}}${{renderTeamForm(b)}}</div>
       </div>
       <div class="pron-body">${{bodyA}}${{bodyB}}</div>
       ${{goalFooter}}
