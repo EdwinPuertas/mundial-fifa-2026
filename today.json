@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-24",
-  "updated": "2026-06-24T12:50:07Z",
+  "updated": "2026-06-24T16:00:00Z",
   "matches": [
     {
       "teamA": "Colombia",
@@ -16,7 +16,7 @@
       "teamA": "Argentina",
       "teamB": "Jordania",
       "grupo": "J",
-      "jornada": 2,
+      "jornada": 3,
       "hora_utc": "17:00",
       "status": "SCHEDULED",
       "goalsA": null,
@@ -26,7 +26,7 @@
       "teamA": "Austria",
       "teamB": "Argelia",
       "grupo": "J",
-      "jornada": 2,
+      "jornada": 3,
       "hora_utc": "20:00",
       "status": "SCHEDULED",
       "goalsA": null,
