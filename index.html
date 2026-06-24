@@ -280,8 +280,29 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
 .pron-lambda-chip{font-size:.62rem;color:var(--text2);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px}
 .pron-lambda-sep{color:var(--text3);font-size:.7rem}
 
+/* ── Poisson Distribution ── */
+.pois-section{padding:8px 14px 10px;border-top:1px solid var(--border)}
+.pois-finished{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pois-score-row{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.pois-score-pred{font-size:1.1rem;font-weight:900;color:var(--blue)}
+.pois-score-pred-sm{font-size:.8rem;font-weight:800;color:var(--blue)}
+.pois-margen{font-size:.7rem;color:var(--text2)}
+.pois-margen-sm{font-size:.7rem;color:var(--text3)}
+.pois-ok.yes{font-size:.72rem;font-weight:700;color:var(--green);background:var(--green-light);border:1px solid var(--green-mid);border-radius:4px;padding:1px 6px}
+.pois-ok.no{font-size:.72rem;font-weight:700;color:var(--red);background:var(--red-light);border:1px solid var(--red-mid);border-radius:4px;padding:1px 6px}
+.pois-bars-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pois-team-block{display:flex;flex-direction:column;gap:3px}
+.pois-team-label{font-size:.62rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+.pb-bars{display:flex;gap:3px;align-items:flex-end;height:65px}
+.pb-item{display:flex;flex-direction:column;align-items:center;gap:1px;flex:1}
+.pb-bar{width:100%;background:var(--blue);border-radius:2px 2px 0 0;min-height:2px;transition:height .3s}
+.pb-bar4{background:var(--text3)}
+.pb-label{font-size:.58rem;color:var(--text3)}
+.eng-goles{background:#f5f3ff;border-color:#c4b5fd}
+.eng-margen{background:#fffbeb;border-color:#fcd34d}
+
 /* ── Historial de Predicciones ── */
-.hist-acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.hist-acc-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px}
 .hist-acc-box{border-radius:8px;padding:10px 14px;border:1px solid}
 .hist-acc-box.eng-a{background:var(--blue-light);border-color:var(--blue-mid)}
 .hist-acc-box.eng-b{background:var(--yellow-light);border-color:var(--yellow-mid)}
@@ -328,6 +349,8 @@ select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,
   .stat-grid{grid-template-columns:1fr}
   .topbar{flex-direction:column;align-items:flex-start;gap:8px}
   .topbar h1{font-size:.95rem}
+  .hist-acc-grid{grid-template-columns:1fr 1fr}
+  .pois-bars-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -659,7 +682,7 @@ const FORMATION_FEATURES = {"4-3-3": {"attack": 0.88, "defense": 0.62, "width": 
 const STYLE_SCORE = {"attacking": 1.18, "balanced": 1.0, "defensive": 0.82, "counterattack": 0.92};
 const GROUPS = {"A": ["México", "Corea del Sur", "Sudáfrica", "República Checa"], "B": ["Canadá", "Bosnia y Herz.", "Qatar", "Suiza"], "C": ["Brasil", "Marruecos", "Haití", "Escocia"], "D": ["Estados Unidos", "Australia", "Paraguay", "Turquía"], "E": ["Alemania", "Ecuador", "Costa de Marfil", "Curazao"], "F": ["Países Bajos", "Japón", "Túnez", "Suecia"], "G": ["Bélgica", "Irán", "Egipto", "Nueva Zelanda"], "H": ["España", "Uruguay", "Arabia Saudita", "Cabo Verde"], "I": ["Francia", "Senegal", "Noruega", "Irak"], "J": ["Argentina", "Austria", "Argelia", "Jordania"], "K": ["Portugal", "Colombia", "Uzbekistán", "RD Congo"], "L": ["Inglaterra", "Croacia", "Panamá", "Ghana"]};
 const HISTORIAL = {
-  "generated": "2026-06-23",
+  "generated": "2026-06-24",
   "accuracy": {
     "engine_A": {
       "correct": 35,
@@ -667,6 +690,14 @@ const HISTORIAL = {
     },
     "engine_B": {
       "correct": 34,
+      "total": 61
+    },
+    "goles_exacto": {
+      "correct": 3,
+      "total": 61
+    },
+    "margen": {
+      "correct": 37,
       "total": 61
     }
   },
@@ -691,7 +722,15 @@ const HISTORIAL = {
       "goles_A": 7,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 4.74,
+      "lambda_B": 0.596,
+      "pred_goles_A": 4,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 4.144,
+      "margen_real": 6,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-11",
@@ -713,7 +752,15 @@ const HISTORIAL = {
       "goles_A": 5,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.322,
+      "lambda_B": 0.364,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.958,
+      "margen_real": 4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-12",
@@ -735,7 +782,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.38,
+      "lambda_B": 1.054,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.674,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-12",
@@ -757,7 +812,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.373,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.173,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-12",
@@ -779,7 +842,15 @@ const HISTORIAL = {
       "goles_A": 0,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.283,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.083,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-13",
@@ -801,7 +872,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.561,
+      "lambda_B": 0.828,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.733,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-13",
@@ -823,7 +902,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.219,
+      "lambda_B": 0.938,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.281,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-13",
@@ -845,7 +932,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 2.359,
+      "lambda_B": 0.697,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.662,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -867,7 +962,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.753,
+      "lambda_B": 2.616,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.863,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -889,7 +992,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.056,
+      "lambda_B": 0.227,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.829,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -911,7 +1022,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.722,
+      "lambda_B": 0.232,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.49,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-15",
@@ -933,7 +1052,15 @@ const HISTORIAL = {
       "goles_A": 4,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.372,
+      "lambda_B": 0.534,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.838,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-15",
@@ -955,7 +1082,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.588,
+      "lambda_B": 0.904,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.316,
+      "margen_real": 2,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-15",
@@ -977,7 +1112,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 2,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.377,
+      "lambda_B": 1.553,
+      "pred_goles_A": 1,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.176,
+      "margen_real": 0,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-16",
@@ -999,7 +1142,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 2,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.994,
+      "lambda_B": 1.012,
+      "pred_goles_A": 1,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": 0.982,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-16",
@@ -1021,7 +1172,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.51,
+      "lambda_B": 1.045,
+      "pred_goles_A": 1,
+      "pred_goles_B": 1,
+      "acierto_goles": true,
+      "margen_pred": 0.465,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-17",
@@ -1043,7 +1202,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.204,
+      "lambda_B": 0.892,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.312,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -1065,7 +1232,15 @@ const HISTORIAL = {
       "goles_A": 4,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 3.068,
+      "lambda_B": 0.853,
+      "pred_goles_A": 3,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.215,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-18",
@@ -1087,7 +1262,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.335,
+      "lambda_B": 0.209,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.126,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-18",
@@ -1109,7 +1292,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.493,
+      "lambda_B": 0.913,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.58,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-18",
@@ -1131,7 +1322,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.477,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.277,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-17",
@@ -1153,7 +1352,15 @@ const HISTORIAL = {
       "goles_A": 4,
       "goles_B": 2,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.677,
+      "lambda_B": 0.868,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.809,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -1175,7 +1382,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.876,
+      "lambda_B": 0.971,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.095,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-17",
@@ -1197,7 +1412,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.928,
+      "lambda_B": 0.68,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.248,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -1219,7 +1442,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.335,
+      "lambda_B": 0.209,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.126,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -1241,7 +1472,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.493,
+      "lambda_B": 0.913,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.58,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -1263,7 +1502,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.477,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.277,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-18",
@@ -1285,7 +1532,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.502,
+      "lambda_B": 0.711,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.209,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-18",
@@ -1307,7 +1562,15 @@ const HISTORIAL = {
       "goles_A": 4,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.659,
+      "lambda_B": 0.876,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.783,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-18",
@@ -1329,7 +1592,15 @@ const HISTORIAL = {
       "goles_A": 6,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 3.484,
+      "lambda_B": 0.2,
+      "pred_goles_A": 3,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 3.284,
+      "margen_real": 6,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-11",
@@ -1351,7 +1622,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.561,
+      "lambda_B": 0.828,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.733,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-12",
@@ -1373,7 +1652,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.219,
+      "lambda_B": 0.938,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.281,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-13",
@@ -1395,7 +1682,15 @@ const HISTORIAL = {
       "goles_A": 4,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.372,
+      "lambda_B": 0.534,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.838,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-13",
@@ -1417,7 +1712,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.753,
+      "lambda_B": 2.616,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.863,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-13",
@@ -1439,7 +1742,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.056,
+      "lambda_B": 0.227,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.829,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -1461,7 +1772,15 @@ const HISTORIAL = {
       "goles_A": 0,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.2,
+      "lambda_B": 1.106,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": true,
+      "margen_pred": -0.906,
+      "margen_real": -1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-14",
@@ -1483,7 +1802,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.588,
+      "lambda_B": 0.904,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.316,
+      "margen_real": 2,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -1505,7 +1832,15 @@ const HISTORIAL = {
       "goles_A": 7,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 4.74,
+      "lambda_B": 0.596,
+      "pred_goles_A": 4,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 4.144,
+      "margen_real": 6,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-14",
@@ -1527,7 +1862,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 2,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.377,
+      "lambda_B": 1.553,
+      "pred_goles_A": 1,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.176,
+      "margen_real": 0,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-14",
@@ -1549,7 +1892,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.38,
+      "lambda_B": 1.054,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.674,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-15",
@@ -1571,7 +1922,15 @@ const HISTORIAL = {
       "goles_A": 5,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.322,
+      "lambda_B": 0.364,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.958,
+      "margen_real": 4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-15",
@@ -1593,7 +1952,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.373,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.173,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-15",
@@ -1615,7 +1982,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.678,
+      "lambda_B": 2.453,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.775,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-16",
@@ -1637,7 +2012,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.204,
+      "lambda_B": 0.892,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.312,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-16",
@@ -1659,7 +2042,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 4,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.667,
+      "lambda_B": 2.15,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.483,
+      "margen_real": -3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-19",
@@ -1681,7 +2072,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.656,
+      "lambda_B": 0.726,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.07,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-19",
@@ -1703,7 +2102,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.184,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.984,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-19",
@@ -1725,7 +2132,15 @@ const HISTORIAL = {
       "goles_A": 0,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.709,
+      "lambda_B": 1.616,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": true,
+      "margen_pred": -0.907,
+      "margen_real": -1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-20",
@@ -1747,7 +2162,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.295,
+      "lambda_B": 0.2,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.095,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-20",
@@ -1769,7 +2192,15 @@ const HISTORIAL = {
       "goles_A": 0,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.279,
+      "lambda_B": 0.297,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.982,
+      "margen_real": -1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-20",
@@ -1791,7 +2222,15 @@ const HISTORIAL = {
       "goles_A": 5,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.258,
+      "lambda_B": 1.405,
+      "pred_goles_A": 2,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": 0.853,
+      "margen_real": 4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-20",
@@ -1813,7 +2252,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.932,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.732,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-21",
@@ -1835,7 +2282,15 @@ const HISTORIAL = {
       "goles_A": 0,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 2.15,
+      "lambda_B": 0.739,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.411,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-21",
@@ -1857,7 +2312,15 @@ const HISTORIAL = {
       "goles_A": 0,
       "goles_B": 4,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.2,
+      "lambda_B": 2.808,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -2.608,
+      "margen_real": -4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-21",
@@ -1879,7 +2342,15 @@ const HISTORIAL = {
       "goles_A": 4,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.372,
+      "lambda_B": 0.2,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.172,
+      "margen_real": 4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-21",
@@ -1901,7 +2372,15 @@ const HISTORIAL = {
       "goles_A": 0,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.285,
+      "lambda_B": 0.658,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.627,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-22",
@@ -1923,7 +2402,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 3,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.85,
+      "lambda_B": 1.94,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -1.09,
+      "margen_real": -2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-22",
@@ -1945,7 +2432,15 @@ const HISTORIAL = {
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.678,
+      "lambda_B": 0.447,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.231,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-22",
@@ -1967,7 +2462,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.428,
+      "lambda_B": 0.489,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.939,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-23",
@@ -1989,7 +2492,15 @@ const HISTORIAL = {
       "goles_A": 3,
       "goles_B": 2,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.622,
+      "lambda_B": 1.036,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.414,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-23",
@@ -2011,7 +2522,15 @@ const HISTORIAL = {
       "goles_A": 1,
       "goles_B": 2,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.663,
+      "lambda_B": 1.938,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -1.275,
+      "margen_real": -1,
+      "acierto_margen": true
     }
   ]
 };
@@ -2334,7 +2853,7 @@ const FIXTURES = {
       "teamB": "Uzbekistán"
     },
     {
-      "fecha": "2026-06-23",
+      "fecha": "2026-06-24",
       "grupo": "K",
       "jornada": 2,
       "teamA": "Colombia",
@@ -2525,15 +3044,25 @@ const FIXTURES = {
   ]
 };
 const TODAY_DATA = {
-  "fecha": "2026-06-23",
-  "updated": "2026-06-23T14:05:31Z",
+  "fecha": "2026-06-24",
+  "updated": "2026-06-24T12:50:07Z",
   "matches": [
+    {
+      "teamA": "Colombia",
+      "teamB": "RD Congo",
+      "grupo": "K",
+      "jornada": 2,
+      "hora_utc": "02:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
     {
       "teamA": "Argentina",
       "teamB": "Jordania",
       "grupo": "J",
       "jornada": 2,
-      "hora_utc": "",
+      "hora_utc": "17:00",
       "status": "SCHEDULED",
       "goalsA": null,
       "goalsB": null
@@ -2543,53 +3072,14 @@ const TODAY_DATA = {
       "teamB": "Argelia",
       "grupo": "J",
       "jornada": 2,
-      "hora_utc": "",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Portugal",
-      "teamB": "Uzbekistán",
-      "grupo": "K",
-      "jornada": 2,
-      "hora_utc": "",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Colombia",
-      "teamB": "RD Congo",
-      "grupo": "K",
-      "jornada": 2,
-      "hora_utc": "",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Inglaterra",
-      "teamB": "Ghana",
-      "grupo": "L",
-      "jornada": 2,
-      "hora_utc": "",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Croacia",
-      "teamB": "Panamá",
-      "grupo": "L",
-      "jornada": 2,
-      "hora_utc": "",
+      "hora_utc": "20:00",
       "status": "SCHEDULED",
       "goalsA": null,
       "goalsB": null
     }
   ]
-};
+}
+;
 
 // Build fast lookup for played matches
 const HIST_LOOKUP = {};
@@ -2700,6 +3190,31 @@ function runAnalysis() {
 // ═══════════════════════════════
 function discreteGoals(lambda) {
   return Math.min(5, Math.max(0, Math.round(lambda)));
+}
+
+// ═══════════════════════════════
+// POISSON DISTRIBUTION
+// ═══════════════════════════════
+function poissonProb(lam, k) {
+  if (lam <= 0) return k === 0 ? 1 : 0;
+  let fact = 1;
+  for (let i = 1; i <= k; i++) fact *= i;
+  return Math.exp(-lam) * Math.pow(lam, k) / fact;
+}
+function predictScore(lA, lB) {
+  let best = {p:-1, a:0, b:0};
+  for (let a=0; a<=6; a++) for (let b=0; b<=6; b++) {
+    const p = poissonProb(lA,a)*poissonProb(lB,b);
+    if (p>best.p) best={p,a,b};
+  }
+  return best;
+}
+function poissonBar(lam, label) {
+  const probs = [0,1,2,3,4].map(k => ({k, p:poissonProb(lam,k)}));
+  const p4plus = Math.max(0, 1 - probs.reduce((s,x)=>s+x.p,0));
+  const bars = probs.map(x=>`<div class="pb-item"><div class="pb-bar" style="height:${Math.round(x.p*60)}px" title="${Math.round(x.p*100)}%"></div><div class="pb-label">${x.k}</div></div>`).join('');
+  const bar4 = `<div class="pb-item"><div class="pb-bar pb-bar4" style="height:${Math.round(p4plus*60)}px" title="${Math.round(p4plus*100)}%"></div><div class="pb-label">4+</div></div>`;
+  return `<div class="pois-team-block"><div class="pois-team-label">${label}</div><div class="pb-bars">${bars}${bar4}</div></div>`;
 }
 
 // ═══════════════════════════════
@@ -3205,12 +3720,28 @@ function renderPronosticosHoy(dateStr) {
         ${he ? `<span class="hc-ok ${he.okB?'yes':'no'}" style="margin-top:3px">${he.okB?'✓':'✗'}</span>` : ''}
       </div>`;
 
+    const scorePred = predictScore(lA, lB);
+    const margen = lA - lB;
+    const margenStr = margen > 0 ? `+${margen.toFixed(2)}` : margen.toFixed(2);
+    const margenLabel = Math.abs(margen) < 0.2 ? 'Empate técnico'
+      : margen > 0 ? `Victoria ${a} por ~${Math.round(margen)} gol${Math.round(margen)!==1?'es':''}`
+      : `Victoria ${b} por ~${Math.abs(Math.round(margen))} gol${Math.abs(Math.round(margen))!==1?'es':''}`;
     const goalFooter = !isFinished ? `
-      <div class="pron-goal-footer">
-        <span class="pron-lambda-chip">${a}: λ=${lA.toFixed(2)} · ${goalA} gol${goalA!==1?'es':''}</span>
-        <span class="pron-lambda-sep">·</span>
-        <span class="pron-lambda-chip">${b}: λ=${lB.toFixed(2)} · ${goalB} gol${goalB!==1?'es':''}</span>
-      </div>` : '';
+      <div class="pois-section">
+        <div class="pois-score-row">
+          <span class="pois-score-pred">🎯 ${scorePred.a}–${scorePred.b}</span>
+          <span class="pois-margen">Δ${margenStr} · ${margenLabel}</span>
+        </div>
+        <div class="pois-bars-row">
+          ${poissonBar(lA, a)}
+          ${poissonBar(lB, b)}
+        </div>
+      </div>` : `
+      <div class="pois-section pois-finished">
+        <span class="pois-score-pred-sm">🎯 Pred: ${scorePred.a}–${scorePred.b}</span>
+        <span class="pois-margen-sm">Real: ${goalsA}–${goalsB}</span>
+        ${scorePred.a===goalsA&&scorePred.b===goalsB ? '<span class="pois-ok yes">✓ Marcador exacto</span>' : '<span class="pois-ok no">✗</span>'}
+      </div>`;
 
     return `<div class="pron-card${isFinished?' pron-played':''}" onclick="document.getElementById('teamA').value='${a}';document.getElementById('teamB').value='${b}';onTeamChange()" style="cursor:pointer">
       <div class="pron-header">
@@ -3250,6 +3781,10 @@ function renderHistorial() {
 
   const pctA = eA.total ? Math.round(100*eA.correct/eA.total) : 0;
   const pctB = eB.total ? Math.round(100*eB.correct/eB.total) : 0;
+  const eGoles = acc.goles_exacto || {correct:0,total:0};
+  const eMargen = acc.margen || {correct:0,total:0};
+  const pctGoles = eGoles.total ? Math.round(100*eGoles.correct/eGoles.total) : 0;
+  const pctMargen = eMargen.total ? Math.round(100*eMargen.correct/eMargen.total) : 0;
   document.getElementById('histAccGrid').innerHTML = `
     <div class="hist-acc-box eng-a">
       <div class="hist-acc-label la">Engine A · MLP+Atención</div>
@@ -3260,6 +3795,16 @@ function renderHistorial() {
       <div class="hist-acc-label lb">Engine B · XGBoost</div>
       <div class="hist-acc-num">${pctB}%</div>
       <div class="hist-acc-sub">${eB.correct} de ${eB.total} correctas · ${eB.total} partidos</div>
+    </div>
+    <div class="hist-acc-box eng-goles">
+      <div class="hist-acc-label" style="color:#8b5cf6">Marcador Exacto · Poisson</div>
+      <div class="hist-acc-num">${pctGoles}%</div>
+      <div class="hist-acc-sub">${eGoles.correct} de ${eGoles.total} correctos</div>
+    </div>
+    <div class="hist-acc-box eng-margen">
+      <div class="hist-acc-label" style="color:#f59e0b">Margen Correcto · Poisson</div>
+      <div class="hist-acc-num">${pctMargen}%</div>
+      <div class="hist-acc-sub">${eMargen.correct} de ${eMargen.total} acertados</div>
     </div>`;
 
   if (!entries.length) {
@@ -3283,6 +3828,16 @@ function renderHistorial() {
     const realLabel = {victoria_A:a,empate:'Empate',victoria_B:b}[real];
     const predTextA = {victoria_A:a,empate:'Empate',victoria_B:b}[pA.prediccion];
     const predTextB = {victoria_A:a,empate:'Empate',victoria_B:b}[pB.prediccion];
+
+    const lA_h = e.lambda_A||0, lB_h = e.lambda_B||0;
+    const sp = lA_h||lB_h ? predictScore(lA_h,lB_h) : null;
+    const poissonHist = sp ? `
+      <div class="pois-section pois-finished" style="padding:6px 14px 8px">
+        <span class="pois-score-pred-sm">🎯 ${sp.a}–${sp.b}</span>
+        <span class="pois-margen-sm">Real: ${e.goles_A}–${e.goles_B}</span>
+        ${sp.a===e.goles_A&&sp.b===e.goles_B?'<span class="pois-ok yes">✓ Exacto</span>':'<span class="pois-ok no">✗</span>'}
+        <span class="pois-margen-sm" style="margin-left:8px">Margen pred: ${(lA_h-lB_h).toFixed(2)}</span>
+      </div>` : '';
 
     return `<div class="hc">
       <div class="hc-top">
@@ -3330,6 +3885,7 @@ function renderHistorial() {
           </div>
         </div>
       </div>
+      ${poissonHist}
     </div>`;
   }).join('');
 }

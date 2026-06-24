@@ -1,13 +1,23 @@
 {
-  "fecha": "2026-06-23",
-  "updated": "2026-06-23T14:05:31Z",
+  "fecha": "2026-06-24",
+  "updated": "2026-06-24T12:50:07Z",
   "matches": [
+    {
+      "teamA": "Colombia",
+      "teamB": "RD Congo",
+      "grupo": "K",
+      "jornada": 2,
+      "hora_utc": "02:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
     {
       "teamA": "Argentina",
       "teamB": "Jordania",
       "grupo": "J",
       "jornada": 2,
-      "hora_utc": "",
+      "hora_utc": "17:00",
       "status": "SCHEDULED",
       "goalsA": null,
       "goalsB": null
@@ -17,47 +27,7 @@
       "teamB": "Argelia",
       "grupo": "J",
       "jornada": 2,
-      "hora_utc": "",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Portugal",
-      "teamB": "Uzbekistán",
-      "grupo": "K",
-      "jornada": 2,
-      "hora_utc": "",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Colombia",
-      "teamB": "RD Congo",
-      "grupo": "K",
-      "jornada": 2,
-      "hora_utc": "",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Inglaterra",
-      "teamB": "Ghana",
-      "grupo": "L",
-      "jornada": 2,
-      "hora_utc": "",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Croacia",
-      "teamB": "Panamá",
-      "grupo": "L",
-      "jornada": 2,
-      "hora_utc": "",
+      "hora_utc": "20:00",
       "status": "SCHEDULED",
       "goalsA": null,
       "goalsB": null

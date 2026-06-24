@@ -340,8 +340,29 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .pron-lambda-chip{{font-size:.62rem;color:var(--text2);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px}}
 .pron-lambda-sep{{color:var(--text3);font-size:.7rem}}
 
+/* ── Poisson Distribution ── */
+.pois-section{{padding:8px 14px 10px;border-top:1px solid var(--border)}}
+.pois-finished{{display:flex;align-items:center;gap:10px;flex-wrap:wrap}}
+.pois-score-row{{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}}
+.pois-score-pred{{font-size:1.1rem;font-weight:900;color:var(--blue)}}
+.pois-score-pred-sm{{font-size:.8rem;font-weight:800;color:var(--blue)}}
+.pois-margen{{font-size:.7rem;color:var(--text2)}}
+.pois-margen-sm{{font-size:.7rem;color:var(--text3)}}
+.pois-ok.yes{{font-size:.72rem;font-weight:700;color:var(--green);background:var(--green-light);border:1px solid var(--green-mid);border-radius:4px;padding:1px 6px}}
+.pois-ok.no{{font-size:.72rem;font-weight:700;color:var(--red);background:var(--red-light);border:1px solid var(--red-mid);border-radius:4px;padding:1px 6px}}
+.pois-bars-row{{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
+.pois-team-block{{display:flex;flex-direction:column;gap:3px}}
+.pois-team-label{{font-size:.62rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}}
+.pb-bars{{display:flex;gap:3px;align-items:flex-end;height:65px}}
+.pb-item{{display:flex;flex-direction:column;align-items:center;gap:1px;flex:1}}
+.pb-bar{{width:100%;background:var(--blue);border-radius:2px 2px 0 0;min-height:2px;transition:height .3s}}
+.pb-bar4{{background:var(--text3)}}
+.pb-label{{font-size:.58rem;color:var(--text3)}}
+.eng-goles{{background:#f5f3ff;border-color:#c4b5fd}}
+.eng-margen{{background:#fffbeb;border-color:#fcd34d}}
+
 /* ── Historial de Predicciones ── */
-.hist-acc-grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}}
+.hist-acc-grid{{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px}}
 .hist-acc-box{{border-radius:8px;padding:10px 14px;border:1px solid}}
 .hist-acc-box.eng-a{{background:var(--blue-light);border-color:var(--blue-mid)}}
 .hist-acc-box.eng-b{{background:var(--yellow-light);border-color:var(--yellow-mid)}}
@@ -388,6 +409,8 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
   .stat-grid{{grid-template-columns:1fr}}
   .topbar{{flex-direction:column;align-items:flex-start;gap:8px}}
   .topbar h1{{font-size:.95rem}}
+  .hist-acc-grid{{grid-template-columns:1fr 1fr}}
+  .pois-bars-row{{grid-template-columns:1fr}}
 }}
 </style>
 </head>
@@ -737,6 +760,31 @@ function runAnalysis() {{
 // ═══════════════════════════════
 function discreteGoals(lambda) {{
   return Math.min(5, Math.max(0, Math.round(lambda)));
+}}
+
+// ═══════════════════════════════
+// POISSON DISTRIBUTION
+// ═══════════════════════════════
+function poissonProb(lam, k) {{
+  if (lam <= 0) return k === 0 ? 1 : 0;
+  let fact = 1;
+  for (let i = 1; i <= k; i++) fact *= i;
+  return Math.exp(-lam) * Math.pow(lam, k) / fact;
+}}
+function predictScore(lA, lB) {{
+  let best = {{p:-1, a:0, b:0}};
+  for (let a=0; a<=6; a++) for (let b=0; b<=6; b++) {{
+    const p = poissonProb(lA,a)*poissonProb(lB,b);
+    if (p>best.p) best={{p,a,b}};
+  }}
+  return best;
+}}
+function poissonBar(lam, label) {{
+  const probs = [0,1,2,3,4].map(k => ({{k, p:poissonProb(lam,k)}}));
+  const p4plus = Math.max(0, 1 - probs.reduce((s,x)=>s+x.p,0));
+  const bars = probs.map(x=>`<div class="pb-item"><div class="pb-bar" style="height:${{Math.round(x.p*60)}}px" title="${{Math.round(x.p*100)}}%"></div><div class="pb-label">${{x.k}}</div></div>`).join('');
+  const bar4 = `<div class="pb-item"><div class="pb-bar pb-bar4" style="height:${{Math.round(p4plus*60)}}px" title="${{Math.round(p4plus*100)}}%"></div><div class="pb-label">4+</div></div>`;
+  return `<div class="pois-team-block"><div class="pois-team-label">${{label}}</div><div class="pb-bars">${{bars}}${{bar4}}</div></div>`;
 }}
 
 // ═══════════════════════════════
@@ -1242,12 +1290,28 @@ function renderPronosticosHoy(dateStr) {{
         ${{he ? `<span class="hc-ok ${{he.okB?'yes':'no'}}" style="margin-top:3px">${{he.okB?'✓':'✗'}}</span>` : ''}}
       </div>`;
 
+    const scorePred = predictScore(lA, lB);
+    const margen = lA - lB;
+    const margenStr = margen > 0 ? `+${{margen.toFixed(2)}}` : margen.toFixed(2);
+    const margenLabel = Math.abs(margen) < 0.2 ? 'Empate técnico'
+      : margen > 0 ? `Victoria ${{a}} por ~${{Math.round(margen)}} gol${{Math.round(margen)!==1?'es':''}}`
+      : `Victoria ${{b}} por ~${{Math.abs(Math.round(margen))}} gol${{Math.abs(Math.round(margen))!==1?'es':''}}`;
     const goalFooter = !isFinished ? `
-      <div class="pron-goal-footer">
-        <span class="pron-lambda-chip">${{a}}: λ=${{lA.toFixed(2)}} · ${{goalA}} gol${{goalA!==1?'es':''}}</span>
-        <span class="pron-lambda-sep">·</span>
-        <span class="pron-lambda-chip">${{b}}: λ=${{lB.toFixed(2)}} · ${{goalB}} gol${{goalB!==1?'es':''}}</span>
-      </div>` : '';
+      <div class="pois-section">
+        <div class="pois-score-row">
+          <span class="pois-score-pred">🎯 ${{scorePred.a}}–${{scorePred.b}}</span>
+          <span class="pois-margen">Δ${{margenStr}} · ${{margenLabel}}</span>
+        </div>
+        <div class="pois-bars-row">
+          ${{poissonBar(lA, a)}}
+          ${{poissonBar(lB, b)}}
+        </div>
+      </div>` : `
+      <div class="pois-section pois-finished">
+        <span class="pois-score-pred-sm">🎯 Pred: ${{scorePred.a}}–${{scorePred.b}}</span>
+        <span class="pois-margen-sm">Real: ${{goalsA}}–${{goalsB}}</span>
+        ${{scorePred.a===goalsA&&scorePred.b===goalsB ? '<span class="pois-ok yes">✓ Marcador exacto</span>' : '<span class="pois-ok no">✗</span>'}}
+      </div>`;
 
     return `<div class="pron-card${{isFinished?' pron-played':''}}" onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()" style="cursor:pointer">
       <div class="pron-header">
@@ -1287,6 +1351,10 @@ function renderHistorial() {{
 
   const pctA = eA.total ? Math.round(100*eA.correct/eA.total) : 0;
   const pctB = eB.total ? Math.round(100*eB.correct/eB.total) : 0;
+  const eGoles = acc.goles_exacto || {{correct:0,total:0}};
+  const eMargen = acc.margen || {{correct:0,total:0}};
+  const pctGoles = eGoles.total ? Math.round(100*eGoles.correct/eGoles.total) : 0;
+  const pctMargen = eMargen.total ? Math.round(100*eMargen.correct/eMargen.total) : 0;
   document.getElementById('histAccGrid').innerHTML = `
     <div class="hist-acc-box eng-a">
       <div class="hist-acc-label la">Engine A · MLP+Atención</div>
@@ -1297,6 +1365,16 @@ function renderHistorial() {{
       <div class="hist-acc-label lb">Engine B · XGBoost</div>
       <div class="hist-acc-num">${{pctB}}%</div>
       <div class="hist-acc-sub">${{eB.correct}} de ${{eB.total}} correctas · ${{eB.total}} partidos</div>
+    </div>
+    <div class="hist-acc-box eng-goles">
+      <div class="hist-acc-label" style="color:#8b5cf6">Marcador Exacto · Poisson</div>
+      <div class="hist-acc-num">${{pctGoles}}%</div>
+      <div class="hist-acc-sub">${{eGoles.correct}} de ${{eGoles.total}} correctos</div>
+    </div>
+    <div class="hist-acc-box eng-margen">
+      <div class="hist-acc-label" style="color:#f59e0b">Margen Correcto · Poisson</div>
+      <div class="hist-acc-num">${{pctMargen}}%</div>
+      <div class="hist-acc-sub">${{eMargen.correct}} de ${{eMargen.total}} acertados</div>
     </div>`;
 
   if (!entries.length) {{
@@ -1320,6 +1398,16 @@ function renderHistorial() {{
     const realLabel = {{victoria_A:a,empate:'Empate',victoria_B:b}}[real];
     const predTextA = {{victoria_A:a,empate:'Empate',victoria_B:b}}[pA.prediccion];
     const predTextB = {{victoria_A:a,empate:'Empate',victoria_B:b}}[pB.prediccion];
+
+    const lA_h = e.lambda_A||0, lB_h = e.lambda_B||0;
+    const sp = lA_h||lB_h ? predictScore(lA_h,lB_h) : null;
+    const poissonHist = sp ? `
+      <div class="pois-section pois-finished" style="padding:6px 14px 8px">
+        <span class="pois-score-pred-sm">🎯 ${{sp.a}}–${{sp.b}}</span>
+        <span class="pois-margen-sm">Real: ${{e.goles_A}}–${{e.goles_B}}</span>
+        ${{sp.a===e.goles_A&&sp.b===e.goles_B?'<span class="pois-ok yes">✓ Exacto</span>':'<span class="pois-ok no">✗</span>'}}
+        <span class="pois-margen-sm" style="margin-left:8px">Margen pred: ${{(lA_h-lB_h).toFixed(2)}}</span>
+      </div>` : '';
 
     return `<div class="hc">
       <div class="hc-top">
@@ -1367,6 +1455,7 @@ function renderHistorial() {{
           </div>
         </div>
       </div>
+      ${{poissonHist}}
     </div>`;
   }}).join('');
 }}
