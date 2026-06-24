@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-23",
+  "generated": "2026-06-24",
   "accuracy": {
     "engine_A": {
       "correct": 35,
@@ -7,6 +7,14 @@
     },
     "engine_B": {
       "correct": 34,
+      "total": 61
+    },
+    "goles_exacto": {
+      "correct": 3,
+      "total": 61
+    },
+    "margen": {
+      "correct": 37,
       "total": 61
     }
   },
@@ -31,7 +39,15 @@
       "goles_A": 7,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 4.74,
+      "lambda_B": 0.596,
+      "pred_goles_A": 4,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 4.144,
+      "margen_real": 6,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-11",
@@ -53,7 +69,15 @@
       "goles_A": 5,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.322,
+      "lambda_B": 0.364,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.958,
+      "margen_real": 4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-12",
@@ -75,7 +99,15 @@
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.38,
+      "lambda_B": 1.054,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.674,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-12",
@@ -97,7 +129,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.373,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.173,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-12",
@@ -119,7 +159,15 @@
       "goles_A": 0,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.283,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.083,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-13",
@@ -141,7 +189,15 @@
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.561,
+      "lambda_B": 0.828,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.733,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-13",
@@ -163,7 +219,15 @@
       "goles_A": 2,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.219,
+      "lambda_B": 0.938,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.281,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-13",
@@ -185,7 +249,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 2.359,
+      "lambda_B": 0.697,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.662,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -207,7 +279,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.753,
+      "lambda_B": 2.616,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.863,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -229,7 +309,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.056,
+      "lambda_B": 0.227,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.829,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -251,7 +339,15 @@
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.722,
+      "lambda_B": 0.232,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.49,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-15",
@@ -273,7 +369,15 @@
       "goles_A": 4,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.372,
+      "lambda_B": 0.534,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.838,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-15",
@@ -295,7 +399,15 @@
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.588,
+      "lambda_B": 0.904,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.316,
+      "margen_real": 2,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-15",
@@ -317,7 +429,15 @@
       "goles_A": 2,
       "goles_B": 2,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.377,
+      "lambda_B": 1.553,
+      "pred_goles_A": 1,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.176,
+      "margen_real": 0,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-16",
@@ -339,7 +459,15 @@
       "goles_A": 2,
       "goles_B": 2,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.994,
+      "lambda_B": 1.012,
+      "pred_goles_A": 1,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": 0.982,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-16",
@@ -361,7 +489,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.51,
+      "lambda_B": 1.045,
+      "pred_goles_A": 1,
+      "pred_goles_B": 1,
+      "acierto_goles": true,
+      "margen_pred": 0.465,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-17",
@@ -383,7 +519,15 @@
       "goles_A": 3,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.204,
+      "lambda_B": 0.892,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.312,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -405,7 +549,15 @@
       "goles_A": 4,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 3.068,
+      "lambda_B": 0.853,
+      "pred_goles_A": 3,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.215,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-18",
@@ -427,7 +579,15 @@
       "goles_A": 3,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.335,
+      "lambda_B": 0.209,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.126,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-18",
@@ -449,7 +609,15 @@
       "goles_A": 3,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.493,
+      "lambda_B": 0.913,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.58,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-18",
@@ -471,7 +639,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.477,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.277,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-17",
@@ -493,7 +669,15 @@
       "goles_A": 4,
       "goles_B": 2,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.677,
+      "lambda_B": 0.868,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.809,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -515,7 +699,15 @@
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.876,
+      "lambda_B": 0.971,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.095,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-17",
@@ -537,7 +729,15 @@
       "goles_A": 2,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.928,
+      "lambda_B": 0.68,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.248,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -559,7 +759,15 @@
       "goles_A": 3,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.335,
+      "lambda_B": 0.209,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.126,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -581,7 +789,15 @@
       "goles_A": 3,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.493,
+      "lambda_B": 0.913,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.58,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-17",
@@ -603,7 +819,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.477,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.277,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-18",
@@ -625,7 +849,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.502,
+      "lambda_B": 0.711,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.209,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-18",
@@ -647,7 +879,15 @@
       "goles_A": 4,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.659,
+      "lambda_B": 0.876,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.783,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-18",
@@ -669,7 +909,15 @@
       "goles_A": 6,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 3.484,
+      "lambda_B": 0.2,
+      "pred_goles_A": 3,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 3.284,
+      "margen_real": 6,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-11",
@@ -691,7 +939,15 @@
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.561,
+      "lambda_B": 0.828,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.733,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-12",
@@ -713,7 +969,15 @@
       "goles_A": 2,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.219,
+      "lambda_B": 0.938,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.281,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-13",
@@ -735,7 +999,15 @@
       "goles_A": 4,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.372,
+      "lambda_B": 0.534,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.838,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-13",
@@ -757,7 +1029,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.753,
+      "lambda_B": 2.616,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.863,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-13",
@@ -779,7 +1059,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.056,
+      "lambda_B": 0.227,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.829,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -801,7 +1089,15 @@
       "goles_A": 0,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.2,
+      "lambda_B": 1.106,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": true,
+      "margen_pred": -0.906,
+      "margen_real": -1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-14",
@@ -823,7 +1119,15 @@
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.588,
+      "lambda_B": 0.904,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.316,
+      "margen_real": 2,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-14",
@@ -845,7 +1149,15 @@
       "goles_A": 7,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 4.74,
+      "lambda_B": 0.596,
+      "pred_goles_A": 4,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 4.144,
+      "margen_real": 6,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-14",
@@ -867,7 +1179,15 @@
       "goles_A": 2,
       "goles_B": 2,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.377,
+      "lambda_B": 1.553,
+      "pred_goles_A": 1,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.176,
+      "margen_real": 0,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-14",
@@ -889,7 +1209,15 @@
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.38,
+      "lambda_B": 1.054,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.674,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-15",
@@ -911,7 +1239,15 @@
       "goles_A": 5,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.322,
+      "lambda_B": 0.364,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.958,
+      "margen_real": 4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-15",
@@ -933,7 +1269,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.373,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.173,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-15",
@@ -955,7 +1299,15 @@
       "goles_A": 1,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.678,
+      "lambda_B": 2.453,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.775,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-16",
@@ -977,7 +1329,15 @@
       "goles_A": 3,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.204,
+      "lambda_B": 0.892,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.312,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-16",
@@ -999,7 +1359,15 @@
       "goles_A": 1,
       "goles_B": 4,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.667,
+      "lambda_B": 2.15,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.483,
+      "margen_real": -3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-19",
@@ -1021,7 +1389,15 @@
       "goles_A": 1,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.656,
+      "lambda_B": 0.726,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.07,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-19",
@@ -1043,7 +1419,15 @@
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.184,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.984,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-19",
@@ -1065,7 +1449,15 @@
       "goles_A": 0,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.709,
+      "lambda_B": 1.616,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": true,
+      "margen_pred": -0.907,
+      "margen_real": -1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-20",
@@ -1087,7 +1479,15 @@
       "goles_A": 3,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.295,
+      "lambda_B": 0.2,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.095,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-20",
@@ -1109,7 +1509,15 @@
       "goles_A": 0,
       "goles_B": 1,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.279,
+      "lambda_B": 0.297,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.982,
+      "margen_real": -1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-20",
@@ -1131,7 +1539,15 @@
       "goles_A": 5,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.258,
+      "lambda_B": 1.405,
+      "pred_goles_A": 2,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": 0.853,
+      "margen_real": 4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-20",
@@ -1153,7 +1569,15 @@
       "goles_A": 2,
       "goles_B": 1,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 1.932,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.732,
+      "margen_real": 1,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-21",
@@ -1175,7 +1599,15 @@
       "goles_A": 0,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 2.15,
+      "lambda_B": 0.739,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.411,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-21",
@@ -1197,7 +1629,15 @@
       "goles_A": 0,
       "goles_B": 4,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.2,
+      "lambda_B": 2.808,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -2.608,
+      "margen_real": -4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-21",
@@ -1219,7 +1659,15 @@
       "goles_A": 4,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.372,
+      "lambda_B": 0.2,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.172,
+      "margen_real": 4,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-21",
@@ -1241,7 +1689,15 @@
       "goles_A": 0,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 1.285,
+      "lambda_B": 0.658,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.627,
+      "margen_real": 0,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-22",
@@ -1263,7 +1719,15 @@
       "goles_A": 1,
       "goles_B": 3,
       "acierto_A": false,
-      "acierto_B": false
+      "acierto_B": false,
+      "lambda_A": 0.85,
+      "lambda_B": 1.94,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -1.09,
+      "margen_real": -2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-22",
@@ -1285,7 +1749,15 @@
       "goles_A": 2,
       "goles_B": 0,
       "acierto_A": false,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.678,
+      "lambda_B": 0.447,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.231,
+      "margen_real": 2,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-22",
@@ -1307,7 +1779,15 @@
       "goles_A": 3,
       "goles_B": 0,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 2.428,
+      "lambda_B": 0.489,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.939,
+      "margen_real": 3,
+      "acierto_margen": true
     },
     {
       "fecha": "2026-06-23",
@@ -1329,7 +1809,15 @@
       "goles_A": 3,
       "goles_B": 2,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.622,
+      "lambda_B": 1.036,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.414,
+      "margen_real": 1,
+      "acierto_margen": false
     },
     {
       "fecha": "2026-06-23",
@@ -1351,7 +1839,15 @@
       "goles_A": 1,
       "goles_B": 2,
       "acierto_A": true,
-      "acierto_B": true
+      "acierto_B": true,
+      "lambda_A": 0.663,
+      "lambda_B": 1.938,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -1.275,
+      "margen_real": -1,
+      "acierto_margen": true
     }
   ]
 }
