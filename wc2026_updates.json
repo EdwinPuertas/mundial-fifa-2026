@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-23T06:05:14Z",
+  "last_updated": "2026-06-25T06:04:58Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -443,6 +443,86 @@
       "teamB": "Argelia",
       "goalsA": 1,
       "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-23",
+      "teamA": "Portugal",
+      "teamB": "Uzbekistán",
+      "goalsA": 5,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-23",
+      "teamA": "Inglaterra",
+      "teamB": "Ghana",
+      "goalsA": 0,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-23",
+      "teamA": "Panamá",
+      "teamB": "Croacia",
+      "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-24",
+      "teamA": "Suiza",
+      "teamB": "Canadá",
+      "goalsA": 2,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-24",
+      "teamA": "Marruecos",
+      "teamB": "Haití",
+      "goalsA": 4,
+      "goalsB": 2,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-24",
+      "teamA": "Escocia",
+      "teamB": "Brasil",
+      "goalsA": 0,
+      "goalsB": 3,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-25",
+      "teamA": "República Checa",
+      "teamB": "México",
+      "goalsA": 0,
+      "goalsB": 3,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-25",
+      "teamA": "Sudáfrica",
+      "teamB": "Corea del Sur",
+      "goalsA": 1,
+      "goalsB": 0,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"

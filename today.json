@@ -1,33 +1,63 @@
 {
-  "fecha": "2026-06-24",
-  "updated": "2026-06-24T16:00:00Z",
+  "fecha": "2026-06-25",
+  "updated": "2026-06-25T06:05:00Z",
   "matches": [
     {
-      "teamA": "Colombia",
-      "teamB": "RD Congo",
-      "grupo": "K",
-      "jornada": 2,
-      "hora_utc": "02:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
-    },
-    {
-      "teamA": "Argentina",
-      "teamB": "Jordania",
-      "grupo": "J",
+      "teamA": "República Checa",
+      "teamB": "México",
+      "grupo": "A",
       "jornada": 3,
-      "hora_utc": "17:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
+      "hora_utc": "01:00",
+      "status": "FINISHED",
+      "goalsA": 0,
+      "goalsB": 3
     },
     {
-      "teamA": "Austria",
-      "teamB": "Argelia",
-      "grupo": "J",
+      "teamA": "Sudáfrica",
+      "teamB": "Corea del Sur",
+      "grupo": "A",
+      "jornada": 3,
+      "hora_utc": "01:00",
+      "status": "FINISHED",
+      "goalsA": 1,
+      "goalsB": 0
+    },
+    {
+      "teamA": "Ecuador",
+      "teamB": "Alemania",
+      "grupo": "E",
       "jornada": 3,
       "hora_utc": "20:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Curazao",
+      "teamB": "Costa de Marfil",
+      "grupo": "E",
+      "jornada": 3,
+      "hora_utc": "20:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Túnez",
+      "teamB": "Países Bajos",
+      "grupo": "F",
+      "jornada": 3,
+      "hora_utc": "23:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Japón",
+      "teamB": "Suecia",
+      "grupo": "F",
+      "jornada": 3,
+      "hora_utc": "23:00",
       "status": "SCHEDULED",
       "goalsA": null,
       "goalsB": null
