@@ -212,9 +212,9 @@ def parse_api_today(data, fixtures):
 
 
 def build_fallback_today(fixtures, updates):
-    """Build today's matches from fixtures.json + wc2026_updates.json."""
+    """Build today's matches from fixtures.json + wc2026_updates.json.
+    Preserves hora_utc from existing today.json when fecha matches."""
     today_matches = []
-    updates_lookup = existing_keys(updates.get("matches", []))
 
     # Build a map from match pair → result from updates
     result_map = {}
@@ -228,6 +228,22 @@ def build_fallback_today(fixtures, updates):
             "date": mu.get("date", ""),
         }
 
+    # Load existing today.json to preserve hora_utc values
+    hora_map = {}
+    existing_path = OUT + "today.json"
+    if os.path.exists(existing_path):
+        try:
+            with open(existing_path, encoding="utf-8") as f:
+                existing = json.load(f)
+            if existing.get("fecha") == TODAY:
+                for m in existing.get("matches", []):
+                    h = m.get("hora_utc", "")
+                    if h:
+                        hora_map[match_key(m["teamA"], m["teamB"])] = h
+                        hora_map[match_key(m["teamB"], m["teamA"])] = h
+        except Exception:
+            pass
+
     for f in fixtures.get("schedule", []):
         if f.get("fecha") != TODAY:
             continue
@@ -236,6 +252,7 @@ def build_fallback_today(fixtures, updates):
         team_b = f["teamB"]
         grupo = f.get("grupo", "")
         jornada = f.get("jornada", 0)
+        hora_utc = hora_map.get(match_key(team_a, team_b), "")
 
         key = match_key(team_a, team_b)
         if key in result_map:
@@ -245,7 +262,7 @@ def build_fallback_today(fixtures, updates):
                 "teamB": team_b,
                 "grupo": grupo,
                 "jornada": jornada,
-                "hora_utc": "",
+                "hora_utc": hora_utc,
                 "status": "FINISHED",
                 "goalsA": r["goalsA"],
                 "goalsB": r["goalsB"],
@@ -256,14 +273,14 @@ def build_fallback_today(fixtures, updates):
                 "teamB": team_b,
                 "grupo": grupo,
                 "jornada": jornada,
-                "hora_utc": "",
+                "hora_utc": hora_utc,
                 "status": "SCHEDULED",
                 "goalsA": None,
                 "goalsB": None,
             }
 
         today_matches.append(entry)
-        print(f"  [fallback/{entry['status']}] {team_a} vs {team_b} Grupo {grupo} J{jornada}")
+        print(f"  [fallback/{entry['status']}] {team_a} vs {team_b} Grupo {grupo} J{jornada} {hora_utc}")
 
     return today_matches
 
