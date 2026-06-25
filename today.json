@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-25",
-  "updated": "2026-06-25T20:01:27Z",
+  "updated": "2026-06-25T21:08:49Z",
   "matches": [
     {
       "teamA": "República Checa",
@@ -28,9 +28,9 @@
       "grupo": "E",
       "jornada": 3,
       "hora_utc": "20:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
+      "status": "PAUSED",
+      "goalsA": 1,
+      "goalsB": 1
     },
     {
       "teamA": "Curazao",
@@ -38,9 +38,9 @@
       "grupo": "E",
       "jornada": 3,
       "hora_utc": "20:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
+      "status": "PAUSED",
+      "goalsA": 0,
+      "goalsB": 1
     },
     {
       "teamA": "Túnez",
