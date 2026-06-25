@@ -69,6 +69,9 @@ html = f"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Mundial FIFA 2026 | Dual Engine AI</title>
 <style>
 :root{{
@@ -734,8 +737,13 @@ document.addEventListener('DOMContentLoaded', () => {{
   _pronDate = today;
   const cnt = TODAY_DATA.matches ? TODAY_DATA.matches.length
     : (FIXTURES.schedule||[]).filter(f => f.fecha === today).length;
+  const pendientes = TODAY_DATA.matches ? TODAY_DATA.matches.filter(m => m.status !== 'FINISHED').length : 0;
   document.getElementById('pdayBannerSub').textContent =
     cnt ? `${{cnt}} partido${{cnt>1?'s':''}} hoy · ${{today}}` : `Sin partidos hoy · ${{today}}`;
+  // Auto-refresh cada 10 min si hay partidos pendientes (live o programados)
+  if (pendientes > 0) {{
+    setTimeout(() => location.reload(), 10 * 60 * 1000);
+  }}
 }});
 
 // ═══════════════════════════════
