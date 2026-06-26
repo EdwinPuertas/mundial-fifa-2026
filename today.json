@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-26",
-  "updated": "2026-06-26T01:34:44Z",
+  "updated": "2026-06-26T03:32:35Z",
   "matches": [
     {
       "teamA": "Turquía",
@@ -8,9 +8,9 @@
       "grupo": "D",
       "jornada": 3,
       "hora_utc": "02:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
+      "status": "IN_PLAY",
+      "goalsA": 2,
+      "goalsB": 2
     },
     {
       "teamA": "Paraguay",
@@ -18,9 +18,9 @@
       "grupo": "D",
       "jornada": 3,
       "hora_utc": "02:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
+      "status": "IN_PLAY",
+      "goalsA": 0,
+      "goalsB": 0
     },
     {
       "teamA": "Noruega",
