@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-26",
-  "updated": "2026-06-26T21:02:00Z",
+  "updated": "2026-06-26T22:14:08Z",
   "matches": [
     {
       "teamA": "Turquía",
@@ -28,9 +28,9 @@
       "grupo": "I",
       "jornada": 3,
       "hora_utc": "19:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 1,
-      "goalsB": 3
+      "goalsB": 4
     },
     {
       "teamA": "Senegal",
@@ -38,7 +38,7 @@
       "grupo": "I",
       "jornada": 3,
       "hora_utc": "19:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 5,
       "goalsB": 0
     },

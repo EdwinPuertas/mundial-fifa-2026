@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-26T21:01:59Z",
+  "last_updated": "2026-06-26T22:14:08Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -582,6 +582,26 @@
       "teamA": "Paraguay",
       "teamB": "Australia",
       "goalsA": 0,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-26",
+      "teamA": "Noruega",
+      "teamB": "Francia",
+      "goalsA": 1,
+      "goalsB": 4,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-26",
+      "teamA": "Senegal",
+      "teamB": "Irak",
+      "goalsA": 5,
       "goalsB": 0,
       "venue": "neutral",
       "bk_probs": null,
