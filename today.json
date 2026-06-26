@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-26",
-  "updated": "2026-06-26T20:47:14Z",
+  "updated": "2026-06-26T21:02:00Z",
   "matches": [
     {
       "teamA": "Turquía",
@@ -39,7 +39,7 @@
       "jornada": 3,
       "hora_utc": "19:00",
       "status": "IN_PLAY",
-      "goalsA": 4,
+      "goalsA": 5,
       "goalsB": 0
     },
     {
