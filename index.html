@@ -691,23 +691,23 @@ const FORMATION_FEATURES = {"4-3-3": {"attack": 0.88, "defense": 0.62, "width": 
 const STYLE_SCORE = {"attacking": 1.18, "balanced": 1.0, "defensive": 0.82, "counterattack": 0.92};
 const GROUPS = {"A": ["México", "Corea del Sur", "Sudáfrica", "República Checa"], "B": ["Canadá", "Bosnia y Herz.", "Qatar", "Suiza"], "C": ["Brasil", "Marruecos", "Haití", "Escocia"], "D": ["Estados Unidos", "Australia", "Paraguay", "Turquía"], "E": ["Alemania", "Ecuador", "Costa de Marfil", "Curazao"], "F": ["Países Bajos", "Japón", "Túnez", "Suecia"], "G": ["Bélgica", "Irán", "Egipto", "Nueva Zelanda"], "H": ["España", "Uruguay", "Arabia Saudita", "Cabo Verde"], "I": ["Francia", "Senegal", "Noruega", "Irak"], "J": ["Argentina", "Austria", "Argelia", "Jordania"], "K": ["Portugal", "Colombia", "Uzbekistán", "RD Congo"], "L": ["Inglaterra", "Croacia", "Panamá", "Ghana"]};
 const HISTORIAL = {
-  "generated": "2026-06-25",
+  "generated": "2026-06-26",
   "accuracy": {
     "engine_A": {
-      "correct": 40,
-      "total": 69
+      "correct": 42,
+      "total": 75
     },
     "engine_B": {
-      "correct": 39,
-      "total": 69
+      "correct": 42,
+      "total": 75
     },
     "goles_exacto": {
       "correct": 3,
-      "total": 69
+      "total": 75
     },
     "margen": {
-      "correct": 42,
-      "total": 69
+      "correct": 44,
+      "total": 75
     }
   },
   "entries": [
@@ -2780,11 +2780,191 @@ const HISTORIAL = {
       "margen_pred": -1.544,
       "margen_real": 1,
       "acierto_margen": false
+    },
+    {
+      "fecha": "2026-06-25",
+      "teamA": "Ecuador",
+      "teamB": "Alemania",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0,
+        "p_empate": 0.0,
+        "p_derrota": 1.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0002,
+        "p_empate": 0.0004,
+        "p_derrota": 0.9995
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false,
+      "lambda_A": 0.271,
+      "lambda_B": 1.52,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -1.249,
+      "margen_real": 1,
+      "acierto_margen": false
+    },
+    {
+      "fecha": "2026-06-25",
+      "teamA": "Curazao",
+      "teamB": "Costa de Marfil",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0006,
+        "p_empate": 0.001,
+        "p_derrota": 0.9984
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0158,
+        "p_empate": 0.0039,
+        "p_derrota": 0.9803
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 2,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 0.586,
+      "lambda_B": 1.132,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.546,
+      "margen_real": -2,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-06-25",
+      "teamA": "Túnez",
+      "teamB": "Países Bajos",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0,
+        "p_empate": 0.0,
+        "p_derrota": 1.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.001,
+        "p_empate": 0.0023,
+        "p_derrota": 0.9967
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 1,
+      "goles_B": 3,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 0.2,
+      "lambda_B": 2.625,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -2.425,
+      "margen_real": -2,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-06-25",
+      "teamA": "Japón",
+      "teamB": "Suecia",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.585,
+        "p_empate": 0.2202,
+        "p_derrota": 0.1948
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9619,
+        "p_empate": 0.0231,
+        "p_derrota": 0.015
+      },
+      "resultado_real": "empate",
+      "goles_A": 1,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false,
+      "lambda_A": 1.559,
+      "lambda_B": 0.497,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.062,
+      "margen_real": 0,
+      "acierto_margen": false
+    },
+    {
+      "fecha": "2026-06-26",
+      "teamA": "Turquía",
+      "teamB": "Estados Unidos",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0559,
+        "p_empate": 0.0,
+        "p_derrota": 0.944
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.6224,
+        "p_empate": 0.1955,
+        "p_derrota": 0.182
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 3,
+      "goles_B": 2,
+      "acierto_A": false,
+      "acierto_B": true,
+      "lambda_A": 0.992,
+      "lambda_B": 1.263,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.271,
+      "margen_real": 1,
+      "acierto_margen": false
+    },
+    {
+      "fecha": "2026-06-26",
+      "teamA": "Paraguay",
+      "teamB": "Australia",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.005,
+        "p_empate": 0.0146,
+        "p_derrota": 0.9804
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.1202,
+        "p_empate": 0.0033,
+        "p_derrota": 0.8765
+      },
+      "resultado_real": "empate",
+      "goles_A": 0,
+      "goles_B": 0,
+      "acierto_A": false,
+      "acierto_B": false,
+      "lambda_A": 0.459,
+      "lambda_B": 1.104,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.645,
+      "margen_real": 0,
+      "acierto_margen": false
     }
   ]
 };
 const FIXTURES = {
-  "updated": "2026-06-25T06:04:59Z",
+  "updated": "2026-06-26T06:08:38Z",
   "schedule": [
     {
       "fecha": "2026-06-11",
@@ -3231,7 +3411,7 @@ const FIXTURES = {
 };
 const TODAY_DATA = {
   "fecha": "2026-06-26",
-  "updated": "2026-06-26T04:49:57Z",
+  "updated": "2026-06-26T06:08:39Z",
   "matches": [
     {
       "teamA": "Turquía",
@@ -3286,7 +3466,7 @@ const TODAY_DATA = {
   ]
 };
 const UPDATES = {
-  "last_updated": "2026-06-26T04:49:56Z",
+  "last_updated": "2026-06-26T06:08:38Z",
   "matches": [
     {
       "date": "2026-06-17",
