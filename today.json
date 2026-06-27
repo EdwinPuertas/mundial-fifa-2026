@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-27",
-  "updated": "2026-06-27T17:11:00Z",
+  "updated": "2026-06-27T17:35:34Z",
   "matches": [
     {
       "teamA": "Uruguay",
@@ -30,7 +30,7 @@
       "hora_utc": "03:00",
       "status": "FINISHED",
       "goalsA": 1,
-      "goalsB": 2
+      "goalsB": 1
     },
     {
       "teamA": "Panamá",
