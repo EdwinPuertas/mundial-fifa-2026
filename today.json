@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-27",
-  "updated": "2026-06-27T21:35:13Z",
+  "updated": "2026-06-27T23:03:22Z",
   "matches": [
     {
       "teamA": "Uruguay",
@@ -38,9 +38,19 @@
       "grupo": "L",
       "jornada": 3,
       "hora_utc": "21:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 0,
-      "goalsB": 0
+      "goalsB": 2
+    },
+    {
+      "teamA": "Croacia",
+      "teamB": "Ghana",
+      "grupo": "L",
+      "jornada": 3,
+      "hora_utc": "21:00",
+      "status": "IN_PLAY",
+      "goalsA": 2,
+      "goalsB": 1
     },
     {
       "teamA": "Colombia",
