@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-27",
-  "updated": "2026-06-27T04:34:45Z",
+  "updated": "2026-06-27T05:52:00Z",
   "matches": [
     {
       "teamA": "Uruguay",
@@ -18,9 +18,9 @@
       "grupo": "G",
       "jornada": 3,
       "hora_utc": "03:00",
-      "status": "IN_PLAY",
-      "goalsA": 0,
-      "goalsB": 3
+      "status": "FINISHED",
+      "goalsA": 1,
+      "goalsB": 5
     },
     {
       "teamA": "Egipto",
@@ -28,7 +28,7 @@
       "grupo": "G",
       "jornada": 3,
       "hora_utc": "03:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 1,
       "goalsB": 1
     },
