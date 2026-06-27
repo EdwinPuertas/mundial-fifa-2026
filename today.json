@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-27",
-  "updated": "2026-06-27T23:03:22Z",
+  "updated": "2026-06-27T23:33:16Z",
   "matches": [
     {
       "teamA": "Uruguay",
@@ -48,7 +48,7 @@
       "grupo": "L",
       "jornada": 3,
       "hora_utc": "21:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 2,
       "goalsB": 1
     },
