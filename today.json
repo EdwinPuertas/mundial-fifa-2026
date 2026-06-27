@@ -1,7 +1,17 @@
 {
   "fecha": "2026-06-27",
-  "updated": "2026-06-27T00:08:15Z",
+  "updated": "2026-06-27T01:27:05Z",
   "matches": [
+    {
+      "teamA": "Uruguay",
+      "teamB": "España",
+      "grupo": "H",
+      "jornada": 3,
+      "hora_utc": "00:00",
+      "status": "IN_PLAY",
+      "goalsA": 0,
+      "goalsB": 1
+    },
     {
       "teamA": "Nueva Zelanda",
       "teamB": "Bélgica",
