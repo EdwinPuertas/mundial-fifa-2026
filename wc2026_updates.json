@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-28T03:38:04Z",
+  "last_updated": "2026-06-28T05:00:35Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -663,6 +663,26 @@
       "teamB": "Portugal",
       "goalsA": 0,
       "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-28",
+      "teamA": "Jordania",
+      "teamB": "Argentina",
+      "goalsA": 1,
+      "goalsB": 3,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-28",
+      "teamA": "Argelia",
+      "teamB": "Austria",
+      "goalsA": 3,
+      "goalsB": 3,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"

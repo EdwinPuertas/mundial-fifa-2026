@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-28",
-  "updated": "2026-06-28T03:38:05Z",
+  "updated": "2026-06-28T05:00:36Z",
   "matches": [
     {
       "teamA": "Jordania",
@@ -8,9 +8,9 @@
       "grupo": "J",
       "jornada": 3,
       "hora_utc": "02:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 1,
-      "goalsB": 2
+      "goalsB": 3
     },
     {
       "teamA": "Argelia",
@@ -18,9 +18,9 @@
       "grupo": "J",
       "jornada": 3,
       "hora_utc": "02:00",
-      "status": "IN_PLAY",
-      "goalsA": 2,
-      "goalsB": 2
+      "status": "FINISHED",
+      "goalsA": 3,
+      "goalsB": 3
     },
     {
       "teamA": "Sudáfrica",
