@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-28",
-  "updated": "2026-06-28T19:51:20Z",
+  "updated": "2026-06-28T21:02:09Z",
   "matches": [
     {
       "teamA": "Jordania",
@@ -28,9 +28,9 @@
       "grupo": "",
       "jornada": 0,
       "hora_utc": "19:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 0,
-      "goalsB": 0
+      "goalsB": 1
     }
   ]
 }
