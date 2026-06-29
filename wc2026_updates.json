@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-29T19:05:13Z",
+  "last_updated": "2026-06-29T19:19:07Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -692,6 +692,16 @@
       "teamA": "Sudáfrica",
       "teamB": "Canadá",
       "goalsA": 0,
+      "goalsB": 1,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-29",
+      "teamA": "Brasil",
+      "teamB": "Japón",
+      "goalsA": 2,
       "goalsB": 1,
       "venue": "neutral",
       "bk_probs": null,
