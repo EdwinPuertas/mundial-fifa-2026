@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-29",
-  "updated": "2026-06-29T21:27:14Z",
+  "updated": "2026-06-29T22:34:47Z",
   "matches": [
     {
       "teamA": "Brasil",
@@ -19,7 +19,7 @@
       "jornada": 0,
       "hora_utc": "20:30",
       "status": "PAUSED",
-      "goalsA": 0,
+      "goalsA": 1,
       "goalsB": 1
     }
   ]
