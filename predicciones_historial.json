@@ -1,21 +1,21 @@
 {
-  "generated": "2026-06-28",
+  "generated": "2026-06-29",
   "accuracy": {
     "engine_A": {
-      "correct": 48,
-      "total": 85
+      "correct": 49,
+      "total": 86
     },
     "engine_B": {
-      "correct": 48,
-      "total": 85
+      "correct": 49,
+      "total": 86
     },
     "goles_exacto": {
       "correct": 4,
-      "total": 85
+      "total": 86
     },
     "margen": {
-      "correct": 52,
-      "total": 85
+      "correct": 53,
+      "total": 86
     }
   },
   "entries": [
@@ -2568,6 +2568,36 @@
       "margen_pred": -0.413,
       "margen_real": 0,
       "acierto_margen": false
+    },
+    {
+      "fecha": "2026-06-28",
+      "teamA": "Sudáfrica",
+      "teamB": "Canadá",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0004,
+        "p_empate": 0.0001,
+        "p_derrota": 0.9994
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0007,
+        "p_empate": 0.0018,
+        "p_derrota": 0.9975
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 0.2,
+      "lambda_B": 3.387,
+      "pred_goles_A": 0,
+      "pred_goles_B": 3,
+      "acierto_goles": false,
+      "margen_pred": -3.187,
+      "margen_real": -1,
+      "acierto_margen": true
     }
   ]
 }

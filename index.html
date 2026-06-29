@@ -691,23 +691,23 @@ const FORMATION_FEATURES = {"4-3-3": {"attack": 0.88, "defense": 0.62, "width": 
 const STYLE_SCORE = {"attacking": 1.18, "balanced": 1.0, "defensive": 0.82, "counterattack": 0.92};
 const GROUPS = {"A": ["México", "Corea del Sur", "Sudáfrica", "República Checa"], "B": ["Canadá", "Bosnia y Herz.", "Qatar", "Suiza"], "C": ["Brasil", "Marruecos", "Haití", "Escocia"], "D": ["Estados Unidos", "Australia", "Paraguay", "Turquía"], "E": ["Alemania", "Ecuador", "Costa de Marfil", "Curazao"], "F": ["Países Bajos", "Japón", "Túnez", "Suecia"], "G": ["Bélgica", "Irán", "Egipto", "Nueva Zelanda"], "H": ["España", "Uruguay", "Arabia Saudita", "Cabo Verde"], "I": ["Francia", "Senegal", "Noruega", "Irak"], "J": ["Argentina", "Austria", "Argelia", "Jordania"], "K": ["Portugal", "Colombia", "Uzbekistán", "RD Congo"], "L": ["Inglaterra", "Croacia", "Panamá", "Ghana"]};
 const HISTORIAL = {
-  "generated": "2026-06-28",
+  "generated": "2026-06-29",
   "accuracy": {
     "engine_A": {
-      "correct": 48,
-      "total": 85
+      "correct": 49,
+      "total": 86
     },
     "engine_B": {
-      "correct": 48,
-      "total": 85
+      "correct": 49,
+      "total": 86
     },
     "goles_exacto": {
       "correct": 4,
-      "total": 85
+      "total": 86
     },
     "margen": {
-      "correct": 52,
-      "total": 85
+      "correct": 53,
+      "total": 86
     }
   },
   "entries": [
@@ -3260,11 +3260,41 @@ const HISTORIAL = {
       "margen_pred": -0.413,
       "margen_real": 0,
       "acierto_margen": false
+    },
+    {
+      "fecha": "2026-06-28",
+      "teamA": "Sudáfrica",
+      "teamB": "Canadá",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0004,
+        "p_empate": 0.0001,
+        "p_derrota": 0.9994
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0007,
+        "p_empate": 0.0018,
+        "p_derrota": 0.9975
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 0.2,
+      "lambda_B": 3.387,
+      "pred_goles_A": 0,
+      "pred_goles_B": 3,
+      "acierto_goles": false,
+      "margen_pred": -3.187,
+      "margen_real": -1,
+      "acierto_margen": true
     }
   ]
 };
 const FIXTURES = {
-  "updated": "2026-06-28T06:16:00Z",
+  "updated": "2026-06-29T06:44:29Z",
   "schedule": [
     {
       "fecha": "2026-06-11",
@@ -3711,7 +3741,7 @@ const FIXTURES = {
 };
 const TODAY_DATA = {
   "fecha": "2026-06-29",
-  "updated": "2026-06-29T05:12:02Z",
+  "updated": "2026-06-29T06:44:29Z",
   "matches": [
     {
       "teamA": "Brasil",
@@ -3736,7 +3766,7 @@ const TODAY_DATA = {
   ]
 };
 const UPDATES = {
-  "last_updated": "2026-06-29T05:12:01Z",
+  "last_updated": "2026-06-29T06:44:28Z",
   "matches": [
     {
       "date": "2026-06-17",
