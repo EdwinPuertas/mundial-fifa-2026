@@ -34,6 +34,12 @@ try:
 except FileNotFoundError:
     updates_raw = '{"last_updated":null,"matches":[]}'
 
+try:
+    with open('penalty_history.json', encoding='utf-8') as f:
+        penalty_raw = f.read()
+except FileNotFoundError:
+    penalty_raw = '{"teams":{}}'
+
 GROUPS = {
     "A":["México","Corea del Sur","Sudáfrica","República Checa"],
     "B":["Canadá","Bosnia y Herz.","Qatar","Suiza"],
@@ -369,6 +375,26 @@ select:focus{{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37
 .pb-label{{font-size:.58rem;color:var(--text3)}}
 .eng-goles{{background:#f5f3ff;border-color:#c4b5fd}}
 .eng-margen{{background:#fffbeb;border-color:#fcd34d}}
+/* ── Extra Time + Penalties ── */
+.et-section{{padding:8px 14px;border-top:1px solid var(--border);background:#fefce8}}
+.et-title{{font-size:.68rem;font-weight:800;color:#92400e;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}}
+.et-row{{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}}
+.et-chip{{font-size:.85rem;font-weight:900;color:#92400e;background:#fef3c7;padding:2px 10px;border-radius:6px;border:1px solid #fcd34d}}
+.et-margin{{font-size:.68rem;color:#78350f}}
+.pen-section{{background:#fff7ed;border-radius:6px;padding:6px 10px;border:1px solid #fed7aa;margin-top:4px}}
+.pen-title{{font-size:.65rem;font-weight:700;color:#c2410c;margin-bottom:5px;text-transform:uppercase}}
+.pen-row{{display:flex;align-items:center;gap:8px}}
+.pen-team{{flex:1;display:flex;flex-direction:column;gap:2px}}
+.pen-team-b{{text-align:right;align-items:flex-end}}
+.pen-name{{font-size:.72rem;font-weight:700;color:var(--text)}}
+.pen-pct{{font-size:1.1rem;font-weight:900;color:#ea580c}}
+.pen-rec{{font-size:.58rem;color:var(--text3)}}
+.pen-vs{{font-size:.65rem;color:var(--text3);font-weight:700;padding:0 4px}}
+/* ── Engine C badge ── */
+.eng-c-block{{border-top:1px solid var(--border);padding:6px 14px 8px;background:#f0fdf4}}
+.eng-c-title{{font-size:.65rem;font-weight:700;color:#15803d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}}
+.eng-c-row{{display:flex;gap:8px;align-items:center;flex-wrap:wrap}}
+.rl-badge{{font-size:.6rem;background:#dcfce7;color:#15803d;border:1px solid #86efac;border-radius:4px;padding:1px 6px;font-weight:700}}
 /* ── Team Form Trend ── */
 .team-form{{display:flex;gap:4px;justify-content:center;margin-top:5px}}
 .form-entry{{display:flex;flex-direction:column;align-items:center;gap:1px}}
@@ -666,6 +692,7 @@ const HISTORIAL = {historial_raw};
 const FIXTURES = {fixtures_raw};
 const TODAY_DATA = {today_raw};
 const UPDATES = {updates_raw};
+const PENALTY_HIST = {penalty_raw};
 
 // Build fast lookup for played matches
 const HIST_LOOKUP = {{}};
@@ -1109,12 +1136,16 @@ function getPredsFor(a, b) {{
   if (PREDS[a]&&PREDS[a][b]) return PREDS[a][b];
   if (PREDS[b]&&PREDS[b][a]) {{
     const m=PREDS[b][a];
-    return {{
+    const flipped = {{
       engine_A:{{p_victoria:m.engine_A.p_derrota,p_empate:m.engine_A.p_empate,p_derrota:m.engine_A.p_victoria}},
       engine_B:{{p_victoria:m.engine_B.p_derrota,p_empate:m.engine_B.p_empate,p_derrota:m.engine_B.p_victoria}},
       lambda_A:m.lambda_B,lambda_B:m.lambda_A,
       lineup_A:m.lineup_B,lineup_B:m.lineup_A
     }};
+    if (m.engine_C) {{
+      flipped.engine_C = {{p_victoria:m.engine_C.p_derrota,p_empate:m.engine_C.p_empate,p_derrota:m.engine_C.p_victoria}};
+    }}
+    return flipped;
   }}
   return null;
 }}
@@ -1251,6 +1282,100 @@ function switchTab(id,el) {{
   document.getElementById('tab-'+id).classList.add('active');
 }}
 
+// ─── ENGINE C BAYESIAN ───────────────────────────────────────────────────────
+function getEngineC(a, b) {{
+  const m = getPredsFor(a, b);
+  if (!m || !m.engine_C) return null;
+  return m.engine_C;
+}}
+
+// ─── RL ENSEMBLE WEIGHTS ─────────────────────────────────────────────────────
+function getRLWeights() {{
+  const meta = PREDS._meta;
+  if (meta && meta.rl_weights) return meta.rl_weights;
+  return {{A: 0.35, B: 0.35, C: 0.30}};
+}}
+
+function ensemblePred(m) {{
+  const w = getRLWeights();
+  const pA = m.engine_A, pB = m.engine_B, pC = m.engine_C;
+  if (!pA || !pB) return null;
+  const wA = w.A, wB = w.B, wC = pC ? w.C : 0;
+  const norm = wA + wB + wC;
+  const pv = (pA.p_victoria*wA + pB.p_victoria*wB + (pC ? pC.p_victoria*wC : 0)) / norm;
+  const pe = (pA.p_empate*wA   + pB.p_empate*wB   + (pC ? pC.p_empate*wC   : 0)) / norm;
+  const pd = (pA.p_derrota*wA  + pB.p_derrota*wB  + (pC ? pC.p_derrota*wC  : 0)) / norm;
+  return {{p_victoria: pv, p_empate: pe, p_derrota: pd}};
+}}
+
+// ─── EXTRA TIME + PENALTIES ──────────────────────────────────────────────────
+function poissonProbET(lam) {{
+  // Expected goals in 30 min extra time = lam * (30/90)
+  return lam * (30/90);
+}}
+
+function getPenaltyRecord(team) {{
+  const t = PENALTY_HIST.teams || {{}};
+  return t[team] || {{w:0, l:0, pct:0.50, note:'sin historial'}};
+}}
+
+function penaltyShootoutProb(teamA, teamB) {{
+  const rA = getPenaltyRecord(teamA).pct;
+  const rB = getPenaltyRecord(teamB).pct;
+  // Best-of-5 simulation: each kick converts with rA or rB
+  // Approximate: P(A wins) ≈ rA / (rA + rB) weighted by historical record
+  const pA = rA / (rA + rB);
+  const pB = 1 - pA;
+  return {{pA: Math.round(pA*100), pB: Math.round(pB*100)}};
+}}
+
+function renderExtraTimePenalty(a, b, lA, lB, isKnockout) {{
+  if (!isKnockout) return '';
+
+  // Extra time lambdas (30/90 of regular time)
+  const lA_et = lA * (30/90);
+  const lB_et = lB * (30/90);
+
+  // P(draw after 120 min) = P(draw 90min) × P(draw in ET)
+  // P(draw 90min) already computed from Poisson
+  const pDrawET = poissonProb(lA_et, 0) * poissonProb(lB_et, 0) +
+    [1,2,3].reduce((s,g) => s + poissonProb(lA_et,g)*poissonProb(lB_et,g), 0);
+
+  const scoreET_a = predictScore(lA_et, lB_et);
+  const margenET = lA_et - lB_et;
+  const margenETLabel = Math.abs(margenET) < 0.1 ? 'Empate técnico en prórroga'
+    : margenET > 0 ? `Ventaja ${{a}}` : `Ventaja ${{b}}`;
+
+  const pen = penaltyShootoutProb(a, b);
+  const recA = getPenaltyRecord(a);
+  const recB = getPenaltyRecord(b);
+
+  return `
+    <div class="et-section">
+      <div class="et-title">&#9201; Tiempo Extra (120')</div>
+      <div class="et-row">
+        <span class="et-chip">&#127919; ${{scoreET_a.a}}&ndash;${{scoreET_a.b}} (prórroga)</span>
+        <span class="et-margin">${{margenETLabel}}</span>
+      </div>
+      <div class="pen-section">
+        <div class="pen-title">&#9971; Penales &mdash; si empate persiste</div>
+        <div class="pen-row">
+          <div class="pen-team">
+            <span class="pen-name">${{a}}</span>
+            <span class="pen-pct">${{pen.pA}}%</span>
+            <span class="pen-rec">${{recA.w}}G ${{recA.l}}P &middot; ${{Math.round(recA.pct*100)}}% conv.</span>
+          </div>
+          <div class="pen-vs">vs</div>
+          <div class="pen-team pen-team-b">
+            <span class="pen-name">${{b}}</span>
+            <span class="pen-pct">${{pen.pB}}%</span>
+            <span class="pen-rec">${{recB.w}}G ${{recB.l}}P &middot; ${{Math.round(recB.pct*100)}}% conv.</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}}
+
 // ═══════════════════════════════
 // PRONÓSTICOS DEL DÍA
 // ═══════════════════════════════
@@ -1357,6 +1482,21 @@ function renderPronosticosHoy(dateStr) {{
         ${{scorePred.a===goalsA&&scorePred.b===goalsB ? '<span class="pois-ok yes">✓ Marcador exacto</span>' : '<span class="pois-ok no">✗</span>'}}
       </div>`;
 
+    const pC = m.engine_C;
+    const ens = ensemblePred(m);
+    const w = getRLWeights();
+    const engineCBlock = pC ? `
+      <div class="eng-c-block">
+        <div class="eng-c-title">Engine C &middot; Bayesian <span class="rl-badge">RL: A${{Math.round(w.A*100)}}% B${{Math.round(w.B*100)}}% C${{Math.round(w.C*100)}}%</span></div>
+        <div class="eng-c-row">
+          <span style="color:var(--green);font-weight:700;font-size:.75rem">${{Math.round(pC.p_victoria*100)}}% ${{a}}</span>
+          <span style="color:var(--yellow);font-size:.75rem">${{Math.round(pC.p_empate*100)}}% Empate</span>
+          <span style="color:var(--red);font-size:.75rem">${{Math.round(pC.p_derrota*100)}}% ${{b}}</span>
+        </div>
+      </div>` : '';
+
+    const etBlock = (!isFinished) ? renderExtraTimePenalty(a, b, lA, lB, true) : '';
+
     return `<div class="pron-card${{isFinished?' pron-played':''}}" onclick="document.getElementById('teamA').value='${{a}}';document.getElementById('teamB').value='${{b}}';onTeamChange()" style="cursor:pointer">
       <div class="pron-header">
         <div class="pron-team-a">${{a}}${{renderTeamForm(a)}}</div>
@@ -1364,7 +1504,9 @@ function renderPronosticosHoy(dateStr) {{
         <div class="pron-team-b">${{b}}${{renderTeamForm(b)}}</div>
       </div>
       <div class="pron-body">${{bodyA}}${{bodyB}}</div>
+      ${{engineCBlock}}
       ${{goalFooter}}
+      ${{etBlock}}
     </div>`;
   }}).join('')}}</div>`;
 }}

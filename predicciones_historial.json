@@ -3,19 +3,19 @@
   "accuracy": {
     "engine_A": {
       "correct": 49,
-      "total": 86
+      "total": 87
     },
     "engine_B": {
       "correct": 49,
-      "total": 86
+      "total": 87
     },
     "goles_exacto": {
       "correct": 4,
-      "total": 86
+      "total": 87
     },
     "margen": {
-      "correct": 53,
-      "total": 86
+      "correct": 54,
+      "total": 87
     }
   },
   "entries": [
@@ -2597,6 +2597,36 @@
       "acierto_goles": false,
       "margen_pred": -3.187,
       "margen_real": -1,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-06-29",
+      "teamA": "Brasil",
+      "teamB": "Japón",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.018,
+        "p_empate": 0.0,
+        "p_derrota": 0.982
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.2006,
+        "p_empate": 0.0443,
+        "p_derrota": 0.7551
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 1,
+      "acierto_A": false,
+      "acierto_B": false,
+      "lambda_A": 0.964,
+      "lambda_B": 0.541,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.423,
+      "margen_real": 1,
       "acierto_margen": true
     }
   ]
