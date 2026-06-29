@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-29",
-  "updated": "2026-06-29T17:16:11Z",
+  "updated": "2026-06-29T19:05:14Z",
   "matches": [
     {
       "teamA": "Brasil",
@@ -9,8 +9,8 @@
       "jornada": 0,
       "hora_utc": "17:00",
       "status": "IN_PLAY",
-      "goalsA": 0,
-      "goalsB": 0
+      "goalsA": 2,
+      "goalsB": 1
     },
     {
       "teamA": "Alemania",
