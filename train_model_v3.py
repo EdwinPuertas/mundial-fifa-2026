@@ -1161,6 +1161,174 @@ def predict_match(nameA, nameB, venue="neutral", bk_probs=None):
         "bk_estimate": [round(float(bk[0]),3), round(float(bk[1]),3), round(float(bk[2]),3)],
     }
 
+import math
+import json as _json
+
+# ─── ENGINE C: BAYESIAN POISSON ─────────────────────────────────────────────
+def bayesian_team_strength(team, matches, prior_alpha=2.0, prior_beta=1.0):
+    """Gamma-Poisson conjugate: posterior Gamma(alpha+goals, beta+n_matches)."""
+    goals_for, goals_against = [], []
+    for m in matches:
+        if m.get("teamA") == team:
+            goals_for.append(m["goalsA"])
+            goals_against.append(m["goalsB"])
+        elif m.get("teamB") == team:
+            goals_for.append(m["goalsB"])
+            goals_against.append(m["goalsA"])
+    n = len(goals_for)
+    atk = (prior_alpha + sum(goals_for),   prior_beta + n)   # (alpha, beta)
+    dff = (prior_alpha + sum(goals_against), prior_beta + n)
+    return atk, dff, n
+
+def bayesian_predict(team_a, team_b, matches, n_sim=5000, rng_seed=42):
+    """Monte Carlo simulation using Bayesian posterior predictive."""
+    import random
+    random.seed(rng_seed)
+
+    atk_a, dff_a, na = bayesian_team_strength(team_a, matches)
+    atk_b, dff_b, nb = bayesian_team_strength(team_b, matches)
+
+    def gamma_sample(alpha, beta):
+        # Box-Muller won't work; use Marsaglia for Gamma (pure Python, no scipy)
+        # For simplicity use mean + noise approximation (sufficient for ensemble)
+        mean = alpha / beta
+        std  = math.sqrt(alpha) / beta
+        # Central Limit approximation (valid when alpha > 1)
+        import random as _r
+        u = sum(_r.gauss(0, 1) for _ in range(max(1, int(alpha)))) / max(1, int(alpha))**0.5
+        return max(0.05, mean + std * u * 0.3)
+
+    def poisson_sample(lam):
+        # Knuth algorithm
+        L = math.exp(-lam)
+        k, p = 0, 1.0
+        while p > L:
+            k += 1
+            p *= random.random()
+        return k - 1
+
+    wins_a = draws = wins_b = 0
+    sum_la = sum_lb = 0.0
+
+    for _ in range(n_sim):
+        # Sample team rates from posterior
+        lambda_base_a = gamma_sample(*atk_a)
+        def_rate_b    = gamma_sample(*dff_b)
+        # Adjust: a's attack vs b's defense (relative to prior mean)
+        prior_mean = atk_a[0] / atk_a[1]  # ~prior
+        lambda_a = lambda_base_a * (def_rate_b / max(0.1, prior_mean))
+        lambda_a = max(0.05, min(6.0, lambda_a))
+
+        lambda_base_b = gamma_sample(*atk_b)
+        def_rate_a    = gamma_sample(*dff_a)
+        lambda_b = lambda_base_b * (def_rate_a / max(0.1, prior_mean))
+        lambda_b = max(0.05, min(6.0, lambda_b))
+
+        sum_la += lambda_a
+        sum_lb += lambda_b
+
+        ga = poisson_sample(lambda_a)
+        gb = poisson_sample(lambda_b)
+
+        if ga > gb: wins_a += 1
+        elif ga == gb: draws += 1
+        else: wins_b += 1
+
+    return {
+        "p_victoria": round(wins_a / n_sim, 4),
+        "p_empate":   round(draws   / n_sim, 4),
+        "p_derrota":  round(wins_b / n_sim, 4),
+        "lambda_A":   round(sum_la / n_sim, 4),
+        "lambda_B":   round(sum_lb / n_sim, 4),
+    }
+
+def train_bayesian_engine(preds_compact_path, updates_path):
+    """Add engine_C Bayesian predictions to predicciones_v3_compact.json."""
+    with open(preds_compact_path, encoding="utf-8") as f:
+        preds = _json.load(f)
+
+    updates_matches = []
+    if os.path.exists(updates_path):
+        with open(updates_path, encoding="utf-8") as f:
+            updates_matches = _json.load(f).get("matches", [])
+
+    if not updates_matches:
+        print("[Bayesian] Sin datos de resultados — saltando Engine C")
+        return
+
+    teams = sorted(preds.keys())
+    added = 0
+    for i, a in enumerate(teams):
+        for b in teams:
+            if a == b:
+                continue
+            if b not in preds.get(a, {}):
+                continue
+            try:
+                bay = bayesian_predict(a, b, updates_matches)
+                preds[a][b]["engine_C"] = {
+                    "p_victoria": bay["p_victoria"],
+                    "p_empate":   bay["p_empate"],
+                    "p_derrota":  bay["p_derrota"],
+                }
+                added += 1
+            except Exception as e:
+                pass
+
+    with open(preds_compact_path, "w", encoding="utf-8") as f:
+        _json.dump(preds, f, ensure_ascii=False, separators=(",", ":"))
+    print(f"[Bayesian] Engine C añadido a {added} pares de equipos en {preds_compact_path}")
+
+# ─── REINFORCEMENT LEARNING: ensemble weight adjustment ─────────────────────
+def apply_rl_weights(historial_path, preds_compact_path, recent_n=15):
+    """Compute RL-adjusted ensemble weights and store in preds metadata."""
+    if not os.path.exists(historial_path):
+        return
+
+    with open(historial_path, encoding="utf-8") as f:
+        hist = _json.load(f)
+
+    entries = [e for e in hist.get("entries", []) if e.get("goles_A") is not None or e.get("golesA") is not None]
+    recent = entries[-recent_n:] if len(entries) >= recent_n else entries
+
+    if not recent:
+        print("[RL] Sin entradas con resultado — pesos default (0.35, 0.35, 0.30)")
+        return
+
+    ok_a = sum(1 for e in recent if e.get("acierto_A", e.get("okA", False)))
+    ok_b = sum(1 for e in recent if e.get("acierto_B", e.get("okB", False)))
+    # Engine C accuracy: okC field (may not exist yet)
+    ok_c = sum(1 for e in recent if e.get("acierto_C", e.get("okC", False)))
+
+    n = len(recent)
+    acc_a = ok_a / n
+    acc_b = ok_b / n
+    acc_c = ok_c / n if ok_c > 0 else 0.28  # prior for new engine
+
+    # Softmax weighting with temperature T=3
+    T = 3.0
+    import math as _m
+    ea = _m.exp(acc_a * T)
+    eb = _m.exp(acc_b * T)
+    ec = _m.exp(acc_c * T)
+    total = ea + eb + ec
+    w_a = round(ea / total, 4)
+    w_b = round(eb / total, 4)
+    w_c = round(ec / total, 4)
+
+    print(f"[RL] Pesos ensemble: A={w_a:.3f} B={w_b:.3f} C={w_c:.3f} (n={n}, acc: A={acc_a:.1%} B={acc_b:.1%} C={acc_c:.1%})")
+
+    with open(preds_compact_path, encoding="utf-8") as f:
+        preds = _json.load(f)
+
+    preds["_meta"] = preds.get("_meta", {})
+    preds["_meta"]["rl_weights"] = {"A": w_a, "B": w_b, "C": w_c, "n": n}
+    preds["_meta"]["updated"] = __import__("datetime").datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    with open(preds_compact_path, "w", encoding="utf-8") as f:
+        _json.dump(preds, f, ensure_ascii=False, separators=(",", ":"))
+    print(f"[RL] Pesos guardados en _meta.rl_weights de predicciones_v3_compact.json")
+
 preds_v3 = {}
 teams_list = sorted(TEAMS.keys())
 for tA in teams_list:
@@ -1326,3 +1494,10 @@ for tA, tB in showcases:
         print(f"    Engine A (MLP+Atención): D={pA['p_derrota']:.2f} E={pA['p_empate']:.2f} V={pA['p_victoria']:.2f}")
         print(f"    Engine B (XGBoost):      D={pB['p_derrota']:.2f} E={pB['p_empate']:.2f} V={pB['p_victoria']:.2f}")
         print(f"    Goles esperados: {tA}={p['lambda_A']:.1f} | {tB}={p['lambda_B']:.1f}")
+
+# Engine C Bayesian + RL weights
+try:
+    train_bayesian_engine("predicciones_v3_compact.json", "wc2026_updates.json")
+    apply_rl_weights("predicciones_historial.json", "predicciones_v3_compact.json")
+except Exception as e:
+    print(f"[Engine C/RL] Error (no crítico): {e}")
