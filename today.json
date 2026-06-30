@@ -1,26 +1,36 @@
 {
-  "fecha": "2026-06-29",
-  "updated": "2026-06-29T22:59:02Z",
+  "fecha": "2026-06-30",
+  "updated": "2026-06-30T00:14:22Z",
   "matches": [
     {
-      "teamA": "Brasil",
-      "teamB": "Japón",
+      "teamA": "Países Bajos",
+      "teamB": "Marruecos",
+      "grupo": "",
+      "jornada": 0,
+      "hora_utc": "01:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Costa de Marfil",
+      "teamB": "Noruega",
       "grupo": "",
       "jornada": 0,
       "hora_utc": "17:00",
-      "status": "FINISHED",
-      "goalsA": 2,
-      "goalsB": 1
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     },
     {
-      "teamA": "Alemania",
-      "teamB": "Paraguay",
+      "teamA": "Francia",
+      "teamB": "Suecia",
       "grupo": "",
       "jornada": 0,
-      "hora_utc": "20:30",
-      "status": "IN_PLAY",
-      "goalsA": 2,
-      "goalsB": 1
+      "hora_utc": "21:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     }
   ]
 }
