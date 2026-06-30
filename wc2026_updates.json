@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-30T18:56:57Z",
+  "last_updated": "2026-06-30T19:13:50Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -723,6 +723,16 @@
       "teamB": "Marruecos",
       "goalsA": 3,
       "goalsB": 4,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-06-30",
+      "teamA": "Costa de Marfil",
+      "teamB": "Noruega",
+      "goalsA": 1,
+      "goalsB": 2,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"

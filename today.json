@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-30",
-  "updated": "2026-06-30T18:56:58Z",
+  "updated": "2026-06-30T19:13:51Z",
   "matches": [
     {
       "teamA": "Países Bajos",
@@ -18,7 +18,7 @@
       "grupo": "",
       "jornada": 0,
       "hora_utc": "17:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 1,
       "goalsB": 2
     },
