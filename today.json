@@ -1,6 +1,6 @@
 {
   "fecha": "2026-06-30",
-  "updated": "2026-06-30T03:30:55Z",
+  "updated": "2026-06-30T04:44:27Z",
   "matches": [
     {
       "teamA": "Países Bajos",
@@ -8,9 +8,9 @@
       "grupo": "",
       "jornada": 0,
       "hora_utc": "01:00",
-      "status": "PAUSED",
-      "goalsA": 1,
-      "goalsB": 1
+      "status": "FINISHED",
+      "goalsA": 3,
+      "goalsB": 4
     },
     {
       "teamA": "Costa de Marfil",
