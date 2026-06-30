@@ -1,21 +1,21 @@
 {
-  "generated": "2026-06-29",
+  "generated": "2026-06-30",
   "accuracy": {
     "engine_A": {
       "correct": 49,
-      "total": 87
+      "total": 89
     },
     "engine_B": {
       "correct": 49,
-      "total": 87
+      "total": 89
     },
     "goles_exacto": {
       "correct": 4,
-      "total": 87
+      "total": 89
     },
     "margen": {
       "correct": 54,
-      "total": 87
+      "total": 89
     }
   },
   "entries": [
@@ -2628,6 +2628,66 @@
       "margen_pred": 0.423,
       "margen_real": 1,
       "acierto_margen": true
+    },
+    {
+      "fecha": "2026-06-29",
+      "teamA": "Alemania",
+      "teamB": "Paraguay",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 1.0,
+        "p_empate": 0.0,
+        "p_derrota": 0.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9999,
+        "p_empate": 0.0001,
+        "p_derrota": 0.0
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 5,
+      "goles_B": 6,
+      "acierto_A": false,
+      "acierto_B": false,
+      "lambda_A": 2.711,
+      "lambda_B": 0.608,
+      "pred_goles_A": 2,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 2.103,
+      "margen_real": -1,
+      "acierto_margen": false
+    },
+    {
+      "fecha": "2026-06-30",
+      "teamA": "Países Bajos",
+      "teamB": "Marruecos",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9968,
+        "p_empate": 0.0,
+        "p_derrota": 0.0032
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9591,
+        "p_empate": 0.0406,
+        "p_derrota": 0.0003
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 3,
+      "goles_B": 4,
+      "acierto_A": false,
+      "acierto_B": false,
+      "lambda_A": 0.911,
+      "lambda_B": 0.2,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.711,
+      "margen_real": -1,
+      "acierto_margen": false
     }
   ]
 }
