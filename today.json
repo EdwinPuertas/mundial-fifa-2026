@@ -1,36 +1,26 @@
 {
-  "fecha": "2026-06-30",
-  "updated": "2026-06-30T22:46:33Z",
+  "fecha": "2026-07-01",
+  "updated": "2026-07-01T00:06:07Z",
   "matches": [
     {
-      "teamA": "Países Bajos",
-      "teamB": "Marruecos",
+      "teamA": "México",
+      "teamB": "Ecuador",
       "grupo": "",
       "jornada": 0,
       "hora_utc": "01:00",
-      "status": "FINISHED",
-      "goalsA": 3,
-      "goalsB": 4
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     },
     {
-      "teamA": "Costa de Marfil",
-      "teamB": "Noruega",
+      "teamA": "Bélgica",
+      "teamB": "Senegal",
       "grupo": "",
       "jornada": 0,
-      "hora_utc": "17:00",
-      "status": "FINISHED",
-      "goalsA": 1,
-      "goalsB": 2
-    },
-    {
-      "teamA": "Francia",
-      "teamB": "Suecia",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "21:00",
-      "status": "IN_PLAY",
-      "goalsA": 3,
-      "goalsB": 0
+      "hora_utc": "20:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     }
   ]
 }
