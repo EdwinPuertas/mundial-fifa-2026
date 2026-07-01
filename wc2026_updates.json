@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-01T03:39:28Z",
+  "last_updated": "2026-07-01T05:05:49Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -742,6 +742,16 @@
       "teamA": "Francia",
       "teamB": "Suecia",
       "goalsA": 3,
+      "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-07-01",
+      "teamA": "México",
+      "teamB": "Ecuador",
+      "goalsA": 2,
       "goalsB": 0,
       "venue": "neutral",
       "bk_probs": null,
