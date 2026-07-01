@@ -1,21 +1,21 @@
 {
-  "generated": "2026-06-30",
+  "generated": "2026-07-01",
   "accuracy": {
     "engine_A": {
-      "correct": 49,
-      "total": 89
+      "correct": 52,
+      "total": 92
     },
     "engine_B": {
-      "correct": 49,
-      "total": 89
+      "correct": 50,
+      "total": 92
     },
     "goles_exacto": {
       "correct": 4,
-      "total": 89
+      "total": 92
     },
     "margen": {
-      "correct": 54,
-      "total": 89
+      "correct": 56,
+      "total": 92
     }
   },
   "entries": [
@@ -2687,6 +2687,96 @@
       "acierto_goles": false,
       "margen_pred": 0.711,
       "margen_real": -1,
+      "acierto_margen": false
+    },
+    {
+      "fecha": "2026-06-30",
+      "teamA": "Costa de Marfil",
+      "teamB": "Noruega",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0,
+        "p_empate": 0.0,
+        "p_derrota": 1.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0004,
+        "p_empate": 0.0617,
+        "p_derrota": 0.9379
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 1,
+      "goles_B": 2,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 0.2,
+      "lambda_B": 1.339,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -1.139,
+      "margen_real": -1,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-06-30",
+      "teamA": "Francia",
+      "teamB": "Suecia",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.5007,
+        "p_empate": 0.3026,
+        "p_derrota": 0.1967
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.4193,
+        "p_empate": 0.1057,
+        "p_derrota": 0.475
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 3,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": false,
+      "lambda_A": 2.18,
+      "lambda_B": 1.364,
+      "pred_goles_A": 2,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": 0.816,
+      "margen_real": 3,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-07-01",
+      "teamA": "México",
+      "teamB": "Ecuador",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9695,
+        "p_empate": 0.0103,
+        "p_derrota": 0.0203
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0124,
+        "p_empate": 0.0328,
+        "p_derrota": 0.9548
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": false,
+      "lambda_A": 0.2,
+      "lambda_B": 0.994,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": -0.794,
+      "margen_real": 2,
       "acierto_margen": false
     }
   ]
