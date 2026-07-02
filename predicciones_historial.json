@@ -1,21 +1,21 @@
 {
-  "generated": "2026-07-01",
+  "generated": "2026-07-02",
   "accuracy": {
     "engine_A": {
-      "correct": 52,
-      "total": 92
+      "correct": 53,
+      "total": 93
     },
     "engine_B": {
-      "correct": 50,
-      "total": 92
+      "correct": 51,
+      "total": 93
     },
     "goles_exacto": {
       "correct": 4,
-      "total": 92
+      "total": 93
     },
     "margen": {
       "correct": 56,
-      "total": 92
+      "total": 93
     }
   },
   "entries": [
@@ -2777,6 +2777,36 @@
       "acierto_goles": false,
       "margen_pred": -0.794,
       "margen_real": 2,
+      "acierto_margen": false
+    },
+    {
+      "fecha": "2026-07-01",
+      "teamA": "Bélgica",
+      "teamB": "Senegal",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9931,
+        "p_empate": 0.0009,
+        "p_derrota": 0.006
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.8709,
+        "p_empate": 0.1029,
+        "p_derrota": 0.0262
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 3,
+      "goles_B": 2,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 0.958,
+      "lambda_B": 0.779,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.179,
+      "margen_real": 1,
       "acierto_margen": false
     }
   ]
