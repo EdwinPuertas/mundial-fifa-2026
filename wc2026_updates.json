@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-01T22:45:17Z",
+  "last_updated": "2026-07-02T00:07:39Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -753,6 +753,16 @@
       "teamB": "Ecuador",
       "goalsA": 2,
       "goalsB": 0,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-07-01",
+      "teamA": "Bélgica",
+      "teamB": "Senegal",
+      "goalsA": 3,
+      "goalsB": 2,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"
