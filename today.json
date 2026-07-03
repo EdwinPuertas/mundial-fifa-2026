@@ -1,26 +1,26 @@
 {
-  "fecha": "2026-07-02",
-  "updated": "2026-07-02T23:34:21Z",
+  "fecha": "2026-07-03",
+  "updated": "2026-07-03T00:05:51Z",
   "matches": [
     {
-      "teamA": "España",
-      "teamB": "Austria",
+      "teamA": "Suiza",
+      "teamB": "Argelia",
       "grupo": "",
       "jornada": 0,
-      "hora_utc": "19:00",
-      "status": "FINISHED",
-      "goalsA": 3,
-      "goalsB": 0
+      "hora_utc": "03:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     },
     {
-      "teamA": "Portugal",
-      "teamB": "Croacia",
+      "teamA": "Australia",
+      "teamB": "Egipto",
       "grupo": "",
       "jornada": 0,
-      "hora_utc": "23:00",
-      "status": "IN_PLAY",
-      "goalsA": 0,
-      "goalsB": 0
+      "hora_utc": "18:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     }
   ]
 }
