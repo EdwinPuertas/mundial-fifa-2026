@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-03",
-  "updated": "2026-07-03T02:47:48Z",
+  "updated": "2026-07-03T04:25:46Z",
   "matches": [
     {
       "teamA": "Suiza",
@@ -8,9 +8,9 @@
       "grupo": "",
       "jornada": 0,
       "hora_utc": "03:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
+      "status": "IN_PLAY",
+      "goalsA": 2,
+      "goalsB": 0
     },
     {
       "teamA": "Australia",
