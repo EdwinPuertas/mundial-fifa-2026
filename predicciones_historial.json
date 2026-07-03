@@ -1,21 +1,21 @@
 {
-  "generated": "2026-07-02",
+  "generated": "2026-07-03",
   "accuracy": {
     "engine_A": {
-      "correct": 53,
-      "total": 93
+      "correct": 56,
+      "total": 96
     },
     "engine_B": {
-      "correct": 51,
-      "total": 93
+      "correct": 53,
+      "total": 96
     },
     "goles_exacto": {
       "correct": 4,
-      "total": 93
+      "total": 96
     },
     "margen": {
-      "correct": 56,
-      "total": 93
+      "correct": 59,
+      "total": 96
     }
   },
   "entries": [
@@ -2808,6 +2808,96 @@
       "margen_pred": 0.179,
       "margen_real": 1,
       "acierto_margen": false
+    },
+    {
+      "fecha": "2026-07-02",
+      "teamA": "España",
+      "teamB": "Austria",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.8636,
+        "p_empate": 0.0001,
+        "p_derrota": 0.1364
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9666,
+        "p_empate": 0.0078,
+        "p_derrota": 0.0257
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 3,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 1.66,
+      "lambda_B": 0.497,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.163,
+      "margen_real": 3,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-07-02",
+      "teamA": "Portugal",
+      "teamB": "Croacia",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9984,
+        "p_empate": 0.0001,
+        "p_derrota": 0.0015
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9697,
+        "p_empate": 0.0219,
+        "p_derrota": 0.0084
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 1.509,
+      "lambda_B": 0.679,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.83,
+      "margen_real": 1,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-07-03",
+      "teamA": "Suiza",
+      "teamB": "Argelia",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9229,
+        "p_empate": 0.0754,
+        "p_derrota": 0.0017
+      },
+      "engine_B": {
+        "prediccion": "empate",
+        "p_victoria": 0.0588,
+        "p_empate": 0.9096,
+        "p_derrota": 0.0316
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": false,
+      "lambda_A": 0.89,
+      "lambda_B": 0.615,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.275,
+      "margen_real": 2,
+      "acierto_margen": true
     }
   ]
 }
