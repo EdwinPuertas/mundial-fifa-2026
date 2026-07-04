@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-04T22:25:04Z",
+  "last_updated": "2026-07-04T23:28:00Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -823,6 +823,16 @@
       "teamB": "Marruecos",
       "goalsA": 0,
       "goalsB": 3,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-07-04",
+      "teamA": "Paraguay",
+      "teamB": "Francia",
+      "goalsA": 0,
+      "goalsB": 1,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"
