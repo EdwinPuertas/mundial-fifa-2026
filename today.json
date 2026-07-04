@@ -1,26 +1,36 @@
 {
-  "fecha": "2026-07-03",
-  "updated": "2026-07-03T23:32:35Z",
+  "fecha": "2026-07-04",
+  "updated": "2026-07-04T02:43:49Z",
   "matches": [
     {
-      "teamA": "Suiza",
-      "teamB": "Argelia",
+      "teamA": "Colombia",
+      "teamB": "Ghana",
       "grupo": "",
       "jornada": 0,
-      "hora_utc": "03:00",
-      "status": "FINISHED",
-      "goalsA": 2,
+      "hora_utc": "01:30",
+      "status": "PAUSED",
+      "goalsA": 1,
       "goalsB": 0
     },
     {
-      "teamA": "Australia",
-      "teamB": "Egipto",
+      "teamA": "Canadá",
+      "teamB": "Marruecos",
       "grupo": "",
       "jornada": 0,
-      "hora_utc": "18:00",
-      "status": "FINISHED",
-      "goalsA": 3,
-      "goalsB": 5
+      "hora_utc": "17:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Paraguay",
+      "teamB": "Francia",
+      "grupo": "",
+      "jornada": 0,
+      "hora_utc": "21:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     }
   ]
 }
