@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-04",
-  "updated": "2026-07-04T02:43:49Z",
+  "updated": "2026-07-04T04:11:12Z",
   "matches": [
     {
       "teamA": "Colombia",
@@ -8,7 +8,7 @@
       "grupo": "",
       "jornada": 0,
       "hora_utc": "01:30",
-      "status": "PAUSED",
+      "status": "FINISHED",
       "goalsA": 1,
       "goalsB": 0
     },
