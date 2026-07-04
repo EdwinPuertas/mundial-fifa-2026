@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-04",
-  "updated": "2026-07-04T20:58:23Z",
+  "updated": "2026-07-04T21:24:35Z",
   "matches": [
     {
       "teamA": "Colombia",
@@ -21,16 +21,6 @@
       "status": "FINISHED",
       "goalsA": 0,
       "goalsB": 3
-    },
-    {
-      "teamA": "Paraguay",
-      "teamB": "Francia",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "21:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
     }
   ]
 }
