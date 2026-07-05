@@ -1,7 +1,17 @@
 {
   "fecha": "2026-07-05",
-  "updated": "2026-07-05T21:31:30Z",
+  "updated": "2026-07-05T23:01:36Z",
   "matches": [
+    {
+      "teamA": "Brasil",
+      "teamB": "Noruega",
+      "grupo": "",
+      "jornada": 0,
+      "hora_utc": "20:00",
+      "status": "FINISHED",
+      "goalsA": 1,
+      "goalsB": 2
+    },
     {
       "teamA": "México",
       "teamB": "Inglaterra",
