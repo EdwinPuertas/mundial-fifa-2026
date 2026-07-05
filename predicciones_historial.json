@@ -1,21 +1,21 @@
 {
-  "generated": "2026-07-04",
+  "generated": "2026-07-05",
   "accuracy": {
     "engine_A": {
-      "correct": 57,
-      "total": 98
+      "correct": 58,
+      "total": 100
     },
     "engine_B": {
-      "correct": 54,
-      "total": 98
+      "correct": 55,
+      "total": 100
     },
     "goles_exacto": {
       "correct": 5,
-      "total": 98
+      "total": 100
     },
     "margen": {
-      "correct": 61,
-      "total": 98
+      "correct": 62,
+      "total": 100
     }
   },
   "entries": [
@@ -2957,6 +2957,66 @@
       "acierto_goles": true,
       "margen_pred": 0.909,
       "margen_real": 1,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-07-04",
+      "teamA": "Canadá",
+      "teamB": "Marruecos",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.8742,
+        "p_empate": 0.0,
+        "p_derrota": 0.1257
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9659,
+        "p_empate": 0.0052,
+        "p_derrota": 0.0289
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 3,
+      "acierto_A": false,
+      "acierto_B": false,
+      "lambda_A": 0.541,
+      "lambda_B": 0.2,
+      "pred_goles_A": 0,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.341,
+      "margen_real": -3,
+      "acierto_margen": false
+    },
+    {
+      "fecha": "2026-07-04",
+      "teamA": "Paraguay",
+      "teamB": "Francia",
+      "engine_A": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0,
+        "p_empate": 0.0,
+        "p_derrota": 1.0
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.0004,
+        "p_empate": 0.0006,
+        "p_derrota": 0.999
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 0.52,
+      "lambda_B": 2.425,
+      "pred_goles_A": 0,
+      "pred_goles_B": 2,
+      "acierto_goles": false,
+      "margen_pred": -1.905,
+      "margen_real": -1,
       "acierto_margen": true
     }
   ]
