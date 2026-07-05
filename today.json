@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-05",
-  "updated": "2026-07-05T23:01:36Z",
+  "updated": "2026-07-05T23:33:24Z",
   "matches": [
     {
       "teamA": "Brasil",
@@ -11,16 +11,6 @@
       "status": "FINISHED",
       "goalsA": 1,
       "goalsB": 2
-    },
-    {
-      "teamA": "México",
-      "teamB": "Inglaterra",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "00:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
     }
   ]
 }
