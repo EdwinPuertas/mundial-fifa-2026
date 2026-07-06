@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-06",
-  "updated": "2026-07-06T19:12:14Z",
+  "updated": "2026-07-06T20:52:44Z",
   "matches": [
     {
       "teamA": "México",
@@ -11,6 +11,16 @@
       "status": "FINISHED",
       "goalsA": 2,
       "goalsB": 3
+    },
+    {
+      "teamA": "Portugal",
+      "teamB": "España",
+      "grupo": "",
+      "jornada": 0,
+      "hora_utc": "19:00",
+      "status": "IN_PLAY",
+      "goalsA": 0,
+      "goalsB": 0
     },
     {
       "teamA": "Estados Unidos",
