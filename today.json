@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-07",
-  "updated": "2026-07-07T15:41:14Z",
+  "updated": "2026-07-07T16:31:51Z",
   "matches": [
     {
       "teamA": "Estados Unidos",
@@ -11,16 +11,6 @@
       "status": "FINISHED",
       "goalsA": 1,
       "goalsB": 4
-    },
-    {
-      "teamA": "Argentina",
-      "teamB": "Egipto",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "16:00",
-      "status": "SCHEDULED",
-      "goalsA": null,
-      "goalsB": null
     },
     {
       "teamA": "Suiza",
