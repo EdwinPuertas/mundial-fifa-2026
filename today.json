@@ -1,33 +1,33 @@
 {
-  "fecha": "2026-07-06",
-  "updated": "2026-07-06T22:43:16Z",
+  "fecha": "2026-07-07",
+  "updated": "2026-07-07T00:08:34Z",
   "matches": [
-    {
-      "teamA": "México",
-      "teamB": "Inglaterra",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "01:00",
-      "status": "FINISHED",
-      "goalsA": 2,
-      "goalsB": 3
-    },
-    {
-      "teamA": "Portugal",
-      "teamB": "España",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "19:00",
-      "status": "FINISHED",
-      "goalsA": 0,
-      "goalsB": 1
-    },
     {
       "teamA": "Estados Unidos",
       "teamB": "Bélgica",
       "grupo": "",
       "jornada": 0,
       "hora_utc": "00:00",
+      "status": "IN_PLAY",
+      "goalsA": 0,
+      "goalsB": 0
+    },
+    {
+      "teamA": "Argentina",
+      "teamB": "Egipto",
+      "grupo": "",
+      "jornada": 0,
+      "hora_utc": "16:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    },
+    {
+      "teamA": "Suiza",
+      "teamB": "Colombia",
+      "grupo": "",
+      "jornada": 0,
+      "hora_utc": "20:00",
       "status": "SCHEDULED",
       "goalsA": null,
       "goalsB": null
