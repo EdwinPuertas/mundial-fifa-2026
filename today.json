@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-07",
-  "updated": "2026-07-07T00:08:34Z",
+  "updated": "2026-07-07T01:13:08Z",
   "matches": [
     {
       "teamA": "Estados Unidos",
@@ -8,9 +8,9 @@
       "grupo": "",
       "jornada": 0,
       "hora_utc": "00:00",
-      "status": "IN_PLAY",
-      "goalsA": 0,
-      "goalsB": 0
+      "status": "PAUSED",
+      "goalsA": 1,
+      "goalsB": 2
     },
     {
       "teamA": "Argentina",
