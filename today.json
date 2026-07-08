@@ -1,36 +1,5 @@
 {
-  "fecha": "2026-07-07",
-  "updated": "2026-07-07T23:01:48Z",
-  "matches": [
-    {
-      "teamA": "Estados Unidos",
-      "teamB": "Bélgica",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "00:00",
-      "status": "FINISHED",
-      "goalsA": 1,
-      "goalsB": 4
-    },
-    {
-      "teamA": "Argentina",
-      "teamB": "Egipto",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "16:00",
-      "status": "FINISHED",
-      "goalsA": 3,
-      "goalsB": 2
-    },
-    {
-      "teamA": "Suiza",
-      "teamB": "Colombia",
-      "grupo": "",
-      "jornada": 0,
-      "hora_utc": "20:00",
-      "status": "FINISHED",
-      "goalsA": 4,
-      "goalsB": 3
-    }
-  ]
+  "fecha": "2026-07-08",
+  "updated": "2026-07-08T00:57:25Z",
+  "matches": []
 }
