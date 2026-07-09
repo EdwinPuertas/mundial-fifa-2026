@@ -1,5 +1,16 @@
 {
-  "fecha": "2026-07-08",
-  "updated": "2026-07-08T23:34:09Z",
-  "matches": []
+  "fecha": "2026-07-09",
+  "updated": "2026-07-09T00:10:31Z",
+  "matches": [
+    {
+      "teamA": "Francia",
+      "teamB": "Marruecos",
+      "grupo": "",
+      "jornada": 0,
+      "hora_utc": "20:00",
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
+    }
+  ]
 }
