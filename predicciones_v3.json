@@ -2815,7 +2815,7 @@
     "Colombia": {
       "engine_A": {
         "p_derrota": 0.0584,
-        "p_empate": 0.2361,
+        "p_empate": 0.236,
         "p_victoria": 0.7055
       },
       "engine_B": {
@@ -24151,7 +24151,7 @@
   "España": {
     "Alemania": {
       "engine_A": {
-        "p_derrota": 0.1507,
+        "p_derrota": 0.1508,
         "p_empate": 0.1556,
         "p_victoria": 0.6936
       },
@@ -27503,7 +27503,7 @@
     },
     "Noruega": {
       "engine_A": {
-        "p_derrota": 0.6861,
+        "p_derrota": 0.6862,
         "p_empate": 0.0146,
         "p_victoria": 0.2993
       },
@@ -31641,7 +31641,7 @@
     "Suiza": {
       "engine_A": {
         "p_derrota": 0.979,
-        "p_empate": 0.0207,
+        "p_empate": 0.0206,
         "p_victoria": 0.0003
       },
       "engine_B": {
@@ -42433,7 +42433,7 @@
       "engine_A": {
         "p_derrota": 0.7269,
         "p_empate": 0.0001,
-        "p_victoria": 0.273
+        "p_victoria": 0.2729
       },
       "engine_B": {
         "p_derrota": 0.8163,
@@ -49409,7 +49409,7 @@
       "engine_A": {
         "p_derrota": 0.4063,
         "p_empate": 0.0021,
-        "p_victoria": 0.5916
+        "p_victoria": 0.5917
       },
       "engine_B": {
         "p_derrota": 0.0627,
