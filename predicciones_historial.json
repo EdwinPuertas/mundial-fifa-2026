@@ -1,21 +1,21 @@
 {
-  "generated": "2026-07-08",
+  "generated": "2026-07-10",
   "accuracy": {
     "engine_A": {
-      "correct": 62,
-      "total": 106
+      "correct": 63,
+      "total": 107
     },
     "engine_B": {
-      "correct": 60,
-      "total": 106
+      "correct": 61,
+      "total": 107
     },
     "goles_exacto": {
       "correct": 6,
-      "total": 106
+      "total": 107
     },
     "margen": {
-      "correct": 66,
-      "total": 106
+      "correct": 67,
+      "total": 107
     }
   },
   "entries": [
@@ -3198,6 +3198,36 @@
       "margen_pred": -0.08,
       "margen_real": 1,
       "acierto_margen": false
+    },
+    {
+      "fecha": "2026-07-09",
+      "teamA": "Francia",
+      "teamB": "Marruecos",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9915,
+        "p_empate": 0.0073,
+        "p_derrota": 0.0012
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9895,
+        "p_empate": 0.0093,
+        "p_derrota": 0.0012
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 1.511,
+      "lambda_B": 0.2,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 1.311,
+      "margen_real": 2,
+      "acierto_margen": true
     }
   ]
 }
