@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-11",
-  "updated": "2026-07-11T22:11:37Z",
+  "updated": "2026-07-11T22:49:27Z",
   "matches": [
     {
       "teamA": "Noruega",
@@ -8,8 +8,8 @@
       "grupo": "",
       "jornada": 0,
       "hora_utc": "21:00",
-      "status": "PAUSED",
-      "goalsA": 1,
+      "status": "IN_PLAY",
+      "goalsA": 2,
       "goalsB": 1
     }
   ]
