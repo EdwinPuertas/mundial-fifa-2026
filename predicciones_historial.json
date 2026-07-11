@@ -1,21 +1,21 @@
 {
-  "generated": "2026-07-10",
+  "generated": "2026-07-11",
   "accuracy": {
     "engine_A": {
-      "correct": 63,
-      "total": 107
+      "correct": 64,
+      "total": 108
     },
     "engine_B": {
-      "correct": 61,
-      "total": 107
+      "correct": 62,
+      "total": 108
     },
     "goles_exacto": {
       "correct": 6,
-      "total": 107
+      "total": 108
     },
     "margen": {
-      "correct": 67,
-      "total": 107
+      "correct": 68,
+      "total": 108
     }
   },
   "entries": [
@@ -3227,6 +3227,36 @@
       "acierto_goles": false,
       "margen_pred": 1.311,
       "margen_real": 2,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-07-10",
+      "teamA": "España",
+      "teamB": "Bélgica",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9473,
+        "p_empate": 0.0001,
+        "p_derrota": 0.0526
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9016,
+        "p_empate": 0.0512,
+        "p_derrota": 0.0471
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 2,
+      "goles_B": 1,
+      "acierto_A": true,
+      "acierto_B": true,
+      "lambda_A": 1.673,
+      "lambda_B": 0.826,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.847,
+      "margen_real": 1,
       "acierto_margen": true
     }
   ]
