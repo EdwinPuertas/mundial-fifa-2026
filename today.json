@@ -1,16 +1,16 @@
 {
-  "fecha": "2026-07-14",
-  "updated": "2026-07-14T23:53:53Z",
+  "fecha": "2026-07-15",
+  "updated": "2026-07-15T00:11:25Z",
   "matches": [
     {
-      "teamA": "Francia",
-      "teamB": "España",
+      "teamA": "Inglaterra",
+      "teamB": "Argentina",
       "grupo": "",
       "jornada": 0,
       "hora_utc": "19:00",
-      "status": "FINISHED",
-      "goalsA": 0,
-      "goalsB": 2
+      "status": "SCHEDULED",
+      "goalsA": null,
+      "goalsB": null
     }
   ]
 }
