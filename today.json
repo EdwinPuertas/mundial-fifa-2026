@@ -1,6 +1,6 @@
 {
   "fecha": "2026-07-15",
-  "updated": "2026-07-15T21:00:58Z",
+  "updated": "2026-07-15T21:27:27Z",
   "matches": [
     {
       "teamA": "Inglaterra",
@@ -8,7 +8,7 @@
       "grupo": "",
       "jornada": 0,
       "hora_utc": "19:00",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "goalsA": 1,
       "goalsB": 2
     }
