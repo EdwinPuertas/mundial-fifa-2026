@@ -1,21 +1,21 @@
 {
-  "generated": "2026-07-12",
+  "generated": "2026-07-15",
   "accuracy": {
     "engine_A": {
       "correct": 65,
-      "total": 110
+      "total": 111
     },
     "engine_B": {
-      "correct": 63,
-      "total": 110
+      "correct": 64,
+      "total": 111
     },
     "goles_exacto": {
       "correct": 7,
-      "total": 110
+      "total": 111
     },
     "margen": {
-      "correct": 70,
-      "total": 110
+      "correct": 71,
+      "total": 111
     }
   },
   "entries": [
@@ -3317,6 +3317,36 @@
       "acierto_goles": false,
       "margen_pred": 0.367,
       "margen_real": 2,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-07-14",
+      "teamA": "Francia",
+      "teamB": "España",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.971,
+        "p_empate": 0.0148,
+        "p_derrota": 0.0142
+      },
+      "engine_B": {
+        "prediccion": "victoria_B",
+        "p_victoria": 0.1103,
+        "p_empate": 0.4344,
+        "p_derrota": 0.4553
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 0,
+      "goles_B": 2,
+      "acierto_A": false,
+      "acierto_B": true,
+      "lambda_A": 0.948,
+      "lambda_B": 1.684,
+      "pred_goles_A": 0,
+      "pred_goles_B": 1,
+      "acierto_goles": false,
+      "margen_pred": -0.736,
+      "margen_real": -2,
       "acierto_margen": true
     }
   ]
