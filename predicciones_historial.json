@@ -1,21 +1,21 @@
 {
-  "generated": "2026-07-15",
+  "generated": "2026-07-16",
   "accuracy": {
     "engine_A": {
       "correct": 65,
-      "total": 111
+      "total": 112
     },
     "engine_B": {
       "correct": 64,
-      "total": 111
+      "total": 112
     },
     "goles_exacto": {
       "correct": 7,
-      "total": 111
+      "total": 112
     },
     "margen": {
       "correct": 71,
-      "total": 111
+      "total": 112
     }
   },
   "entries": [
@@ -3348,6 +3348,36 @@
       "margen_pred": -0.736,
       "margen_real": -2,
       "acierto_margen": true
+    },
+    {
+      "fecha": "2026-07-15",
+      "teamA": "Inglaterra",
+      "teamB": "Argentina",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.9899,
+        "p_empate": 0.0022,
+        "p_derrota": 0.0079
+      },
+      "engine_B": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.8655,
+        "p_empate": 0.1153,
+        "p_derrota": 0.0192
+      },
+      "resultado_real": "victoria_B",
+      "goles_A": 1,
+      "goles_B": 2,
+      "acierto_A": false,
+      "acierto_B": false,
+      "lambda_A": 1.204,
+      "lambda_B": 0.621,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": false,
+      "margen_pred": 0.583,
+      "margen_real": -1,
+      "acierto_margen": false
     }
   ]
 }
