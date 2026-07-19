@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-19T21:53:18Z",
+  "last_updated": "2026-07-19T22:13:42Z",
   "matches": [
     {
       "date": "2026-06-17",
@@ -963,6 +963,16 @@
       "teamB": "Inglaterra",
       "goalsA": 4,
       "goalsB": 6,
+      "venue": "neutral",
+      "bk_probs": null,
+      "source": "football-data.org"
+    },
+    {
+      "date": "2026-07-19",
+      "teamA": "España",
+      "teamB": "Argentina",
+      "goalsA": 1,
+      "goalsB": 0,
       "venue": "neutral",
       "bk_probs": null,
       "source": "football-data.org"
