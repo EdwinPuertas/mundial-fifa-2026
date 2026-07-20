@@ -1,21 +1,21 @@
 {
-  "generated": "2026-07-19",
+  "generated": "2026-07-20",
   "accuracy": {
     "engine_A": {
-      "correct": 66,
-      "total": 113
+      "correct": 67,
+      "total": 114
     },
     "engine_B": {
       "correct": 65,
-      "total": 113
+      "total": 114
     },
     "goles_exacto": {
-      "correct": 7,
-      "total": 113
+      "correct": 8,
+      "total": 114
     },
     "margen": {
-      "correct": 72,
-      "total": 113
+      "correct": 73,
+      "total": 114
     }
   },
   "entries": [
@@ -3407,6 +3407,36 @@
       "acierto_goles": false,
       "margen_pred": -0.488,
       "margen_real": -2,
+      "acierto_margen": true
+    },
+    {
+      "fecha": "2026-07-19",
+      "teamA": "España",
+      "teamB": "Argentina",
+      "engine_A": {
+        "prediccion": "victoria_A",
+        "p_victoria": 0.8414,
+        "p_empate": 0.0002,
+        "p_derrota": 0.1585
+      },
+      "engine_B": {
+        "prediccion": "empate",
+        "p_victoria": 0.2536,
+        "p_empate": 0.5282,
+        "p_derrota": 0.2182
+      },
+      "resultado_real": "victoria_A",
+      "goles_A": 1,
+      "goles_B": 0,
+      "acierto_A": true,
+      "acierto_B": false,
+      "lambda_A": 1.167,
+      "lambda_B": 0.79,
+      "pred_goles_A": 1,
+      "pred_goles_B": 0,
+      "acierto_goles": true,
+      "margen_pred": 0.377,
+      "margen_real": 1,
       "acierto_margen": true
     }
   ]
